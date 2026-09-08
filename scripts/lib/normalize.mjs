@@ -30,9 +30,11 @@ export function normalizeMoveType(raw) {
 
 // Priorité de dérivation : quand un héros porte plusieurs propriétés,
 // la première trouvée ici gagne. (Ordre d'affichage : cf. CATEGORY_ORDER dans js/catalog-view.mjs.)
+// NB : les héros « brave » / CYL n'ont pas de catégorie propre -> ils retombent
+// sur `standard` (ou leur autre propriété plus prioritaire).
 const CATEGORY_PRIORITY = [
   'mythic', 'legendary', 'emblem', 'rearmed', 'attuned', 'ascended',
-  'duo', 'harmonized', 'brave', 'aided', 'entwined', 'vista',
+  'duo', 'harmonized', 'aided', 'entwined', 'vista', 'chosen',
   'ghb', 'tempest', 'refresher', 'special',
 ];
 
