@@ -63,9 +63,12 @@ test('catalog: gender ∈ {female,male,multi,other}', () => {
   );
   assert.deepEqual(bad, []);
 });
-test('catalog: image/imageFull are Special:FilePath URLs', () => {
+test('catalog: image/imageFull are Fandom CDN URLs', () => {
+  const cdn = /^https:\/\/static\.wikia\.nocookie\.net\/feheroes_gamepedia_en\/images\/[0-9a-f]\/[0-9a-f]{2}\/.+/;
   for (const h of catalog.heroes) {
-    assert.match(h.image, /^https:\/\/feheroes\.fandom\.com\/wiki\/Special:FilePath\/.+_Face_FC\.webp$/, h.id);
+    assert.match(h.image, cdn, h.id);
+    assert.match(h.image, /_Face_FC\.webp$/, h.id);
+    assert.match(h.imageFull, cdn, h.id);
     assert.match(h.imageFull, /_Face\.webp$/, h.id);
   }
 });

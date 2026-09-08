@@ -121,8 +121,8 @@ test('normalizeUnit produit un héros normalisé sans jointures', () => {
   assert.equal(h.gender, 'female'); // RAW_RHEA.Gender = 'F' -> normalisé
   assert.equal(h.origin, 'Fire Emblem: Three Houses');
   assert.deepEqual(h.origins, ['Fire Emblem: Three Houses']);
-  assert.equal(h.image, 'https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face_FC.webp');
-  assert.equal(h.imageFull, 'https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face.webp');
+  assert.equal(h.image, 'https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/0/05/Rhea_The_Final_Child_Face_FC.webp');
+  assert.equal(h.imageFull, 'https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/7/7b/Rhea_The_Final_Child_Face.webp');
   assert.equal(h.category, 'legendary');
   assert.deepEqual(h.properties, ['legendary', 'hat']);
   assert.equal(h.blessing, null);
@@ -142,7 +142,7 @@ test('normalizeUnit tolère les champs manquants', () => {
   assert.equal(h.move, null);
   assert.equal(h.gender, 'other');
   assert.deepEqual(h.origins, []);
-  assert.equal(h.image, 'https://feheroes.fandom.com/wiki/Special:FilePath/X_Face_FC.webp');
+  assert.equal(h.image, 'https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/6/67/X_Face_FC.webp');
   assert.equal(h.intId, null);
   assert.equal(h.releaseDate, null);
   assert.deepEqual(h.actorEn, []);
@@ -212,8 +212,8 @@ test('buildCatalog trie par date desc puis nom asc et compte', () => {
 
 test('heroImageUrls dérive les deux URL du WikiName', () => {
   assert.deepEqual(heroImageUrls('Rhea The Final Child'), {
-    image: 'https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face_FC.webp',
-    imageFull: 'https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face.webp',
+    image: 'https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/0/05/Rhea_The_Final_Child_Face_FC.webp',
+    imageFull: 'https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/7/7b/Rhea_The_Final_Child_Face.webp',
   });
   assert.deepEqual(heroImageUrls(''), { image: null, imageFull: null });
   assert.deepEqual(heroImageUrls(null), { image: null, imageFull: null });

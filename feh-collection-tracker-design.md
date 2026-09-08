@@ -138,7 +138,7 @@ Jointure par **nom de page** : `_pageName` de ces tables ≈ `"<Name>: <Title>"`
 | `image` | `_Face_FC.webp` | ~10–15 Ko | vignette de la grille |
 | `imageFull` | `_Face.webp` | ~120–330 Ko | panneau détail |
 
-Base URL : `https://feheroes.fandom.com/wiki/Special:FilePath/<WikiName_underscored><suffixe>` (redirige 30x vers le CDN `static.wikia.nocookie.net` ; `<img>` n'a pas besoin de CORS). **Hotlink** (pas de rapatriement : ~1400 portraits = trop lourd pour le repo). Vérifié 2026-09 : `Special:FilePath` sert du `image/webp` même quand l'extension demandée est `.png`.
+URL **directe CDN** : `https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/<h0>/<h0h1>/<WikiName_underscored><suffixe>` où `h = md5("<WikiName_underscored><suffixe>")` (hex), `h0` = 1er caractère, `h0h1` = 2 premiers. `<img>` n'a pas besoin de CORS. **Hotlink** (pas de rapatriement : ~1400 portraits = trop lourd pour le repo). ⚠️ Ne **pas** utiliser `feheroes.fandom.com/wiki/Special:FilePath/…` : Cloudflare y renvoie des 403 intermittents (constaté au déploiement Pages 2026-09-08). Le CDN `static.wikia.nocookie.net` répond 200 de façon fiable depuis un `<img>` cross-site. `heroImageUrls` dépend donc de `node:crypto` (built-in, toujours zéro dépendance npm).
 
 - Overridable : `heroes.overrides.json` → `patch` peut fixer `image` / `imageFull` pour un héros dont le nom de fichier wiki dévie.
 - UI : `<img loading="lazy">` + `onerror` → **tuile de repli** (pastille couleur + icône arme).
@@ -220,8 +220,8 @@ Aucun `package.json` requis si `fetch-heroes.mjs` n'utilise que `fetch` natif (N
       "artist": "Kaya8",
       "actorEn": ["Cherami Leigh"],
       "actorJp": ["Ai Kayano"],
-      "image": "https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face_FC.webp",
-      "imageFull": "https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face.webp",
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/0/05/Rhea_The_Final_Child_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/7/7b/Rhea_The_Final_Child_Face.webp",
       "releaseDate": "2026-08-31",
       "intId": 12345
     }

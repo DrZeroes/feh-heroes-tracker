@@ -1,6 +1,8 @@
 // scripts/lib/normalize.mjs
 // Fonctions pures de normalisation du catalogue FEH. Aucun I/O, aucun réseau.
 
+import { createHash } from 'node:crypto';
+
 const COLOR_CODE = { Red: 'r', Blue: 'b', Green: 'v', Colorless: 'g' };
 const WEAPON_CODE = {
   Sword: 'sword', Lance: 'lance', Axe: 'axe', Bow: 'bow', Dagger: 'dagger',
@@ -155,15 +157,22 @@ export function buildCatalog(heroes, { generatedAt }) {
   return { generatedAt, source: SOURCE, count: sorted.length, heroes: sorted };
 }
 
-const WIKI_FILEPATH = 'https://feheroes.fandom.com/wiki/Special:FilePath';
+// Direct Fandom image CDN. Special:FilePath on the wiki domain 403s intermittently
+// (Cloudflare); the CDN with the md5-sharded path is stable from a browser <img>.
+const WIKI_CDN = 'https://static.wikia.nocookie.net/feheroes_gamepedia_en/images';
+
+function cdnUrl(fileName) {
+  const h = createHash('md5').update(fileName).digest('hex');
+  return `${WIKI_CDN}/${h[0]}/${h.slice(0, 2)}/${fileName}`;
+}
 
 export function heroImageUrls(wikiName) {
   const name = String(wikiName ?? '').trim();
   if (!name) return { image: null, imageFull: null };
   const slug = name.replace(/ /g, '_');
   return {
-    image: `${WIKI_FILEPATH}/${slug}_Face_FC.webp`,
-    imageFull: `${WIKI_FILEPATH}/${slug}_Face.webp`,
+    image: cdnUrl(`${slug}_Face_FC.webp`),
+    imageFull: cdnUrl(`${slug}_Face.webp`),
   };
 }
 
