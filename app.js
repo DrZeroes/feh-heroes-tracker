@@ -9,6 +9,7 @@ import {
   ownedIdSet, collectionStats, filterByStatus,
   setCopies, setDate, setWanted, wantedIdSet,
 } from './js/collection.mjs';
+import { distribution, acquisitionTimeline, topCopies, wishlistSummary } from './js/stats.mjs';
 
 const SUPPORTED = ['en', 'fr'];
 const FACETS = ['color', 'weapon', 'move', 'category', 'origin', 'gender', 'blessing', 'poolRarity'];
@@ -418,7 +419,71 @@ function renderCaserne() {
   }
   box.appendChild(wrap);
 }
-function renderStats() { $('#view-stats').innerHTML = ''; }
+function barBlock(titleKey, rows) {
+  const b = document.createElement('div');
+  b.className = 'stat-block';
+  const h = document.createElement('h3');
+  h.textContent = state.t(titleKey);
+  b.appendChild(h);
+  const max = Math.max(1, ...rows.map((r) => r.total ?? r.count ?? 0));
+  for (const r of rows) {
+    const v = r.total ?? r.count ?? 0;
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    const label = document.createElement('span');
+    label.textContent = r.label;
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    const fill = document.createElement('i');
+    fill.style.width = `${Math.round((v / max) * 100)}%`;
+    bar.appendChild(fill);
+    const num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = r.owned != null ? `${r.owned} / ${r.total}` : String(v);
+    row.append(label, bar, num);
+    b.appendChild(row);
+  }
+  return b;
+}
+
+function renderStats() {
+  const box = $('#view-stats');
+  box.innerHTML = '';
+  const ownedSet = ownedIdSet(state.collection);
+  const s = collectionStats(state.collection, state.heroes);
+
+  const head = document.createElement('p');
+  head.className = 'stat-block';
+  head.style.fontWeight = '700';
+  head.textContent = state.t('stats.total', s);
+  box.appendChild(head);
+
+  const facetLabel = (key, v) => (key === 'blessing'
+    ? state.t(`blessing.${v}`)
+    : state.t(`${key === 'move' ? 'move' : key === 'weapon' ? 'weapon' : key === 'color' ? 'color' : 'category'}.${v}`));
+
+  for (const [key, titleKey] of [
+    ['color', 'stats.byColor'], ['weapon', 'stats.byWeapon'], ['move', 'stats.byMove'],
+    ['category', 'stats.byCategory'], ['blessing', 'stats.byBlessing'],
+  ]) {
+    const rows = distribution(state.heroes, ownedSet, key)
+      .map((d) => ({ label: facetLabel(key, d.value), total: d.total, owned: d.owned }));
+    if (rows.length) box.appendChild(barBlock(titleKey, rows));
+  }
+
+  const tl = acquisitionTimeline(state.collection).map((m) => ({ label: m.month, count: m.count }));
+  if (tl.length) box.appendChild(barBlock('stats.timeline', tl));
+
+  const tc = topCopies(state.collection, state.heroes, 10)
+    .map((h) => ({ label: `${h.name}${h.title ? ` (${h.title})` : ''}`, count: h.copies }));
+  if (tc.length) box.appendChild(barBlock('stats.topCopies', tc));
+
+  const w = wishlistSummary(state.collection, ownedSet);
+  const wl = document.createElement('p');
+  wl.className = 'stat-block';
+  wl.textContent = state.t('stats.wishlistLine', w);
+  box.appendChild(wl);
+}
 function renderWishlist() { $('#view-wishlist').innerHTML = ''; }
 function renderManuels() { $('#view-manuels').innerHTML = ''; }
 
