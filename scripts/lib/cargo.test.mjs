@@ -118,3 +118,25 @@ test('cargoQuery construit une URL Cargo correcte', async () => {
   assert.equal(u.searchParams.get('fields'), '_pageName=Page,LegendaryEffect');
   assert.equal(u.searchParams.get('order_by'), 'StartTime DESC');
 });
+
+test('cargoQuery retente sur erreur réseau lancée puis réussit', async () => {
+  let n = 0;
+  const fetchImpl = async () => {
+    n += 1;
+    if (n <= 2) throw Object.assign(new Error('fetch failed'), { code: 'ECONNRESET' });
+    return resp({ cargoquery: [{ title: { Name: 'ok' } }] });
+  };
+  const rows = await cargoQuery({
+    table: 'Units', fields: 'Name', fetchImpl, sleepImpl: noSleep, pauseMs: 0, maxRetries: 4,
+  });
+  assert.deepEqual(rows, [{ Name: 'ok' }]);
+  assert.equal(n, 3);
+});
+
+test('cargoQuery jette après maxRetries sur erreur réseau persistante', async () => {
+  const fetchImpl = async () => { throw new Error('fetch failed'); };
+  await assert.rejects(
+    cargoQuery({ table: 'Units', fields: 'Name', fetchImpl, sleepImpl: noSleep, pauseMs: 0, maxRetries: 2 }),
+    /network failure .*after 2 retries/,
+  );
+});

@@ -48,10 +48,23 @@ export async function cargoQuery({
     let page = null;
     let attempt = 0;
     for (;;) {
-      const res = await fetchImpl(url, {
-        headers: { 'User-Agent': userAgent },
-        signal: AbortSignal.timeout(timeoutMs),
-      });
+      let res;
+      try {
+        res = await fetchImpl(url, {
+          headers: { 'User-Agent': userAgent },
+          signal: AbortSignal.timeout(timeoutMs),
+        });
+      } catch (err) {
+        // Transient network failure (ECONNRESET, fetch failed, AbortError on timeout).
+        attempt += 1;
+        if (attempt > maxRetries) {
+          throw new Error(
+            `Cargo network failure on ${table} (offset ${offset}) after ${maxRetries} retries: ${err.message}`,
+          );
+        }
+        await sleepImpl(pauseMs * 2 ** attempt);
+        continue;
+      }
       if (!res.ok) {
         if (res.status === 429 || res.status === 503 || res.status >= 500) {
           attempt += 1;
