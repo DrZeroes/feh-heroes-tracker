@@ -10,7 +10,7 @@ import {
 import {
   migrateCollection, emptyCollection, setOwned, setSupport, clampMerges,
   ownedIdSet, collectionStats, filterByStatus,
-  setCopies, setDate, setWanted, wantedIdSet,
+  addUnit, removeUnit, setUnit, setWanted, wantedIdSet,
   setManualCount, manualsTotal,
   setWantedPriority, setWantedNote, setProject,
 } from './js/collection.mjs';
@@ -269,14 +269,13 @@ function card(hero) {
   mrg.addEventListener('click', (e) => e.stopPropagation());
   const mInput = document.createElement('input');
   mInput.type = 'number'; mInput.min = '0'; mInput.max = '10';
-  mInput.value = String(state.collection.owned[hero.id]?.merges ?? 0);
+  mInput.value = String(state.collection.owned[hero.id]?.[0]?.merges ?? 0);
   mInput.addEventListener('change', (e) => {
     e.stopPropagation();
     const v = clampMerges(mInput.value);
     mInput.value = String(v);
     if (state.collection.owned[hero.id]) {
-      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], merges: v };
-      state.collection.updated = new Date().toISOString().slice(0, 10);
+      state.collection = setUnit(state.collection, hero.id, 0, { merges: v });
       saveCollection();
     }
   });
@@ -321,7 +320,7 @@ function syncCardControls(el, id) {
   if (mrg) {
     mrg.hidden = !(quickActive() && owned);
     const input = mrg.querySelector('input');
-    if (input) input.value = String(state.collection.owned[id]?.merges ?? 0);
+    if (input) input.value = String(state.collection.owned[id]?.[0]?.merges ?? 0);
   }
 }
 
@@ -448,88 +447,104 @@ function renderCaserne() {
   }
   wrap.appendChild(head);
 
+  const commit = (rerender) => {
+    saveCollection();
+    if (rerender) renderCaserne();
+  };
+
   for (const hero of list) {
-    const entry = state.collection.owned[hero.id];
-    const row = document.createElement('div');
-    row.className = 'roster-row';
+    const units = state.collection.owned[hero.id];
+    units.forEach((unit, idx) => {
+      const row = document.createElement('div');
+      row.className = 'roster-row';
 
-    const img = document.createElement('img');
-    img.loading = 'lazy'; img.alt = hero.name; img.src = hero.image || '';
-    img.className = 'roster-portrait';
-    img.title = epithetFor(hero);
-    img.addEventListener('click', () => openDetail(hero));
-    row.appendChild(img);
+      const img = document.createElement('img');
+      img.loading = 'lazy'; img.alt = hero.name; img.src = hero.image || '';
+      img.className = 'roster-portrait';
+      img.title = epithetFor(hero);
+      img.addEventListener('click', () => openDetail(hero, idx));
+      if (idx > 0) img.style.visibility = 'hidden';
+      row.appendChild(img);
 
-    const who = document.createElement('button');
-    who.type = 'button';
-    who.className = 'who';
-    who.innerHTML = `<b></b><span></span>`;
-    who.querySelector('b').textContent = hero.name;
-    who.querySelector('span').textContent = epithetFor(hero);
-    who.addEventListener('click', () => openDetail(hero));
-    row.appendChild(who);
+      const who = document.createElement('button');
+      who.type = 'button';
+      who.className = 'who';
+      who.innerHTML = '<b></b><span></span>';
+      who.querySelector('b').textContent = units.length > 1 ? `${hero.name} #${idx + 1}` : hero.name;
+      who.querySelector('span').textContent = epithetFor(hero);
+      who.addEventListener('click', () => openDetail(hero, idx));
+      row.appendChild(who);
 
-    const merges = document.createElement('input');
-    merges.type = 'number'; merges.min = '0'; merges.max = '10'; merges.value = String(entry.merges);
-    merges.addEventListener('change', () => {
-      const v = clampMerges(merges.value);
-      merges.value = String(v);
-      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], merges: v };
-      state.collection.updated = new Date().toISOString().slice(0, 10);
-      saveCollection();
+      const merges = document.createElement('input');
+      merges.type = 'number'; merges.min = '0'; merges.max = '10'; merges.value = String(unit.merges);
+      merges.addEventListener('change', () => {
+        merges.value = String(clampMerges(merges.value));
+        state.collection = setUnit(state.collection, hero.id, idx, { merges: merges.value });
+        commit(false);
+      });
+      row.appendChild(merges);
+
+      const ivP = document.createElement('select');
+      ivOptions(ivP, unit.ivPlus);
+      ivP.addEventListener('change', () => {
+        state.collection = setUnit(state.collection, hero.id, idx, { ivPlus: ivP.value || null });
+        commit(false);
+      });
+      row.appendChild(ivP);
+
+      const ivM = document.createElement('select');
+      ivOptions(ivM, unit.ivMinus);
+      ivM.addEventListener('change', () => {
+        state.collection = setUnit(state.collection, hero.id, idx, { ivMinus: ivM.value || null });
+        commit(false);
+      });
+      row.appendChild(ivM);
+
+      const sup = document.createElement('select');
+      for (const v of ['none', 'C', 'B', 'A', 'S']) {
+        const o = document.createElement('option');
+        o.value = v === 'none' ? '' : v;
+        o.textContent = state.t(`support.${v}`);
+        if ((unit.support ?? '') === o.value) o.selected = true;
+        sup.appendChild(o);
+      }
+      sup.addEventListener('change', () => {
+        state.collection = setSupport(state.collection, hero.id, idx, sup.value || null);
+        commit(true); // règle un-seul-S : d'autres lignes peuvent changer
+      });
+      row.appendChild(sup);
+
+      const rm = document.createElement('button');
+      rm.type = 'button';
+      rm.className = 'roster-remove';
+      rm.textContent = '✕';
+      rm.title = state.t('caserne.remove');
+      rm.setAttribute('aria-label', state.t('caserne.remove'));
+      rm.addEventListener('click', () => {
+        const last = units.length === 1;
+        if (last && !window.confirm(state.t('caserne.removeConfirm', { name: hero.name }))) return;
+        state.collection = removeUnit(state.collection, hero.id, idx);
+        if (last) refreshCard(hero.id);
+        updateCollectionCount();
+        commit(true);
+      });
+      row.appendChild(rm);
+
+      wrap.appendChild(row);
     });
-    row.appendChild(merges);
 
-    const ivP = document.createElement('select');
-    ivOptions(ivP, entry.ivPlus);
-    ivP.addEventListener('change', () => {
-      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], ivPlus: ivP.value || null };
-      state.collection.updated = new Date().toISOString().slice(0, 10);
-      saveCollection();
-    });
-    row.appendChild(ivP);
-
-    const ivM = document.createElement('select');
-    ivOptions(ivM, entry.ivMinus);
-    ivM.addEventListener('change', () => {
-      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], ivMinus: ivM.value || null };
-      state.collection.updated = new Date().toISOString().slice(0, 10);
-      saveCollection();
-    });
-    row.appendChild(ivM);
-
-    const sup = document.createElement('select');
-    for (const v of ['none', 'C', 'B', 'A', 'S']) {
-      const o = document.createElement('option');
-      o.value = v === 'none' ? '' : v;
-      o.textContent = state.t(`support.${v}`);
-      if ((entry.support ?? '') === o.value) o.selected = true;
-      sup.appendChild(o);
-    }
-    sup.addEventListener('change', () => {
-      state.collection = setSupport(state.collection, hero.id, sup.value || null);
-      saveCollection();
-      renderCaserne(); // re-render : la règle un-seul-S peut changer une autre ligne
-    });
-    row.appendChild(sup);
-
-    const rm = document.createElement('button');
-    rm.type = 'button';
-    rm.className = 'roster-remove';
-    rm.textContent = '✕';
-    rm.title = state.t('caserne.remove');
-    rm.setAttribute('aria-label', state.t('caserne.remove'));
-    rm.addEventListener('click', () => {
-      if (!window.confirm(state.t('caserne.removeConfirm', { name: hero.name }))) return;
-      state.collection = setOwned(state.collection, hero.id, false);
-      saveCollection();
-      refreshCard(hero.id);
+    const addRow = document.createElement('div');
+    addRow.className = 'roster-add';
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.textContent = `＋ ${state.t('caserne.addCopy')}`;
+    addBtn.addEventListener('click', () => {
+      state.collection = addUnit(state.collection, hero.id);
       updateCollectionCount();
-      renderCaserne();
+      commit(true);
     });
-    row.appendChild(rm);
-
-    wrap.appendChild(row);
+    addRow.appendChild(addBtn);
+    wrap.appendChild(addRow);
   }
   box.appendChild(wrap);
 }
@@ -576,6 +591,12 @@ function renderStats() {
   head.className = 'stat-block';
   head.style.fontWeight = '700';
   head.textContent = state.t('stats.total', s);
+  if (s.units > s.owned) {
+    const u = document.createElement('span');
+    u.style.cssText = 'font-weight:400;color:var(--muted)';
+    u.textContent = ` · ${state.t('stats.units', { n: s.units })}`;
+    head.appendChild(u);
+  }
   box.appendChild(head);
 
   const FACET_ORDER = {
@@ -903,7 +924,7 @@ function renderAbout() {
   box.appendChild(src);
 }
 
-function openDetail(hero) {
+function openDetail(hero, unitIndex = 0) {
   const body = $('#detail-body');
   body.innerHTML = '';
   body.appendChild(portrait(hero, 'big', [hero.imageFull, hero.image].filter(Boolean)));
@@ -953,19 +974,58 @@ function openDetail(hero) {
   });
 
   if (isOwned(hero.id)) {
-    const entry = state.collection.owned[hero.id];
+    const units = state.collection.owned[hero.id];
+    const idx = Math.max(0, Math.min(unitIndex, units.length - 1));
+    const unit = units[idx];
     const addRow = (key, node) => {
       const l = document.createElement('label');
       l.textContent = state.t(key);
       ed.append(l, node);
     };
+
+    const copiesBar = document.createElement('div');
+    copiesBar.className = 'owned-row copies-bar';
+    units.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = `copy-tab${i === idx ? ' is-active' : ''}`;
+      b.textContent = `#${i + 1}`;
+      b.addEventListener('click', () => openDetail(hero, i));
+      copiesBar.appendChild(b);
+    });
+    const addCopy = document.createElement('button');
+    addCopy.type = 'button';
+    addCopy.className = 'copy-tab copy-add';
+    addCopy.textContent = '＋';
+    addCopy.title = state.t('caserne.addCopy');
+    addCopy.addEventListener('click', () => {
+      state.collection = addUnit(state.collection, hero.id);
+      saveCollection();
+      updateCollectionCount();
+      openDetail(hero, state.collection.owned[hero.id].length - 1);
+    });
+    copiesBar.appendChild(addCopy);
+    if (units.length > 1) {
+      const delCopy = document.createElement('button');
+      delCopy.type = 'button';
+      delCopy.className = 'copy-tab copy-del';
+      delCopy.textContent = '✕';
+      delCopy.title = state.t('caserne.remove');
+      delCopy.addEventListener('click', () => {
+        state.collection = removeUnit(state.collection, hero.id, idx);
+        saveCollection();
+        updateCollectionCount();
+        openDetail(hero, Math.max(0, idx - 1));
+      });
+      copiesBar.appendChild(delCopy);
+    }
+    ed.appendChild(copiesBar);
+
     const merges = document.createElement('input');
-    merges.type = 'number'; merges.min = '0'; merges.max = '10'; merges.value = String(entry.merges);
+    merges.type = 'number'; merges.min = '0'; merges.max = '10'; merges.value = String(unit.merges);
     merges.addEventListener('change', () => {
-      const v = clampMerges(merges.value);
-      merges.value = String(v);
-      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], merges: v };
-      state.collection.updated = new Date().toISOString().slice(0, 10);
+      merges.value = String(clampMerges(merges.value));
+      state.collection = setUnit(state.collection, hero.id, idx, { merges: merges.value });
       saveCollection();
     });
     addRow('field.merges', merges);
@@ -982,14 +1042,12 @@ function openDetail(hero) {
       s.addEventListener('change', () => onChange(s.value || null));
       return s;
     };
-    addRow('field.ivPlus', ivSelect(entry.ivPlus, (v) => {
-      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], ivPlus: v };
-      state.collection.updated = new Date().toISOString().slice(0, 10);
+    addRow('field.ivPlus', ivSelect(unit.ivPlus, (v) => {
+      state.collection = setUnit(state.collection, hero.id, idx, { ivPlus: v });
       saveCollection();
     }));
-    addRow('field.ivMinus', ivSelect(entry.ivMinus, (v) => {
-      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], ivMinus: v };
-      state.collection.updated = new Date().toISOString().slice(0, 10);
+    addRow('field.ivMinus', ivSelect(unit.ivMinus, (v) => {
+      state.collection = setUnit(state.collection, hero.id, idx, { ivMinus: v });
       saveCollection();
     }));
 
@@ -998,28 +1056,19 @@ function openDetail(hero) {
       const o = document.createElement('option');
       o.value = v === 'none' ? '' : v;
       o.textContent = state.t(`support.${v}`);
-      if ((entry.support ?? '') === o.value) o.selected = true;
+      if ((unit.support ?? '') === o.value) o.selected = true;
       sup.appendChild(o);
     }
     sup.addEventListener('change', () => {
-      state.collection = setSupport(state.collection, hero.id, sup.value || null);
+      state.collection = setSupport(state.collection, hero.id, idx, sup.value || null);
       saveCollection();
     });
     addRow('field.support', sup);
 
-    const copies = document.createElement('input');
-    copies.type = 'number'; copies.min = '0'; copies.value = String(entry.copies ?? 0);
-    copies.addEventListener('change', () => {
-      state.collection = setCopies(state.collection, hero.id, copies.value);
-      copies.value = String(state.collection.owned[hero.id].copies);
-      saveCollection();
-    });
-    addRow('field.copies', copies);
-
     const date = document.createElement('input');
-    date.type = 'date'; date.value = entry.date ?? '';
+    date.type = 'date'; date.value = unit.date ?? '';
     date.addEventListener('change', () => {
-      state.collection = setDate(state.collection, hero.id, date.value || null);
+      state.collection = setUnit(state.collection, hero.id, idx, { date: date.value || null });
       saveCollection();
     });
     addRow('field.date', date);
@@ -1028,33 +1077,33 @@ function openDetail(hero) {
     projRow.className = 'owned-row';
     const projCb = document.createElement('input');
     projCb.type = 'checkbox';
-    projCb.checked = !!entry.project;
+    projCb.checked = !!unit.project;
     projCb.addEventListener('change', () => {
-      state.collection = setProject(state.collection, hero.id, projCb.checked ? {} : null);
+      state.collection = setProject(state.collection, hero.id, idx, projCb.checked ? {} : null);
       saveCollection();
-      openDetail(hero);
+      openDetail(hero, idx);
     });
     projRow.append(projCb, document.createTextNode(` ${state.t('project.enable')}`));
     ed.appendChild(projRow);
 
-    if (entry.project) {
+    if (unit.project) {
       const tm = document.createElement('input');
       tm.type = 'number'; tm.min = '0'; tm.max = '10';
-      tm.value = String(entry.project.targetMerges);
+      tm.value = String(unit.project.targetMerges);
       tm.addEventListener('change', () => {
-        state.collection = setProject(state.collection, hero.id, { targetMerges: tm.value });
-        tm.value = String(state.collection.owned[hero.id].project.targetMerges);
+        state.collection = setProject(state.collection, hero.id, idx, { targetMerges: tm.value });
+        tm.value = String(state.collection.owned[hero.id][idx].project.targetMerges);
         saveCollection();
       });
       addRow('project.targetMerges', tm);
-      addRow('project.targetIvPlus', ivSelect(entry.project.targetIvPlus, (v) => {
-        state.collection = setProject(state.collection, hero.id, { targetIvPlus: v });
+      addRow('project.targetIvPlus', ivSelect(unit.project.targetIvPlus, (v) => {
+        state.collection = setProject(state.collection, hero.id, idx, { targetIvPlus: v });
         saveCollection();
       }));
       const pn = document.createElement('input');
-      pn.type = 'text'; pn.value = entry.project.notes || '';
+      pn.type = 'text'; pn.value = unit.project.notes || '';
       pn.addEventListener('change', () => {
-        state.collection = setProject(state.collection, hero.id, { notes: pn.value });
+        state.collection = setProject(state.collection, hero.id, idx, { notes: pn.value });
         saveCollection();
       });
       addRow('project.notes', pn);

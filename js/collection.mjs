@@ -1,4 +1,8 @@
 // js/collection.mjs — forme et dérivés de la collection perso. Pur, sans DOM.
+//
+// `owned[id]` est une LISTE d'unités (exemplaires physiques du même héros).
+// Chaque unité : { merges, ivPlus, ivMinus, support, date, project }.
+// Un héros est « possédé » dès qu'il a au moins une unité.
 
 const IVS = new Set(['hp', 'atk', 'spd', 'def', 'res']);
 const RANKS = new Set(['C', 'B', 'A', 'S']);
@@ -32,17 +36,34 @@ function normProject(p) {
   };
 }
 
-function normEntry(e) {
+function normUnit(e) {
   const o = e && typeof e === 'object' ? e : {};
   return {
     merges: clampMerges(o.merges),
     ivPlus: IVS.has(o.ivPlus) ? o.ivPlus : null,
     ivMinus: IVS.has(o.ivMinus) ? o.ivMinus : null,
     support: RANKS.has(o.support) ? o.support : null,
-    copies: clampCount(o.copies),
     date: typeof o.date === 'string' && DATE_RE.test(o.date) ? o.date : null,
     project: normProject(o.project),
   };
+}
+
+export function freshUnit() {
+  return { merges: 0, ivPlus: null, ivMinus: null, support: null, date: null, project: null };
+}
+
+// Accepte l'ancienne forme (objet unique, avec éventuel `copies`) ou une liste.
+// Renvoie une liste d'au moins une unité, ou null si rien d'exploitable.
+function normUnitList(v) {
+  if (Array.isArray(v)) {
+    const units = v.filter((u) => u && typeof u === 'object').map(normUnit);
+    return units.length ? units : null;
+  }
+  if (v && typeof v === 'object') {
+    const spares = clampCount(v.copies); // ancien compteur de doubles → unités vierges en plus
+    return [normUnit(v), ...Array.from({ length: spares }, () => freshUnit())];
+  }
+  return null;
 }
 
 function normWanted(v) {
@@ -56,16 +77,13 @@ function normWanted(v) {
   return null;
 }
 
-function freshEntry() {
-  return { merges: 0, ivPlus: null, ivMinus: null, support: null, copies: 0, date: null, project: null };
-}
-
 export function migrateCollection(raw) {
   const src = raw && typeof raw === 'object' ? raw : {};
   const rawOwned = src.owned && typeof src.owned === 'object' ? src.owned : {};
   const owned = {};
   for (const [id, e] of Object.entries(rawOwned)) {
-    if (e && typeof e === 'object') owned[id] = normEntry(e);
+    const units = normUnitList(e);
+    if (units) owned[id] = units;
   }
   const wanted = {};
   if (src.wanted && typeof src.wanted === 'object') {
@@ -93,7 +111,7 @@ export function migrateCollection(raw) {
 export function setOwned(col, id, owned) {
   const next = migrateCollection(col);
   if (owned) {
-    if (!next.owned[id]) next.owned[id] = freshEntry();
+    if (!next.owned[id]) next.owned[id] = [freshUnit()];
   } else {
     delete next.owned[id];
   }
@@ -101,18 +119,43 @@ export function setOwned(col, id, owned) {
   return next;
 }
 
-export function setCopies(col, id, n) {
+// Ajoute un exemplaire (crée l'entrée si le héros n'était pas possédé).
+export function addUnit(col, id) {
   const next = migrateCollection(col);
-  if (!next.owned[id]) return col;
-  next.owned[id] = { ...next.owned[id], copies: clampCount(n) };
+  if (!next.owned[id]) next.owned[id] = [];
+  next.owned[id] = [...next.owned[id], freshUnit()];
   next.updated = today();
   return next;
 }
 
-export function setDate(col, id, date) {
+// Retire l'exemplaire `index` ; supprime le héros s'il ne reste plus rien.
+export function removeUnit(col, id, index) {
   const next = migrateCollection(col);
-  if (!next.owned[id]) return col;
-  next.owned[id] = { ...next.owned[id], date: typeof date === 'string' && DATE_RE.test(date) ? date : null };
+  const units = next.owned[id];
+  if (!units || index < 0 || index >= units.length) return col;
+  const rest = units.filter((_, i) => i !== index);
+  if (rest.length) next.owned[id] = rest;
+  else delete next.owned[id];
+  next.updated = today();
+  return next;
+}
+
+// Modifie des champs simples (merges/ivPlus/ivMinus/date) d'un exemplaire.
+export function setUnit(col, id, index, patch) {
+  const next = migrateCollection(col);
+  const units = next.owned[id];
+  if (!units || index < 0 || index >= units.length) return col;
+  const cur = units[index];
+  const merged = {
+    ...cur,
+    ...('merges' in patch ? { merges: clampMerges(patch.merges) } : {}),
+    ...('ivPlus' in patch ? { ivPlus: IVS.has(patch.ivPlus) ? patch.ivPlus : null } : {}),
+    ...('ivMinus' in patch ? { ivMinus: IVS.has(patch.ivMinus) ? patch.ivMinus : null } : {}),
+    ...('date' in patch
+      ? { date: typeof patch.date === 'string' && DATE_RE.test(patch.date) ? patch.date : null }
+      : {}),
+  };
+  next.owned[id] = units.map((u, i) => (i === index ? merged : u));
   next.updated = today();
   return next;
 }
@@ -141,15 +184,20 @@ export function setWantedNote(col, id, note) {
   return next;
 }
 
-export function setProject(col, id, patch) {
+// Projet +10 sur l'exemplaire `index` ; `patch === null` retire le projet.
+export function setProject(col, id, index, patch) {
   const next = migrateCollection(col);
-  if (!next.owned[id]) return col;
+  const units = next.owned[id];
+  if (!units || index < 0 || index >= units.length) return col;
+  const cur = units[index];
+  let project;
   if (patch === null) {
-    next.owned[id] = { ...next.owned[id], project: null };
+    project = null;
   } else {
-    const base = next.owned[id].project || { targetMerges: 10, targetIvPlus: null, notes: '' };
-    next.owned[id] = { ...next.owned[id], project: normProject({ ...base, ...patch }) };
+    const base = cur.project || { targetMerges: 10, targetIvPlus: null, notes: '' };
+    project = normProject({ ...base, ...patch });
   }
+  next.owned[id] = units.map((u, i) => (i === index ? { ...u, project } : u));
   next.updated = today();
   return next;
 }
@@ -171,16 +219,20 @@ export function manualsTotal(col) {
   return Object.values(col && col.manuals ? col.manuals : {}).reduce((a, b) => a + b, 0);
 }
 
-export function setSupport(col, id, rank) {
+// Soutien de l'Invocateur : un seul `S` sur TOUTE la collection (tous héros, tous exemplaires).
+export function setSupport(col, id, index, rank) {
   const next = migrateCollection(col);
-  if (!next.owned[id]) return col;
+  const units = next.owned[id];
+  if (!units || index < 0 || index >= units.length) return col;
   const r = RANKS.has(rank) ? rank : null;
   if (r === 'S') {
-    for (const [k, e] of Object.entries(next.owned)) {
-      if (k !== id && e.support === 'S') e.support = null;
+    for (const [k, list] of Object.entries(next.owned)) {
+      next.owned[k] = list.map((u, i) => (
+        (k === id && i === index) || u.support !== 'S' ? u : { ...u, support: null }
+      ));
     }
   }
-  next.owned[id] = { ...next.owned[id], support: r };
+  next.owned[id] = next.owned[id].map((u, i) => (i === index ? { ...u, support: r } : u));
   next.updated = today();
   return next;
 }
@@ -189,12 +241,18 @@ export function ownedIdSet(col) {
   return new Set(Object.keys(col && col.owned ? col.owned : {}));
 }
 
+export function unitCount(col) {
+  return Object.values(col && col.owned ? col.owned : {}).reduce((a, list) => a + list.length, 0);
+}
+
 export function collectionStats(col, heroes) {
   const set = ownedIdSet(col);
   const total = heroes.length;
   let owned = 0;
   for (const h of heroes) if (set.has(h.id)) owned += 1;
-  return { owned, total, pct: total ? Math.round((owned / total) * 100) : 0 };
+  return {
+    owned, total, pct: total ? Math.round((owned / total) * 100) : 0, units: unitCount(col),
+  };
 }
 
 export function filterByStatus(heroes, ownedSet, status) {

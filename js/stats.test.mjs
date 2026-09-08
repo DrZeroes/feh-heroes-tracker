@@ -19,21 +19,25 @@ test('distribution par couleur', () => {
   ]);
 });
 
-test('acquisitionTimeline groupe par mois', () => {
-  const col = { owned: { A: { date: '2026-01-15' }, B: { date: '2026-01-02' }, C: { date: '2025-12-20' } } };
+test('acquisitionTimeline groupe par mois (toutes unités)', () => {
+  const col = { owned: {
+    A: [{ date: '2026-01-15' }, { date: '2025-12-01' }],
+    B: [{ date: '2026-01-02' }],
+    C: [{ date: '2025-12-20' }],
+  } };
   assert.deepEqual(acquisitionTimeline(col), [
-    { month: '2025-12', count: 1 },
+    { month: '2025-12', count: 2 },
     { month: '2026-01', count: 2 },
   ]);
 });
 
 test('acquisitionTimeline ignore les dates nulles', () => {
-  const col = { owned: { A: { date: null }, B: {} } };
+  const col = { owned: { A: [{ date: null }], B: [{}] } };
   assert.deepEqual(acquisitionTimeline(col), []);
 });
 
-test('topCopies', () => {
-  const col = { owned: { A: { copies: 5 }, B: { copies: 0 }, C: { copies: 2 } } };
+test('topCopies = héros en plusieurs exemplaires', () => {
+  const col = { owned: { A: [{}, {}, {}, {}, {}], B: [{}], C: [{}, {}] } };
   assert.deepEqual(topCopies(col, heroes, 10), [
     { id: 'A', name: 'A', title: '', copies: 5 },
     { id: 'C', name: 'C', title: 'x', copies: 2 },
@@ -58,17 +62,20 @@ test('wishlistByPriority', () => {
   });
 });
 
-test('projectProgress trie par avancement décroissant', () => {
+test('projectProgress : par exemplaire, trié par avancement décroissant', () => {
   const col = {
     owned: {
-      A: { merges: 5, project: { targetMerges: 10, targetIvPlus: 'atk', notes: '' } },
-      B: { merges: 10, project: { targetMerges: 10, targetIvPlus: null, notes: '' } },
-      C: { merges: 3, project: null },
+      A: [
+        { merges: 5, project: { targetMerges: 10, targetIvPlus: 'atk', notes: '' } },
+        { merges: 1, project: null },
+      ],
+      B: [{ merges: 10, project: { targetMerges: 10, targetIvPlus: null, notes: '' } }],
+      C: [{ merges: 3, project: null }],
     },
   };
   const p = projectProgress(col, heroes);
-  assert.deepEqual(p.map((x) => [x.id, x.pct, x.done]), [
-    ['B', 100, true],
-    ['A', 50, false],
+  assert.deepEqual(p.map((x) => [x.id, x.unit, x.name, x.pct, x.done]), [
+    ['B', 0, 'B', 100, true],
+    ['A', 0, 'A #1', 50, false],
   ]);
 });

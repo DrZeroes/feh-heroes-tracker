@@ -195,6 +195,16 @@ img { max-width: 100%; }
 .roster-remove, .wish-row .roster-remove { border: 1px solid var(--border); background: var(--card);
   color: var(--muted); border-radius: 6px; width: 1.7rem; height: 1.7rem; cursor: pointer; padding: 0; }
 .roster-remove:hover { border-color: #c0392b; color: #c0392b; }
+.roster-add { padding: .1rem 0 .3rem 3rem; }
+.roster-add button { border: 1px dashed var(--border); background: transparent; color: var(--muted);
+  border-radius: 6px; padding: .2rem .6rem; cursor: pointer; font: inherit; font-size: .8rem; }
+.roster-add button:hover { border-color: var(--accent); color: var(--accent); }
+
+.editor .copies-bar { display: flex; gap: .3rem; flex-wrap: wrap; }
+.copy-tab { border: 1px solid var(--border); background: var(--card); color: var(--fg);
+  border-radius: 6px; min-width: 1.9rem; height: 1.9rem; padding: 0 .3rem; cursor: pointer; font: inherit; }
+.copy-tab.is-active { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+.copy-tab.copy-del:hover { border-color: #c0392b; color: #c0392b; }
 
 .manual-add { display: flex; gap: .5rem; align-items: center; padding: .4rem 1rem 1rem; }
 .manual-add input { flex: 1 1 12rem; padding: .4rem .5rem; border: 1px solid var(--border);

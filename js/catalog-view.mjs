@@ -12,23 +12,20 @@ export const CATEGORY_ORDER = [
   'ghb', 'tempest', // unités Orbes héroïques : après la danse
 ];
 export const BLESSING_ORDER = ['fire', 'water', 'wind', 'earth', 'light', 'dark', 'astra', 'anima'];
-export const POOL_ORDER = ['3', '4', '4sr', '5', '5sr', 'special', 'na'];
+export const POOL_ORDER = ['3', '4', '4sr', '5', 'special', 'na'];
 
 // Palier de pool d'invocation, dérivé de poolRarity + poolFlags.
-//  3 / 4         : pool de base (démote possible)
-//  4sr / 5sr     : « Special Rate » (taux boosté sur bannière focus, hors pool général)
-//  special       : Héros Spéciaux (saisonniers) à taux spécial (SHSpecialRate)
-//  na            : hors pool (GHB / TT / exclusifs légendaire-mythique…)
+//  3 / 4     : pool général (démote possible)
+//  4sr       : 4★ à taux spécial (démote sur bannière focus)
+//  special   : 5★ à taux spécial / saisonnier (specialRate ou SHSpecialRate)
+//  na        : hors pool (GHB / TT / exclusifs légendaire-mythique…)
 export function poolTier(hero) {
   if (!hero || hero.poolRarity == null) return 'na';
   const flags = new Set(hero.poolFlags ?? []);
-  const sr = flags.has('specialRate');
-  const shsr = flags.has('SHSpecialRate');
+  const special = flags.has('specialRate') || flags.has('SHSpecialRate');
   if (hero.poolRarity === 3) return '3';
-  if (hero.poolRarity === 4) return sr ? '4sr' : '4';
-  if (shsr) return 'special';
-  if (sr) return '5sr';
-  return '5';
+  if (hero.poolRarity === 4) return special ? '4sr' : '4';
+  return special ? 'special' : '5';
 }
 
 // Trie `values` selon `order` ; les valeurs hors liste vont à la fin, en ordre alpha.
