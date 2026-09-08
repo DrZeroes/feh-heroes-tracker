@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   splitWeaponType, normalizeMoveType, parseListField, deriveCategory,
   pageNameFor, normalizePageName, blessingFromEffect, pickPoolRarity,
+  normalizeUnit, mergeJoins,
 } from './normalize.mjs';
 
 test('splitWeaponType sépare couleur et arme', () => {
@@ -91,4 +92,70 @@ test('pickPoolRarity renvoie null si aucune ligne utilisable', () => {
     pickPoolRarity([{ rarity: '5', property: 'revivalOnly', startTime: '2025-01-01 07:00:00' }]),
     { poolRarity: null, poolFlags: ['revivalOnly'] },
   );
+});
+
+const RAW_RHEA = {
+  WikiName: 'Rhea The Final Child', Name: 'Rhea', Title: 'The Final Child',
+  Person: 'Rhea', Origin: 'Fire Emblem: Three Houses', IntID: '1234', Gender: 'F',
+  WeaponType: 'Blue Breath', MoveType: 'Infantry', Artist: 'Kaya8',
+  ActorEN: 'Cherami Leigh', ActorJP: 'Ai Kayano',
+  ReleaseDate: '2026-08-31', Properties: 'legendary,hat',
+};
+
+test('normalizeUnit produit un héros normalisé sans jointures', () => {
+  const h = normalizeUnit(RAW_RHEA);
+  assert.equal(h.id, 'Rhea The Final Child');
+  assert.equal(h.name, 'Rhea');
+  assert.equal(h.title, 'The Final Child');
+  assert.equal(h.titleFr, null);
+  assert.equal(h.person, 'Rhea');
+  assert.equal(h.color, 'b');
+  assert.equal(h.weapon, 'breath');
+  assert.equal(h.move, 'infantry');
+  assert.equal(h.gender, 'F');
+  assert.equal(h.origin, 'Fire Emblem: Three Houses');
+  assert.equal(h.category, 'legendary');
+  assert.deepEqual(h.properties, ['legendary', 'hat']);
+  assert.equal(h.blessing, null);
+  assert.equal(h.poolRarity, null);
+  assert.deepEqual(h.poolFlags, []);
+  assert.equal(h.artist, 'Kaya8');
+  assert.deepEqual(h.actorEn, ['Cherami Leigh']);
+  assert.deepEqual(h.actorJp, ['Ai Kayano']);
+  assert.equal(h.releaseDate, '2026-08-31');
+  assert.equal(h.intId, 1234);
+});
+
+test('normalizeUnit tolère les champs manquants', () => {
+  const h = normalizeUnit({ WikiName: 'X', Name: 'X', Title: '' });
+  assert.equal(h.person, null);
+  assert.equal(h.color, null);
+  assert.equal(h.move, null);
+  assert.equal(h.gender, null);
+  assert.equal(h.intId, null);
+  assert.equal(h.releaseDate, null);
+  assert.deepEqual(h.actorEn, []);
+});
+
+test('normalizeUnit tronque une date horodatée à YYYY-MM-DD', () => {
+  const h = normalizeUnit({ WikiName: 'X', Name: 'X', Title: 'Y', ReleaseDate: '2026-08-31 00:00:00' });
+  assert.equal(h.releaseDate, '2026-08-31');
+});
+
+test('mergeJoins renseigne blessing et pool via la clé de page', () => {
+  const base = normalizeUnit(RAW_RHEA);
+  const blessingByPage = new Map([['rhea the final child', 'fire']]);
+  const poolByPage = new Map([['rhea the final child', { poolRarity: 5, poolFlags: ['specialRate'] }]]);
+  const merged = mergeJoins(base, { blessingByPage, poolByPage });
+  assert.equal(merged.blessing, 'fire');
+  assert.equal(merged.poolRarity, 5);
+  assert.deepEqual(merged.poolFlags, ['specialRate']);
+});
+
+test('mergeJoins laisse les valeurs par défaut si aucune correspondance', () => {
+  const base = normalizeUnit(RAW_RHEA);
+  const merged = mergeJoins(base, { blessingByPage: new Map(), poolByPage: new Map() });
+  assert.equal(merged.blessing, null);
+  assert.equal(merged.poolRarity, null);
+  assert.deepEqual(merged.poolFlags, []);
 });

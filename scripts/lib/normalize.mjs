@@ -82,3 +82,43 @@ export function pickPoolRarity(rows) {
   const n = Number.parseInt(best.rarity, 10);
   return { poolRarity: Number.isFinite(n) ? n : null, poolFlags };
 }
+
+export function normalizeUnit(raw) {
+  const { color, weapon } = splitWeaponType(raw.WeaponType);
+  const properties = parseListField(raw.Properties);
+  const releaseDate = String(raw.ReleaseDate ?? '').slice(0, 10) || null;
+  const intIdNum = Number.parseInt(raw.IntID, 10);
+  return {
+    id: String(raw.WikiName ?? '').trim(),
+    name: String(raw.Name ?? '').trim(),
+    title: String(raw.Title ?? '').trim(),
+    titleFr: null,
+    person: String(raw.Person ?? '').trim() || null,
+    color,
+    weapon,
+    move: normalizeMoveType(raw.MoveType),
+    gender: String(raw.Gender ?? '').trim() || null,
+    origin: String(raw.Origin ?? '').trim() || null,
+    category: deriveCategory(properties),
+    properties,
+    blessing: null,
+    poolRarity: null,
+    poolFlags: [],
+    artist: String(raw.Artist ?? '').trim() || null,
+    actorEn: parseListField(raw.ActorEN),
+    actorJp: parseListField(raw.ActorJP),
+    releaseDate,
+    intId: Number.isFinite(intIdNum) ? intIdNum : null,
+  };
+}
+
+export function mergeJoins(hero, { blessingByPage, poolByPage }) {
+  const key = normalizePageName(pageNameFor(hero.name, hero.title));
+  const pool = poolByPage.get(key) ?? { poolRarity: null, poolFlags: [] };
+  return {
+    ...hero,
+    blessing: blessingByPage.get(key) ?? null,
+    poolRarity: pool.poolRarity,
+    poolFlags: pool.poolFlags,
+  };
+}
