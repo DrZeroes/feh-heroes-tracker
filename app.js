@@ -325,7 +325,7 @@ function openDetail(hero) {
     merges.addEventListener('change', () => {
       const v = clampMerges(merges.value);
       merges.value = String(v);
-      state.collection.owned[hero.id] = { ...entry, merges: v };
+      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], merges: v };
       state.collection.updated = new Date().toISOString().slice(0, 10);
       saveCollection();
     });
