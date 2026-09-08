@@ -12,6 +12,9 @@
       <strong data-i18n="app.title">FEH Collection Tracker</strong>
       <span class="tagline" data-i18n="app.tagline">Catalogue Fire Emblem Heroes</span>
     </div>
+    <button id="export-btn" type="button" class="lang" data-i18n="action.export">Export</button>
+    <button id="import-btn" type="button" class="lang" data-i18n="action.import">Import</button>
+    <input id="import-file" type="file" accept="application/json,.json" hidden>
     <button id="theme-toggle" type="button" class="lang" aria-label="theme">🌓</button>
     <button id="lang-toggle" type="button" class="lang" aria-label="language">EN</button>
   </header>
@@ -29,6 +32,15 @@
       <input id="group-toggle" type="checkbox">
       <span data-i18n="group.byPerson">Grouper par personnage</span>
     </label>
+    <label class="status">
+      <span data-i18n="filter.status">Statut</span>
+      <select id="status-filter">
+        <option value="all" data-i18n="status.all">Tous</option>
+        <option value="owned" data-i18n="status.owned">Possédés</option>
+        <option value="missing" data-i18n="status.missing">Manquants</option>
+      </select>
+    </label>
+    <span id="collection-count" class="collection-count" aria-live="polite"></span>
   </section>
 
   <p id="grid-count" class="grid-count" aria-live="polite"></p>
