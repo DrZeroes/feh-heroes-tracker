@@ -5,11 +5,11 @@ import {
   setOwned, addUnit, removeUnit, setUnit, setSupport, setProject,
   ownedIdSet, unitCount, collectionStats, filterByStatus,
   setWanted, wantedIdSet, setWantedPriority, setWantedNote,
-  setManualCount, manualsTotal,
+  setManualCount, manualsTotal, manualsByRarity,
 } from './collection.mjs';
 
 const U = (o = {}) => ({
-  merges: 0, ivPlus: null, ivMinus: null, support: null, date: null, project: null, ...o,
+  rarity: null, merges: 0, ivPlus: null, ivMinus: null, support: null, date: null, project: null, ...o,
 });
 
 test('emptyCollection', () => {
@@ -97,6 +97,10 @@ test('setUnit : modifie l\'exemplaire ciblé seulement', () => {
   assert.deepEqual(c.owned.A[1], U({ merges: 5, ivPlus: 'atk', ivMinus: 'spd', date: '2026-03-01' }));
   c = setUnit(c, 'A', 1, { date: 'nope' });
   assert.equal(c.owned.A[1].date, null);
+  c = setUnit(c, 'A', 0, { rarity: 4 });
+  assert.equal(c.owned.A[0].rarity, 4);
+  c = setUnit(c, 'A', 0, { rarity: 9 });
+  assert.equal(c.owned.A[0].rarity, null);
   assert.equal(setUnit(c, 'A', 9, { merges: 1 }), c);
 });
 
@@ -178,10 +182,22 @@ test('setWantedPriority / setWantedNote', () => {
   assert.equal(setWantedPriority(c, 'Ghost', 'high'), c);
 });
 
-test('setManualCount / manualsTotal', () => {
-  let c = setManualCount(migrateCollection({}), 'A', 3);
-  c = setManualCount(c, 'B', 1);
-  assert.equal(manualsTotal(c), 4);
-  c = setManualCount(c, 'A', 0);
-  assert.deepEqual(c.manuals, { B: 1 });
+test('setManualCount par rareté / manualsTotal / manualsByRarity', () => {
+  let c = setManualCount(migrateCollection({}), 'A', 5, 3);
+  c = setManualCount(c, 'A', 4, 2);
+  c = setManualCount(c, 'B', 3, 1);
+  assert.deepEqual(c.manuals.A, { 4: 2, 5: 3 });
+  assert.deepEqual(manualsByRarity(c, 'A'), { 3: 0, 4: 2, 5: 3 });
+  assert.equal(manualsTotal(c), 6);
+  c = setManualCount(c, 'A', 5, 0);
+  assert.deepEqual(c.manuals.A, { 4: 2 });
+  c = setManualCount(c, 'A', 4, 0);
+  assert.ok(!('A' in c.manuals));
+});
+
+test('migrateCollection : ancien manuels entier -> 5★', () => {
+  const c = migrateCollection({ manuals: { A: 3, B: { 3: 1, 5: 2 }, C: 0 } });
+  assert.deepEqual(c.manuals.A, { 5: 3 });
+  assert.deepEqual(c.manuals.B, { 3: 1, 5: 2 });
+  assert.ok(!('C' in c.manuals));
 });

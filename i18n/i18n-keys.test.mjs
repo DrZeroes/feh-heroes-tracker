@@ -30,7 +30,7 @@ const REQUIRED = [
   'gender.female', 'gender.male', 'gender.multi', 'gender.other',
   'poolRarity.low', 'poolRarity.5', 'poolRarity.4sr', 'poolRarity.na',
   'status.all', 'status.owned', 'status.missing', 'status.wanted',
-  'field.owned', 'field.merges', 'field.ivPlus', 'field.ivMinus', 'field.support',
+  'field.owned', 'field.rarity', 'field.merges', 'field.ivPlus', 'field.ivMinus', 'field.support',
   'field.date', 'field.wanted',
   'support.none', 'support.C', 'support.B', 'support.A', 'support.S',
   'iv.none', 'iv.hp', 'iv.atk', 'iv.spd', 'iv.def', 'iv.res',

@@ -104,6 +104,7 @@
   "status.owned": "Possédés",
   "status.missing": "Manquants",
   "field.owned": "Possédé",
+  "field.rarity": "Rareté",
   "field.merges": "Fusions",
   "field.ivPlus": "IV +",
   "field.ivMinus": "IV −",

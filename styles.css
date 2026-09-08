@@ -182,11 +182,11 @@ img { max-width: 100%; }
 
 .roster { display: grid; gap: .5rem; padding: 1rem; }
 .roster-row { display: grid;
-  grid-template-columns: 2.4rem minmax(0, 1fr) repeat(4, minmax(3.4rem, auto)) 2rem;
+  grid-template-columns: 2.4rem minmax(0, 1fr) repeat(5, minmax(3rem, auto)) 1.9rem;
   gap: .5rem; align-items: center; background: var(--card); border: 1px solid var(--border);
   border-radius: 10px; padding: .4rem .6rem; }
 .roster-head { background: transparent; border: none; padding: 0 .6rem; }
-.roster-head span { font-size: .68rem; text-transform: uppercase; letter-spacing: .03em;
+.roster-head span { font-size: .66rem; text-transform: uppercase; letter-spacing: .03em;
   color: var(--muted); text-align: center; }
 .roster-head span:nth-child(2) { text-align: left; }
 .roster-row img.roster-portrait { width: 2.4rem; height: 2.4rem; border-radius: 6px;
@@ -195,6 +195,8 @@ img { max-width: 100%; }
   color: inherit; font: inherit; cursor: pointer; padding: 0; }
 .roster-row .who b { display: block; font-size: .85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .roster-row .who span { font-size: .72rem; color: var(--muted); }
+.rfield { display: contents; }
+.rfield > span { display: none; } /* caption : mobile seulement */
 .roster-row select, .roster-row input { padding: .25rem .3rem; border: 1px solid var(--border);
   border-radius: 6px; background: var(--card); color: var(--fg); width: 100%; }
 .roster-remove, .wish-row .roster-remove { border: 1px solid var(--border); background: var(--card);
@@ -205,25 +207,48 @@ img { max-width: 100%; }
   border-radius: 6px; padding: .2rem .6rem; cursor: pointer; font: inherit; font-size: .8rem; }
 .roster-add button:hover { border-color: var(--accent); color: var(--accent); }
 
+/* --- Caserne / Manuels sur petit écran : lignes empilées en cartes --- */
+@media (max-width: 46rem) {
+  .roster-head { display: none; }
+  .roster-row { grid-template-columns: 2.4rem 1fr; row-gap: .55rem; }
+  .roster-row .roster-remove { grid-column: 2; justify-self: end; margin-top: -.2rem; }
+  .rfield { display: flex; flex-direction: column; gap: .15rem; }
+  .rfield:nth-of-type(odd) { grid-column: 1 / 2; }
+  .rfield:nth-of-type(even) { grid-column: 2 / 3; }
+  .rfield > span { display: block; font-size: .64rem; text-transform: uppercase;
+    letter-spacing: .03em; color: var(--muted); }
+  .manual-row { grid-template-columns: 2rem 1fr; }
+  .manual-row .manual-name { grid-column: 2; }
+  .manual-row .manual-icons { grid-column: 1; justify-self: center; }
+  .manual-steppers { grid-column: 1 / -1; }
+}
+
 .editor .copies-bar { display: flex; gap: .3rem; flex-wrap: wrap; }
 .copy-tab { border: 1px solid var(--border); background: var(--card); color: var(--fg);
   border-radius: 6px; min-width: 1.9rem; height: 1.9rem; padding: 0 .3rem; cursor: pointer; font: inherit; }
 .copy-tab.is-active { border-color: var(--accent); color: var(--accent); font-weight: 700; }
 .copy-tab.copy-del:hover { border-color: #c0392b; color: #c0392b; }
 
-.manual-add { display: flex; gap: .5rem; align-items: center; padding: .4rem 1rem 1rem; }
+.manual-add { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; padding: .4rem 1rem 1rem; }
 .manual-add input { flex: 1 1 12rem; padding: .4rem .5rem; border: 1px solid var(--border);
   border-radius: 8px; background: var(--card); color: var(--fg); }
+.manual-add select { padding: .35rem .4rem; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--card); color: var(--fg); }
 .manual-add button { border: 1px solid var(--border); background: var(--card); color: var(--fg);
   border-radius: 6px; width: 2rem; height: 2rem; cursor: pointer; font-weight: 700; }
-.manual-row { display: grid; grid-template-columns: 2rem auto minmax(0, 1fr) auto auto auto;
-  gap: .5rem; align-items: center; padding: .4rem 1rem; border-bottom: 1px solid var(--border); }
+.manual-row { display: grid; grid-template-columns: 2rem auto minmax(0, 1fr) auto;
+  gap: .5rem .6rem; align-items: center; padding: .5rem 1rem; border-bottom: 1px solid var(--border); }
 .manual-row .roster-portrait { width: 2rem; height: 2rem; border-radius: 5px; background: var(--bg); cursor: pointer; }
 .manual-icons { display: flex; gap: .25rem; }
 .manual-icons img { width: 16px; height: 16px; }
 .manual-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .85rem; }
-.manual-row button { border: 1px solid var(--border); background: var(--card); color: var(--fg);
-  border-radius: 6px; width: 1.8rem; height: 1.8rem; cursor: pointer; }
+.manual-steppers { display: flex; gap: .5rem; flex-wrap: wrap; justify-self: end; }
+.mstep { display: inline-flex; align-items: center; gap: .2rem; font-size: .78rem; }
+.mstep b { color: var(--muted); font-weight: 700; min-width: 1.5rem; }
+.mstep.is-zero { opacity: .45; }
+.mstep .mcount { min-width: 1ch; text-align: center; font-variant-numeric: tabular-nums; }
+.manual-row button, .mstep button { border: 1px solid var(--border); background: var(--card); color: var(--fg);
+  border-radius: 6px; width: 1.7rem; height: 1.7rem; cursor: pointer; }
 
 .card .card-add { position: absolute; bottom: .4rem; right: .4rem; width: 1.5rem; height: 1.5rem;
   border-radius: 50%; border: 1px solid var(--border); background: var(--card); color: var(--fg);

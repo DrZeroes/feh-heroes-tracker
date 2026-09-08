@@ -11,7 +11,7 @@ import {
   migrateCollection, emptyCollection, setOwned, setSupport, clampMerges,
   ownedIdSet, collectionStats, filterByStatus,
   addUnit, removeUnit, setUnit, setWanted, wantedIdSet,
-  setManualCount, manualsTotal,
+  setManualCount, manualsTotal, manualsByRarity,
   setWantedPriority, setWantedNote, setProject,
 } from './js/collection.mjs';
 import {
@@ -436,6 +436,27 @@ function ivOptions(sel, cur) {
   }
 }
 
+// Sélecteur de rareté 3/4/5★ (valeur '' = non renseigné).
+function rarityOptions(sel, cur) {
+  for (const v of ['', '3', '4', '5']) {
+    const o = document.createElement('option');
+    o.value = v;
+    o.textContent = v ? `${v}★` : '—';
+    if (String(cur ?? '') === v) o.selected = true;
+    sel.appendChild(o);
+  }
+}
+
+// Champ étiqueté (caption visible en mobile, masquée en desktop via CSS).
+function rfield(captionKey, control) {
+  const l = document.createElement('label');
+  l.className = 'rfield';
+  const cap = document.createElement('span');
+  cap.textContent = state.t(captionKey);
+  l.append(cap, control);
+  return l;
+}
+
 function renderCaserne() {
   const box = $('#view-caserne');
   box.innerHTML = '';
@@ -452,7 +473,7 @@ function renderCaserne() {
   const head = document.createElement('div');
   head.className = 'roster-row roster-head';
   for (const label of [
-    '', state.t('caserne.colHero'), state.t('field.merges'),
+    '', state.t('caserne.colHero'), state.t('field.rarity'), state.t('field.merges'),
     state.t('field.ivPlus'), state.t('field.ivMinus'), state.t('field.support'), '',
   ]) {
     const c = document.createElement('span');
@@ -489,6 +510,14 @@ function renderCaserne() {
       who.addEventListener('click', () => openDetail(hero, idx));
       row.appendChild(who);
 
+      const rar = document.createElement('select');
+      rarityOptions(rar, unit.rarity);
+      rar.addEventListener('change', () => {
+        state.collection = setUnit(state.collection, hero.id, idx, { rarity: rar.value || null });
+        commit(false);
+      });
+      row.appendChild(rfield('field.rarity', rar));
+
       const merges = document.createElement('input');
       merges.type = 'number'; merges.min = '0'; merges.max = '10'; merges.value = String(unit.merges);
       merges.addEventListener('change', () => {
@@ -496,7 +525,7 @@ function renderCaserne() {
         state.collection = setUnit(state.collection, hero.id, idx, { merges: merges.value });
         commit(false);
       });
-      row.appendChild(merges);
+      row.appendChild(rfield('field.merges', merges));
 
       const ivP = document.createElement('select');
       ivOptions(ivP, unit.ivPlus);
@@ -504,7 +533,7 @@ function renderCaserne() {
         state.collection = setUnit(state.collection, hero.id, idx, { ivPlus: ivP.value || null });
         commit(false);
       });
-      row.appendChild(ivP);
+      row.appendChild(rfield('field.ivPlus', ivP));
 
       const ivM = document.createElement('select');
       ivOptions(ivM, unit.ivMinus);
@@ -512,7 +541,7 @@ function renderCaserne() {
         state.collection = setUnit(state.collection, hero.id, idx, { ivMinus: ivM.value || null });
         commit(false);
       });
-      row.appendChild(ivM);
+      row.appendChild(rfield('field.ivMinus', ivM));
 
       const sup = document.createElement('select');
       for (const v of ['none', 'C', 'B', 'A', 'S']) {
@@ -526,7 +555,7 @@ function renderCaserne() {
         state.collection = setSupport(state.collection, hero.id, idx, sup.value || null);
         commit(true); // règle un-seul-S : d'autres lignes peuvent changer
       });
-      row.appendChild(sup);
+      row.appendChild(rfield('field.support', sup));
 
       const rm = document.createElement('button');
       rm.type = 'button';
@@ -800,7 +829,7 @@ function renderManuels() {
   total.textContent = state.t('manuels.total', { n: manualsTotal(state.collection) });
   box.appendChild(total);
 
-  // ajout : datalist sur le catalogue
+  // ajout : datalist sur le catalogue + choix de rareté
   const addWrap = document.createElement('div');
   addWrap.className = 'manual-add';
   const input = document.createElement('input');
@@ -814,6 +843,12 @@ function renderManuels() {
     o.dataset.id = h.id;
     dl.appendChild(o);
   }
+  const addStar = document.createElement('select');
+  for (const v of ['5', '4', '3']) {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = `${v}★`;
+    addStar.appendChild(o);
+  }
   const addBtn = document.createElement('button');
   addBtn.type = 'button';
   addBtn.textContent = '+';
@@ -821,12 +856,13 @@ function renderManuels() {
     const opt = [...dl.children].find((o) => o.value === input.value);
     if (!opt) return;
     const id = opt.dataset.id;
-    state.collection = setManualCount(state.collection, id, (state.collection.manuals[id] || 0) + 1);
+    const r = addStar.value;
+    state.collection = setManualCount(state.collection, id, r, manualsByRarity(state.collection, id)[r] + 1);
     saveCollection();
     input.value = '';
     renderManuels();
   });
-  addWrap.append(input, dl, document.createElement('span'), addBtn);
+  addWrap.append(input, dl, addStar, addBtn);
   box.appendChild(addWrap);
 
   const entries = Object.entries(state.collection.manuals);
@@ -839,8 +875,9 @@ function renderManuels() {
   }
   const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
   entries.sort((a, b) => (heroesById.get(a[0])?.name || a[0]).localeCompare(heroesById.get(b[0])?.name || b[0]));
-  for (const [id, n] of entries) {
+  for (const [id] of entries) {
     const h = heroesById.get(id) || { name: id, title: '' };
+    const by = manualsByRarity(state.collection, id);
     const row = document.createElement('div');
     row.className = 'manual-row';
 
@@ -865,23 +902,35 @@ function renderManuels() {
     label.textContent = `${h.name}${h.title ? ` · ${h.title}` : ''}`;
     row.appendChild(label);
 
-    const minus = document.createElement('button');
-    minus.type = 'button'; minus.textContent = '−';
-    minus.addEventListener('click', () => {
-      state.collection = setManualCount(state.collection, id, n - 1);
-      saveCollection();
-      renderManuels();
-    });
-    const count = document.createElement('span');
-    count.textContent = String(n);
-    const plus = document.createElement('button');
-    plus.type = 'button'; plus.textContent = '+';
-    plus.addEventListener('click', () => {
-      state.collection = setManualCount(state.collection, id, n + 1);
-      saveCollection();
-      renderManuels();
-    });
-    row.append(minus, count, plus);
+    const steppers = document.createElement('div');
+    steppers.className = 'manual-steppers';
+    for (const r of ['5', '4', '3']) {
+      const grp = document.createElement('span');
+      grp.className = 'mstep';
+      if (!by[r]) grp.classList.add('is-zero');
+      const cap = document.createElement('b');
+      cap.textContent = `${r}★`;
+      const minus = document.createElement('button');
+      minus.type = 'button'; minus.textContent = '−';
+      minus.addEventListener('click', () => {
+        state.collection = setManualCount(state.collection, id, r, by[r] - 1);
+        saveCollection();
+        renderManuels();
+      });
+      const count = document.createElement('span');
+      count.className = 'mcount';
+      count.textContent = String(by[r]);
+      const plus = document.createElement('button');
+      plus.type = 'button'; plus.textContent = '+';
+      plus.addEventListener('click', () => {
+        state.collection = setManualCount(state.collection, id, r, by[r] + 1);
+        saveCollection();
+        renderManuels();
+      });
+      grp.append(cap, minus, count, plus);
+      steppers.appendChild(grp);
+    }
+    row.appendChild(steppers);
     box.appendChild(row);
   }
 }
@@ -1035,6 +1084,14 @@ function openDetail(hero, unitIndex = 0) {
     }
     ed.appendChild(copiesBar);
 
+    const rar = document.createElement('select');
+    rarityOptions(rar, unit.rarity);
+    rar.addEventListener('change', () => {
+      state.collection = setUnit(state.collection, hero.id, idx, { rarity: rar.value || null });
+      saveCollection();
+    });
+    addRow('field.rarity', rar);
+
     const merges = document.createElement('input');
     merges.type = 'number'; merges.min = '0'; merges.max = '10'; merges.value = String(unit.merges);
     merges.addEventListener('change', () => {
@@ -1169,22 +1226,32 @@ function openDetail(hero, unitIndex = 0) {
 
   const manRow = document.createElement('div');
   manRow.className = 'owned-row manual-inline';
+  const manStar = document.createElement('select');
+  for (const v of ['5', '4', '3']) {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = `${v}★`;
+    manStar.appendChild(o);
+  }
   const manBtn = document.createElement('button');
   manBtn.type = 'button';
   manBtn.className = 'lang';
   manBtn.textContent = state.t('detail.addManual');
   const manCount = document.createElement('span');
   const syncMan = () => {
-    const n = state.collection.manuals[hero.id] || 0;
-    manCount.textContent = n ? `${state.t('detail.manuals')}: ${n}` : '';
+    const by = manualsByRarity(state.collection, hero.id);
+    const parts = ['5', '4', '3'].filter((r) => by[r]).map((r) => `${by[r]}×${r}★`);
+    manCount.textContent = parts.length ? `${state.t('detail.manuals')}: ${parts.join(' · ')}` : '';
   };
   syncMan();
   manBtn.addEventListener('click', () => {
-    state.collection = setManualCount(state.collection, hero.id, (state.collection.manuals[hero.id] || 0) + 1);
+    const r = manStar.value;
+    state.collection = setManualCount(
+      state.collection, hero.id, r, manualsByRarity(state.collection, hero.id)[r] + 1,
+    );
     saveCollection();
     syncMan();
   });
-  manRow.append(manBtn, manCount);
+  manRow.append(manStar, manBtn, manCount);
   ed.appendChild(manRow);
 
   body.appendChild(ed);

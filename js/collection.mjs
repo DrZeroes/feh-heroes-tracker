@@ -7,6 +7,8 @@
 const IVS = new Set(['hp', 'atk', 'spd', 'def', 'res']);
 const RANKS = new Set(['C', 'B', 'A', 'S']);
 const PRIORITIES = new Set(['high', 'normal']);
+const STARS = [3, 4, 5];
+const star = (v) => (STARS.includes(Number(v)) ? Number(v) : null);
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -39,6 +41,7 @@ function normProject(p) {
 function normUnit(e) {
   const o = e && typeof e === 'object' ? e : {};
   return {
+    rarity: star(o.rarity),
     merges: clampMerges(o.merges),
     ivPlus: IVS.has(o.ivPlus) ? o.ivPlus : null,
     ivMinus: IVS.has(o.ivMinus) ? o.ivMinus : null,
@@ -49,7 +52,9 @@ function normUnit(e) {
 }
 
 export function freshUnit() {
-  return { merges: 0, ivPlus: null, ivMinus: null, support: null, date: null, project: null };
+  return {
+    rarity: null, merges: 0, ivPlus: null, ivMinus: null, support: null, date: null, project: null,
+  };
 }
 
 // Accepte l'ancienne forme (objet unique, avec éventuel `copies`) ou une liste.
@@ -62,6 +67,24 @@ function normUnitList(v) {
   if (v && typeof v === 'object') {
     const spares = clampCount(v.copies); // ancien compteur de doubles → unités vierges en plus
     return [normUnit(v), ...Array.from({ length: spares }, () => freshUnit())];
+  }
+  return null;
+}
+
+// Manuels de combat par rareté : { "3": n, "4": n, "5": n } (entrées non nulles).
+// Ancienne forme (entier) -> supposée 5★.
+function normManuals(v) {
+  if (typeof v === 'number') {
+    const n = clampCount(v);
+    return n > 0 ? { 5: n } : null;
+  }
+  if (v && typeof v === 'object') {
+    const out = {};
+    for (const r of STARS) {
+      const n = clampCount(v[r]);
+      if (n > 0) out[r] = n;
+    }
+    return Object.keys(out).length ? out : null;
   }
   return null;
 }
@@ -95,8 +118,8 @@ export function migrateCollection(raw) {
   const manuals = {};
   if (src.manuals && typeof src.manuals === 'object') {
     for (const [id, v] of Object.entries(src.manuals)) {
-      const n = clampCount(v);
-      if (n > 0) manuals[id] = n;
+      const rec = normManuals(v);
+      if (rec) manuals[id] = rec;
     }
   }
   return {
@@ -140,7 +163,7 @@ export function removeUnit(col, id, index) {
   return next;
 }
 
-// Modifie des champs simples (merges/ivPlus/ivMinus/date) d'un exemplaire.
+// Modifie des champs simples (rarity/merges/ivPlus/ivMinus/date) d'un exemplaire.
 export function setUnit(col, id, index, patch) {
   const next = migrateCollection(col);
   const units = next.owned[id];
@@ -148,6 +171,7 @@ export function setUnit(col, id, index, patch) {
   const cur = units[index];
   const merged = {
     ...cur,
+    ...('rarity' in patch ? { rarity: star(patch.rarity) } : {}),
     ...('merges' in patch ? { merges: clampMerges(patch.merges) } : {}),
     ...('ivPlus' in patch ? { ivPlus: IVS.has(patch.ivPlus) ? patch.ivPlus : null } : {}),
     ...('ivMinus' in patch ? { ivMinus: IVS.has(patch.ivMinus) ? patch.ivMinus : null } : {}),
@@ -206,17 +230,32 @@ export function wantedIdSet(col) {
   return new Set(Object.keys(col && col.wanted ? col.wanted : {}));
 }
 
-export function setManualCount(col, id, n) {
+// Fixe le nombre de manuels d'un héros pour une rareté (3, 4 ou 5).
+export function setManualCount(col, id, rarity, n) {
   const next = migrateCollection(col);
+  const r = star(rarity) ?? 5;
   const c = clampCount(n);
-  if (c > 0) next.manuals[id] = c;
+  const rec = next.manuals[id] && typeof next.manuals[id] === 'object' ? { ...next.manuals[id] } : {};
+  if (c > 0) rec[r] = c;
+  else delete rec[r];
+  if (Object.keys(rec).length) next.manuals[id] = rec;
   else delete next.manuals[id];
   next.updated = today();
   return next;
 }
 
+export function manualsByRarity(col, id) {
+  const rec = col && col.manuals && col.manuals[id] ? col.manuals[id] : {};
+  return { 3: rec[3] || 0, 4: rec[4] || 0, 5: rec[5] || 0 };
+}
+
 export function manualsTotal(col) {
-  return Object.values(col && col.manuals ? col.manuals : {}).reduce((a, b) => a + b, 0);
+  const m = col && col.manuals ? col.manuals : {};
+  let t = 0;
+  for (const rec of Object.values(m)) {
+    for (const n of Object.values(rec || {})) t += Number(n) || 0;
+  }
+  return t;
 }
 
 // Soutien de l'Invocateur : un seul `S` sur TOUTE la collection (tous héros, tous exemplaires).
