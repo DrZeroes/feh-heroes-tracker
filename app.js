@@ -8,6 +8,7 @@ import {
   migrateCollection, emptyCollection, setOwned, setSupport, clampMerges,
   ownedIdSet, collectionStats, filterByStatus,
   setCopies, setDate, setWanted, wantedIdSet,
+  setManualCount, manualsTotal,
 } from './js/collection.mjs';
 import { distribution, acquisitionTimeline, topCopies, wishlistSummary } from './js/stats.mjs';
 
@@ -484,8 +485,97 @@ function renderStats() {
   wl.textContent = state.t('stats.wishlistLine', w);
   box.appendChild(wl);
 }
-function renderWishlist() { $('#view-wishlist').innerHTML = ''; }
-function renderManuels() { $('#view-manuels').innerHTML = ''; }
+function renderWishlist() {
+  const box = $('#view-wishlist');
+  box.innerHTML = '';
+  const ids = [...wantedIdSet(state.collection)];
+  const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
+  const list = ids.map((id) => heroesById.get(id)).filter(Boolean);
+  if (!list.length) {
+    box.innerHTML = `<p class="empty-note">${state.t('wishlist.empty')}</p>`;
+    return;
+  }
+  list.sort((a, b) => (sortHeroes([a, b], 'release-desc')[0] === a ? -1 : 1));
+  const grid = document.createElement('main');
+  grid.className = 'grid';
+  for (const hero of list) grid.appendChild(card(hero));
+  box.appendChild(grid);
+}
+function renderManuels() {
+  const box = $('#view-manuels');
+  box.innerHTML = '';
+
+  const total = document.createElement('p');
+  total.className = 'stat-block';
+  total.style.fontWeight = '700';
+  total.textContent = state.t('manuels.total', { n: manualsTotal(state.collection) });
+  box.appendChild(total);
+
+  // ajout : datalist sur le catalogue
+  const addWrap = document.createElement('div');
+  addWrap.className = 'manual-row';
+  const input = document.createElement('input');
+  input.setAttribute('list', 'manual-hero-list');
+  input.placeholder = state.t('manuels.add');
+  const dl = document.createElement('datalist');
+  dl.id = 'manual-hero-list';
+  for (const h of state.heroes) {
+    const o = document.createElement('option');
+    o.value = `${h.name} — ${h.title}`;
+    o.dataset.id = h.id;
+    dl.appendChild(o);
+  }
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.textContent = '+';
+  addBtn.addEventListener('click', () => {
+    const opt = [...dl.children].find((o) => o.value === input.value);
+    if (!opt) return;
+    const id = opt.dataset.id;
+    state.collection = setManualCount(state.collection, id, (state.collection.manuals[id] || 0) + 1);
+    saveCollection();
+    input.value = '';
+    renderManuels();
+  });
+  addWrap.append(input, dl, document.createElement('span'), addBtn);
+  box.appendChild(addWrap);
+
+  const entries = Object.entries(state.collection.manuals);
+  if (!entries.length) {
+    const p = document.createElement('p');
+    p.className = 'empty-note';
+    p.textContent = state.t('manuels.empty');
+    box.appendChild(p);
+    return;
+  }
+  const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
+  entries.sort((a, b) => (heroesById.get(a[0])?.name || a[0]).localeCompare(heroesById.get(b[0])?.name || b[0]));
+  for (const [id, n] of entries) {
+    const h = heroesById.get(id) || { name: id, title: '' };
+    const row = document.createElement('div');
+    row.className = 'manual-row';
+    const label = document.createElement('span');
+    label.textContent = `${h.name}${h.title ? ` — ${h.title}` : ''}`;
+    const minus = document.createElement('button');
+    minus.type = 'button'; minus.textContent = '−';
+    minus.addEventListener('click', () => {
+      state.collection = setManualCount(state.collection, id, n - 1);
+      saveCollection();
+      renderManuels();
+    });
+    const count = document.createElement('span');
+    count.textContent = String(n);
+    const plus = document.createElement('button');
+    plus.type = 'button'; plus.textContent = '+';
+    plus.addEventListener('click', () => {
+      state.collection = setManualCount(state.collection, id, n + 1);
+      saveCollection();
+      renderManuels();
+    });
+    row.append(label, minus, count, plus);
+    box.appendChild(row);
+  }
+}
 
 function openDetail(hero) {
   const body = $('#detail-body');
