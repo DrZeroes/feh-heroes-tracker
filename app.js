@@ -223,6 +223,26 @@ function card(hero) {
     el.appendChild(r);
   }
 
+  const add = document.createElement('button');
+  add.type = 'button';
+  add.className = 'card-add';
+  const syncAdd = () => {
+    const owned = isOwned(hero.id);
+    add.textContent = owned ? '✓' : '+';
+    add.setAttribute('aria-label', state.t(owned ? 'card.remove' : 'card.add'));
+    add.title = add.getAttribute('aria-label');
+  };
+  syncAdd();
+  add.addEventListener('click', (e) => {
+    e.stopPropagation();
+    state.collection = setOwned(state.collection, hero.id, !isOwned(hero.id));
+    saveCollection();
+    refreshCard(hero.id);
+    syncAdd();
+    updateCollectionCount();
+  });
+  el.appendChild(add);
+
   const open = () => openDetail(hero);
   el.addEventListener('click', open);
   el.addEventListener('keydown', (e) => { if (e.key === 'Enter') open(); });
