@@ -119,3 +119,25 @@ body { margin: 0; background: var(--bg); color: var(--fg);
 a { color: var(--accent); }
 [hidden] { display: none !important; }
 img { max-width: 100%; }
+
+.card.is-owned::after {
+  content: "\2713";
+  position: absolute; top: .4rem; left: .4rem;
+  width: 1.05rem; height: 1.05rem; line-height: 1.05rem; text-align: center;
+  font-size: .8rem; font-weight: 700; color: #fff;
+  background: var(--owned, #3fae52); border: 2px solid var(--card); border-radius: 50%;
+}
+.card.is-missing { opacity: .62; }
+.card.is-missing:hover { opacity: 1; }
+
+.status, .collection-count { display: flex; align-items: center; gap: .35rem; font-size: .85rem; color: var(--muted); }
+.collection-count { font-weight: 600; color: var(--fg); }
+
+.editor { display: grid; grid-template-columns: auto 1fr; gap: .45rem .8rem; align-items: center;
+  margin: .9rem 0 0; padding-top: .8rem; border-top: 1px solid var(--border); }
+.editor label { color: var(--muted); }
+.editor input[type="number"], .editor select {
+  width: 100%; padding: .3rem .4rem; border: 1px solid var(--border);
+  border-radius: 6px; background: var(--card); color: var(--fg);
+}
+.editor .owned-row { grid-column: 1 / -1; display: flex; align-items: center; gap: .5rem; font-weight: 600; }
