@@ -905,6 +905,138 @@ git commit -m "$(printf 'feat: game filter in release order with short labels\n\
 
 ---
 
+## Task 11: Mode sombre manuel (toggle + `data-theme` + persistance)
+
+**Files:** `index.html`, `styles.css`, `app.js`, `i18n/en.json`, `i18n/fr.json`, `i18n/i18n-keys.test.mjs`
+
+**Interfaces:**
+- `styles.css` : la palette claire reste sur `:root` ; les tokens sombres sont définis dans **deux** blocs — `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { … } }` (suivi OS) **et** `:root[data-theme="dark"] { … }` (forçage). `body` garde un `background` explicite.
+- `app.js` : `resolveTheme(stored)` → `'dark' | 'light' | null` (null = suit l'OS) ; au chargement, si `stored` non nul → `document.documentElement.dataset.theme = stored`. Bouton `#theme-toggle` : bascule entre `'dark'` et `'light'` (calcul de l'état effectif courant via `matchMedia('(prefers-color-scheme: dark)')` quand pas de choix explicite), écrit `localStorage['feh-theme']`, met à jour `dataset.theme` + le glyphe du bouton.
+- i18n : `theme.toLight` = "Mode clair"/"Light mode", `theme.toDark` = "Mode sombre"/"Dark mode" (utilisés en `aria-label` / `title`).
+
+- [ ] **Step 1: i18n (RED)** — dans `i18n/i18n-keys.test.mjs` `REQUIRED` : + `'theme.toLight'`, `'theme.toDark'`. `node --test i18n/i18n-keys.test.mjs` → FAIL. Puis ajouter les 2 clés dans `en.json` + `fr.json`.
+
+- [ ] **Step 2: `index.html`** — dans `.topbar`, avant `#lang-toggle` :
+```html
+    <button id="theme-toggle" type="button" class="lang" aria-label="theme">🌓</button>
+```
+
+- [ ] **Step 3: `styles.css`** — repérer le bloc `@media (prefers-color-scheme: dark) { :root { … } }` : y remplacer `:root` par `:root:not([data-theme="light"])`. Juste après ce `@media`, ajouter un bloc `:root[data-theme="dark"] { … }` avec **les mêmes** redéfinitions de tokens (`--bg`, `--fg`, `--muted`, `--card`, `--border`, `--accent`, `--shadow`, et `--owned` si présent). Vérifier que `body` a bien `background: var(--bg);`.
+
+- [ ] **Step 4: `app.js`**
+  - constante `const LS_THEME = 'feh-theme';`
+  - helper :
+    ```js
+    function effectiveDark() {
+      const t = document.documentElement.dataset.theme;
+      if (t === 'dark') return true;
+      if (t === 'light') return false;
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    function applyThemeButton() {
+      const dark = effectiveDark();
+      const btn = $('#theme-toggle');
+      btn.textContent = dark ? '☀️' : '🌙';
+      btn.setAttribute('aria-label', state.t(dark ? 'theme.toLight' : 'theme.toDark'));
+      btn.title = btn.getAttribute('aria-label');
+    }
+    ```
+  - dans `main()` : après le chargement des dicts et `resolveLang`, avant `applyStaticI18n()` :
+    ```js
+    let storedTheme = null;
+    try { storedTheme = localStorage.getItem(LS_THEME); } catch { /* ignore */ }
+    if (storedTheme === 'dark' || storedTheme === 'light') document.documentElement.dataset.theme = storedTheme;
+    ```
+  - après les autres `addEventListener` de `main()` :
+    ```js
+    $('#theme-toggle').addEventListener('click', () => {
+      const next = effectiveDark() ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem(LS_THEME, next); } catch { /* ignore */ }
+      applyThemeButton();
+    });
+    ```
+  - appeler `applyThemeButton()` dans `main()` après `applyStaticI18n()`, et dans `setLang()` après `applyStaticI18n()` (pour re-traduire l'`aria-label`).
+
+- [ ] **Step 5: Vérifs**
+```bash
+node --check app.js && node --test
+node scripts/serve.mjs 8144 & SV=$!; sleep 1
+curl -s http://localhost:8144/ | grep -c 'id="theme-toggle"'                 # 1
+curl -s http://localhost:8144/styles.css | grep -c 'data-theme="dark"'       # 1
+curl -s http://localhost:8144/styles.css | grep -c 'data-theme="light"'      # 1
+kill $SV
+```
+
+- [ ] **Step 6: Commit**
+```bash
+git add index.html styles.css app.js i18n/en.json i18n/fr.json i18n/i18n-keys.test.mjs
+git commit -m "$(printf 'feat: manual dark/light theme toggle with persistence\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>')"
+```
+
+---
+
+## Task 12: Filtre Bénédiction — « Sans bénédiction » / « Béni »
+
+**Files:** `js/catalog-view.mjs`, `js/catalog-view.test.mjs`, `i18n/en.json`, `i18n/fr.json`, `i18n/i18n-keys.test.mjs`
+
+**Interfaces:**
+- `buildFacetOptions(heroes).blessing` = `['none', 'any', ...les bénédictions présentes triées]` — `'none'` en tête si au moins un héros a `blessing === null`, `'any'` ensuite si au moins un a une bénédiction.
+- `applyFilters` : `filters.blessing === 'none'` → garde `h.blessing === null` ; `=== 'any'` → garde `h.blessing !== null` ; sinon égalité stricte.
+- L'app (`labelFor`) route déjà `blessing.<value>` → clés `blessing.none`, `blessing.any` à ajouter.
+
+- [ ] **Step 1: Tests (RED)**
+
+Dans `js/catalog-view.test.mjs`, ajouter :
+```js
+test('blessing : none + any dans les facettes, filtrage', () => {
+  const H2 = (b) => ({ color: 'r', weapon: 'sword', move: 'infantry', category: 'standard',
+    gender: 'male', origins: ['G1'], poolRarity: null, blessing: b });
+  const heroes = [H2('fire'), H2('water'), H2(null), H2(null)];
+  const { blessing } = buildFacetOptions(heroes);
+  assert.deepEqual(blessing, ['none', 'any', 'fire', 'water']);
+  assert.equal(applyFilters(heroes, { blessing: 'none' }, '').length, 2);
+  assert.equal(applyFilters(heroes, { blessing: 'any' }, '').length, 2);
+  assert.equal(applyFilters(heroes, { blessing: 'fire' }, '').length, 1);
+});
+```
+Dans `i18n/i18n-keys.test.mjs` `REQUIRED` : + `'blessing.none'`, `'blessing.any'`. → RED.
+
+- [ ] **Step 2: `js/catalog-view.mjs`**
+
+Dans `buildFacetOptions`, remplacer la ligne `blessing: uniqSorted(heroes.map((h) => h.blessing).filter(Boolean)),` par :
+```js
+    blessing: (() => {
+      const present = uniqSorted(heroes.map((h) => h.blessing).filter(Boolean));
+      const head = [];
+      if (heroes.some((h) => h.blessing == null)) head.push('none');
+      if (present.length) head.push('any');
+      return [...head, ...present];
+    })(),
+```
+
+Dans `applyFilters`, retirer `blessing` de `SCALAR_FACETS` et ajouter un bloc dédié (après le bloc `origin`) :
+```js
+    if (filters.blessing) {
+      if (filters.blessing === 'none') { if (h.blessing != null) return false; }
+      else if (filters.blessing === 'any') { if (h.blessing == null) return false; }
+      else if (h.blessing !== filters.blessing) return false;
+    }
+```
+(`SCALAR_FACETS` devient `['color', 'weapon', 'move', 'category', 'gender']`.)
+
+- [ ] **Step 3: i18n** — `en.json` : `"blessing.none": "No blessing"`, `"blessing.any": "Blessed"`. `fr.json` : `"blessing.none": "Sans bénédiction"`, `"blessing.any": "Bénis"`.
+
+- [ ] **Step 4: GREEN** — `node --test` tout vert.
+
+- [ ] **Step 5: Commit**
+```bash
+git add js/catalog-view.mjs js/catalog-view.test.mjs i18n/en.json i18n/fr.json i18n/i18n-keys.test.mjs
+git commit -m "$(printf 'feat: blessing filter gains none / blessed options\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>')"
+```
+
+---
+
 ## Self-Review
 
 **Couverture des 5 demandes utilisateur :**
