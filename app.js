@@ -482,7 +482,9 @@ async function main() {
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'ma-collection.json';
+    document.body.append(a);
     a.click();
+    a.remove();
     URL.revokeObjectURL(a.href);
   });
 
@@ -494,7 +496,7 @@ async function main() {
     let incoming;
     try {
       incoming = migrateCollection(JSON.parse(await file.text()));
-    } catch { alert(state.t('import.mode')); return; }
+    } catch { alert(state.t('import.error')); return; }
     const merge = window.confirm(`${state.t('import.mode')}\n\nOK = ${state.t('import.merge')} / Annuler = ${state.t('import.replace')}`);
     if (merge) {
       state.collection = migrateCollection({

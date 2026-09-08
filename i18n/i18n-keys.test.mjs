@@ -30,7 +30,7 @@ const REQUIRED = [
   'field.owned', 'field.merges', 'field.ivPlus', 'field.ivMinus', 'field.support',
   'support.none', 'support.C', 'support.B', 'support.A', 'support.S',
   'iv.none', 'iv.hp', 'iv.atk', 'iv.spd', 'iv.def', 'iv.res',
-  'collection.count', 'action.export', 'action.import', 'import.mode', 'import.replace', 'import.merge', 'import.unknown',
+  'collection.count', 'action.export', 'action.import', 'import.mode', 'import.replace', 'import.merge', 'import.unknown', 'import.error',
 ];
 
 test('en.json contient toutes les clés requises', () => {

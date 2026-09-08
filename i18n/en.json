@@ -106,5 +106,6 @@
   "import.mode": "Import: replace your collection or merge into it?",
   "import.replace": "Replace",
   "import.merge": "Merge",
-  "import.unknown": "{n} unknown hero id(s) kept as-is."
+  "import.unknown": "{n} unknown hero id(s) kept as-is.",
+  "import.error": "Could not read that file — is it a valid ma-collection.json?"
 }

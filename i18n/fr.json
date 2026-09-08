@@ -106,5 +106,6 @@
   "import.mode": "Import : remplacer ta collection ou fusionner dedans ?",
   "import.replace": "Remplacer",
   "import.merge": "Fusionner",
-  "import.unknown": "{n} id(s) de héros inconnus conservés tels quels."
+  "import.unknown": "{n} id(s) de héros inconnus conservés tels quels.",
+  "import.error": "Fichier illisible — est-ce bien un ma-collection.json valide ?"
 }
