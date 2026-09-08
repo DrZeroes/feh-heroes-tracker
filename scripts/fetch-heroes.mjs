@@ -23,6 +23,7 @@ export async function run({
   maxDropRatio = 0.9,
   outPath = new URL('../data/heroes.json', import.meta.url),
   overridesPath = new URL('../data/heroes.overrides.json', import.meta.url),
+  localePath = new URL('../data/locale-fr.json', import.meta.url),
 } = {}) {
   const common = { fetchImpl };
   if (sleepImpl) common.sleepImpl = sleepImpl;
@@ -74,6 +75,16 @@ export async function run({
   // Le `where` Cargo ci-dessus est le filtre principal ; ceci est le filet de
   // sécurité si un `enemy` passe malgré tout (ex. réponse partielle / cache).
   heroes = heroes.filter((h) => !h.properties.includes('enemy'));
+
+  let localeTitles = {};
+  try {
+    localeTitles = JSON.parse(await readFile(localePath, 'utf8')).titles ?? {};
+  } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+  }
+  for (const h of heroes) {
+    h.titleFr = localeTitles[`${h.name}\u001f${h.title}`] ?? null;
+  }
 
   const consumed = new Set(heroes.map((h) => normalizePageName(pageNameFor(h.name, h.title))));
   const orphanBlessings = [...blessingByPage.keys()].filter((k) => !consumed.has(k));

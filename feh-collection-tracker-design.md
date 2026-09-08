@@ -112,6 +112,8 @@ Vérifié contre les données réelles 2026-09 (1535 lignes `Units` brutes → 1
 
 **`Origin`** : peut contenir plusieurs jeux joints par `,`. Conserver `origin` (string brute, affichage) **et** `origins` (array scindé, filtre/facette).
 
+**`titleFr`** : épithète française officielle, résolue par `scripts/fetch-locale.mjs` depuis les dumps de messages `USEN`/`EUFR` de `HertzDevil/feh-assets-json@book7-2023` (jointure `(name, title)` EN, repli clé normalisée), stockée dans `data/locale-fr.json` puis appliquée par `fetch-heroes.mjs`. `null` si non résolu (héros post-sept. 2023 ou mismatch) → l'app affiche l'épithète EN. Overridable via `patch`.
+
 **Clé primaire** : `WikiName` (unique, stable). C'est aussi la clé dans le fichier collection utilisateur.
 
 ### Tables jointes (3 passes Cargo supplémentaires)
@@ -204,7 +206,7 @@ Aucun `package.json` requis si `fetch-heroes.mjs` n'utilise que `fetch` natif (N
       "id": "Rhea The Final Child",
       "name": "Rhea",
       "title": "The Final Child",
-      "titleFr": null,
+      "titleFr": "L'Enfant ultime",
       "person": "Rhea",
       "color": "b",
       "weapon": "breath",
@@ -229,7 +231,7 @@ Aucun `package.json` requis si `fetch-heroes.mjs` n'utilise que `fetch` natif (N
 }
 ```
 
-Champs ajoutés en rév. 2026-09-08b : `person`, `gender`, `blessing`, `poolRarity`, `poolFlags`, `artist`, `actorEn`, `actorJp`. Rév. 2026-09-08c : `image`, `imageFull` (§3). Rév. 2026-09-08d : `origins`, `gender` normalisé. Valeurs d'exemple ci-dessus illustratives.
+Champs ajoutés en rév. 2026-09-08b : `person`, `gender`, `blessing`, `poolRarity`, `poolFlags`, `artist`, `actorEn`, `actorJp`. Rév. 2026-09-08c : `image`, `imageFull` (§3). Rév. 2026-09-08d : `origins`, `gender` normalisé. Rév. 2026-09-08e : `titleFr` rempli via `data/locale-fr.json`. Valeurs d'exemple ci-dessus illustratives.
 
 ### 5.2 `data/heroes.overrides.json` (manuel)
 ```json

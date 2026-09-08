@@ -23,6 +23,11 @@ test('catalog: every hero has exactly the 23 keys', () => {
     assert.deepEqual(Object.keys(h).sort(), want, `bad shape: ${h.id}`);
   }
 });
+test('catalog: titleFr est une chaîne non vide ou null', () => {
+  for (const h of catalog.heroes) {
+    assert.ok(h.titleFr === null || (typeof h.titleFr === 'string' && h.titleFr.length > 0), h.id);
+  }
+});
 test('catalog: no enemy rows', () => {
   assert.deepEqual(catalog.heroes.filter((h) => h.properties.includes('enemy')).map((h) => h.id), []);
 });
