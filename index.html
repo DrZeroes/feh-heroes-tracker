@@ -19,7 +19,16 @@
     <button id="lang-toggle" type="button" class="lang" aria-label="language">EN</button>
   </header>
 
-  <section class="controls">
+  <nav id="tabs" class="tabs" aria-label="views">
+    <button type="button" class="tab" data-view="catalogue" data-i18n="nav.catalogue">Catalogue</button>
+    <button type="button" class="tab" data-view="caserne" data-i18n="nav.caserne">Caserne</button>
+    <button type="button" class="tab" data-view="stats" data-i18n="nav.stats">Stats</button>
+    <button type="button" class="tab" data-view="wishlist" data-i18n="nav.wishlist">Wishlist</button>
+    <button type="button" class="tab" data-view="manuels" data-i18n="nav.manuels">Manuels</button>
+  </nav>
+
+  <section data-view="catalogue" class="view">
+    <section class="controls">
     <input id="search" type="search" autocomplete="off" data-i18n-attr="placeholder:search.placeholder" placeholder="Rechercher…">
     <div id="filters" class="filters"></div>
     <button type="button" class="reset" id="filter-reset" data-i18n="filter.reset">Réinitialiser les filtres</button>
@@ -46,6 +55,12 @@
   <p id="grid-count" class="grid-count" aria-live="polite"></p>
   <main id="grid" class="grid"></main>
   <div id="load-more-sentinel" aria-hidden="true"></div>
+  </section>
+
+  <section data-view="caserne" class="view" hidden><div id="view-caserne"></div></section>
+  <section data-view="stats" class="view" hidden><div id="view-stats"></div></section>
+  <section data-view="wishlist" class="view" hidden><div id="view-wishlist"></div></section>
+  <section data-view="manuels" class="view" hidden><div id="view-manuels"></div></section>
 
   <aside id="detail" class="detail" hidden>
     <button id="detail-close" type="button" class="detail-close" data-i18n="detail.close">Fermer</button>
