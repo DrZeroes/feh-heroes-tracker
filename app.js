@@ -27,7 +27,7 @@ const LS_PREFS = 'feh-catalog-prefs';
 const LS_THEME = 'feh-theme';
 const LS_COLLECTION = 'feh-collection-v1';
 const LS_VIEW = 'feh-view';
-const VIEWS = ['catalogue', 'caserne', 'new', 'stats', 'wishlist', 'manuels', 'about'];
+const VIEWS = ['catalogue', 'caserne', 'stats', 'wishlist', 'manuels', 'about'];
 const STATUSES = ['all', 'owned', 'missing', 'wanted'];
 const GH_REPO = 'DrZeroes/feh-heroes-tracker';
 const APP_VERSION = '0.3.0';
@@ -413,7 +413,6 @@ function renderView() {
   }
   if (v === 'catalogue') recompute();
   else if (v === 'caserne') renderCaserne();
-  else if (v === 'new') renderNew();
   else if (v === 'stats') renderStats();
   else if (v === 'wishlist') renderWishlist();
   else if (v === 'manuels') renderManuels();
@@ -791,20 +790,6 @@ function renderWishlist() {
   box.appendChild(wrap);
 }
 
-function renderNew() {
-  const box = $('#view-new');
-  box.innerHTML = '';
-  const intro = document.createElement('p');
-  intro.className = 'grid-count';
-  intro.style.margin = '.75rem 1rem 0';
-  intro.textContent = state.t('new.intro');
-  box.appendChild(intro);
-  const list = sortHeroes(state.heroes, 'release-desc').slice(0, 30);
-  const grid = document.createElement('main');
-  grid.className = 'grid';
-  for (const hero of list) grid.appendChild(card(hero));
-  box.appendChild(grid);
-}
 function renderManuels() {
   const box = $('#view-manuels');
   box.innerHTML = '';

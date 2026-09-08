@@ -147,9 +147,9 @@ test('buildFacetOptions.origin est en ordre de sortie des jeux', () => {
     gender: 'male', blessing: null, poolRarity: null, ...o }));
   const { origin } = buildFacetOptions(heroes);
   assert.deepEqual(origin, [
+    'Fire Emblem Heroes',
     'Fire Emblem: Mystery of the Emblem',
     'Fire Emblem Awakening',
-    'Fire Emblem Heroes',
     'Fire Emblem Engage',
     'Zzz Unknown Game',
   ]);
