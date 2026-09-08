@@ -28,9 +28,15 @@ const REQUIRED = [
   'poolRarity.3', 'poolRarity.4', 'poolRarity.5', 'poolRarity.na',
   'status.all', 'status.owned', 'status.missing',
   'field.owned', 'field.merges', 'field.ivPlus', 'field.ivMinus', 'field.support',
+  'field.copies', 'field.date', 'field.wanted',
   'support.none', 'support.C', 'support.B', 'support.A', 'support.S',
   'iv.none', 'iv.hp', 'iv.atk', 'iv.spd', 'iv.def', 'iv.res',
   'collection.count', 'action.export', 'action.import', 'import.mode', 'import.replace', 'import.merge', 'import.unknown', 'import.error',
+  'nav.catalogue', 'nav.caserne', 'nav.stats', 'nav.wishlist', 'nav.manuels',
+  'stats.total', 'stats.byColor', 'stats.byWeapon', 'stats.byMove', 'stats.byCategory', 'stats.byBlessing',
+  'stats.timeline', 'stats.topCopies', 'stats.wishlist', 'stats.wishlistLine',
+  'caserne.empty', 'wishlist.empty', 'manuels.empty', 'manuels.total', 'manuels.add',
+  'card.add', 'card.remove',
 ];
 
 test('en.json contient toutes les clés requises', () => {
