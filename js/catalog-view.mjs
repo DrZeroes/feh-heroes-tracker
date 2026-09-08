@@ -1,4 +1,4 @@
-// js/catalog-view.mjs — filtrage / tri / groupement du catalogue. Pur, sans DOM.
+// js/catalog-view.mjs - filtrage / tri / groupement du catalogue. Pur, sans DOM.
 
 // Ordres d'affichage des facettes (menus déroulants + barres de stats).
 export const COLOR_ORDER = ['r', 'b', 'v', 'g'];
@@ -23,7 +23,7 @@ export function isDancer(hero) {
 // Palier de pool d'invocation, dérivé de poolRarity + poolFlags.
 //  low   : pool général 1-4★ (démote possible)
 //  5     : 5★ du pool général (sans taux spécial)
-//  4sr   : « 4★ taux spécial » (démote focus) — base OU saisonnier, peu importe ici
+//  4sr   : « 4★ taux spécial » (démote focus) - base OU saisonnier, peu importe ici
 //  na    : hors pool (GHB / TT / exclusifs légendaire-mythique…)
 export function poolTier(hero) {
   if (!hero || hero.poolRarity == null) return 'na';

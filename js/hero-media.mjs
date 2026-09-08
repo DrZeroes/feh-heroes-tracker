@@ -1,4 +1,4 @@
-// js/hero-media.mjs — chemins d'assets et couleurs pour les cartes. Pur, sans DOM.
+// js/hero-media.mjs - chemins d'assets et couleurs pour les cartes. Pur, sans DOM.
 
 const COLOR_HEX = { r: '#d34b4b', b: '#3b6fd4', v: '#3fae52', g: '#8a8f98' };
 

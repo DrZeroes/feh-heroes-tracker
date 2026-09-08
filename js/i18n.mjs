@@ -1,4 +1,4 @@
-// js/i18n.mjs — résolution de langue + fabrique de traducteur. Pur, sans DOM.
+// js/i18n.mjs - résolution de langue + fabrique de traducteur. Pur, sans DOM.
 
 export function resolveLang(stored, navigatorLanguages = [], supported = ['en', 'fr']) {
   if (supported.includes(stored)) return stored;

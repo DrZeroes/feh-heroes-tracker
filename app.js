@@ -1,4 +1,4 @@
-// app.js — câblage DOM du catalogue (lecture seule). Module ES, chemins relatifs.
+// app.js - câblage DOM du catalogue (lecture seule). Module ES, chemins relatifs.
 import { resolveLang, makeTranslator } from './js/i18n.mjs';
 import {
   colorHex, classIconPath, moveIconPath, imageCandidates, shortOrigin, displayRarity,
@@ -264,7 +264,7 @@ function card(hero) {
   const rarity = displayRarity(hero);
   if (rarity != null) {
     const r = document.createElement('span');
-    r.className = 'rarity';
+    r.className = `rarity star-${rarity}`;
     r.textContent = `${rarity}★`;
     el.appendChild(r);
   }
@@ -436,15 +436,24 @@ function ivOptions(sel, cur) {
   }
 }
 
+// Applique la classe couleur star-N (ou aucune) à un <select> de rareté.
+function starClass(sel) {
+  sel.classList.remove('star-3', 'star-4', 'star-5');
+  if (sel.value) sel.classList.add(`star-${sel.value}`);
+}
+
 // Sélecteur de rareté 3/4/5★ (valeur '' = non renseigné).
 function rarityOptions(sel, cur) {
+  sel.classList.add('star-sel');
   for (const v of ['', '3', '4', '5']) {
     const o = document.createElement('option');
     o.value = v;
-    o.textContent = v ? `${v}★` : '—';
+    o.textContent = v ? `${v}★` : state.t('rarity.unset');
     if (String(cur ?? '') === v) o.selected = true;
     sel.appendChild(o);
   }
+  starClass(sel);
+  sel.addEventListener('change', () => starClass(sel));
 }
 
 // Champ étiqueté (caption visible en mobile, masquée en desktop via CSS).
@@ -844,11 +853,14 @@ function renderManuels() {
     dl.appendChild(o);
   }
   const addStar = document.createElement('select');
+  addStar.className = 'star-sel';
   for (const v of ['5', '4', '3']) {
     const o = document.createElement('option');
     o.value = v; o.textContent = `${v}★`;
     addStar.appendChild(o);
   }
+  starClass(addStar);
+  addStar.addEventListener('change', () => starClass(addStar));
   const addBtn = document.createElement('button');
   addBtn.type = 'button';
   addBtn.textContent = '+';
@@ -910,7 +922,7 @@ function renderManuels() {
     steppers.className = 'manual-steppers';
     for (const r of ['5', '4', '3']) {
       const grp = document.createElement('span');
-      grp.className = 'mstep';
+      grp.className = `mstep star-${r}`;
       if (!by[r]) grp.classList.add('is-zero');
       const cap = document.createElement('b');
       cap.textContent = `${r}★`;
@@ -1231,6 +1243,8 @@ function openDetail(hero, unitIndex = 0) {
   const manRow = document.createElement('div');
   manRow.className = 'owned-row manual-inline';
   const manStar = document.createElement('select');
+  manStar.className = 'star-sel star-5';
+  manStar.addEventListener('change', () => starClass(manStar));
   for (const v of ['5', '4', '3']) {
     const o = document.createElement('option');
     o.value = v; o.textContent = `${v}★`;
@@ -1243,8 +1257,17 @@ function openDetail(hero, unitIndex = 0) {
   const manCount = document.createElement('span');
   const syncMan = () => {
     const by = manualsByRarity(state.collection, hero.id);
-    const parts = ['5', '4', '3'].filter((r) => by[r]).map((r) => `${by[r]}×${r}★`);
-    manCount.textContent = parts.length ? `${state.t('detail.manuals')}: ${parts.join(' · ')}` : '';
+    const shown = ['5', '4', '3'].filter((r) => by[r]);
+    manCount.textContent = '';
+    if (!shown.length) return;
+    manCount.append(`${state.t('detail.manuals')}: `);
+    shown.forEach((r, i) => {
+      if (i) manCount.append(' · ');
+      const s = document.createElement('span');
+      s.className = `star-${r}`;
+      s.textContent = `${by[r]}×${r}★`;
+      manCount.append(s);
+    });
   };
   syncMan();
   manBtn.addEventListener('click', () => {

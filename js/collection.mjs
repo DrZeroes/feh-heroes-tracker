@@ -1,4 +1,4 @@
-// js/collection.mjs — forme et dérivés de la collection perso. Pur, sans DOM.
+// js/collection.mjs - forme et dérivés de la collection perso. Pur, sans DOM.
 //
 // `owned[id]` est une LISTE d'unités (exemplaires physiques du même héros).
 // Chaque unité : { merges, ivPlus, ivMinus, support, date, project }.

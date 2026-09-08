@@ -105,6 +105,7 @@
   "status.missing": "Missing",
   "field.owned": "Owned",
   "field.rarity": "Rarity",
+  "rarity.unset": "None",
   "field.merges": "Merges",
   "field.ivPlus": "IV +",
   "field.ivMinus": "IV −",

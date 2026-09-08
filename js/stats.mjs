@@ -1,4 +1,4 @@
-// js/stats.mjs — agrégats pour l'onglet Stats. Pur, sans DOM.
+// js/stats.mjs - agrégats pour l'onglet Stats. Pur, sans DOM.
 
 export function distribution(heroes, ownedSet, key) {
   const map = new Map();
