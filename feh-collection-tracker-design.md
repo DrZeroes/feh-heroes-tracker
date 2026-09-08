@@ -127,6 +127,32 @@ Jointure par **nom de page** : `_pageName` de ces tables ≈ `"<Name>: <Title>"`
 - **`poolFlags`** : array des `Property` non vides vus pour ce héros (`specialRate`, `SHSpecialRate`, …). Filtre fin optionnel.
 - Rate limit : ces 3 passes s'ajoutent au budget de `fetch-heroes.mjs` (pause 2–5 s entre pages, retry back-off, `User-Agent` explicite). Run hebdo → surcoût acceptable.
 
+### Images des héros (dérivées, pas de passe Cargo)
+
+`fetch-heroes.mjs` écrit deux URL par héros, dérivées du `WikiName` (espaces → `_`) :
+
+| Champ | Suffixe fichier wiki | Taille typique | Usage |
+|---|---|---|---|
+| `image` | `_Face_FC.webp` | ~10–15 Ko | vignette de la grille |
+| `imageFull` | `_Face.webp` | ~120–330 Ko | panneau détail |
+
+Base URL : `https://feheroes.fandom.com/wiki/Special:FilePath/<WikiName_underscored><suffixe>` (redirige 30x vers le CDN `static.wikia.nocookie.net` ; `<img>` n'a pas besoin de CORS). **Hotlink** (pas de rapatriement : ~1400 portraits = trop lourd pour le repo). Vérifié 2026-09 : `Special:FilePath` sert du `image/webp` même quand l'extension demandée est `.png`.
+
+- Overridable : `heroes.overrides.json` → `patch` peut fixer `image` / `imageFull` pour un héros dont le nom de fichier wiki dévie.
+- UI : `<img loading="lazy">` + `onerror` → **tuile de repli** (pastille couleur + icône arme).
+
+### Icônes classe / déplacement (rapatriées dans le repo)
+
+Jeu **fini et petit** (4 déplacements + ~19 combos couleur×arme réels), ce sont du chrome d'UI → téléchargées une fois et commitées dans `assets/icons/` (marche hors-ligne, pas de dépendance wiki au runtime).
+
+- Script `scripts/fetch-icons.mjs` (one-shot / rejouable) :
+  - déplacements : `Icon_Move_{Infantry,Cavalry,Flying,Armored}.png` → `assets/icons/move-<code>.webp`
+  - classes : pour chaque couple `(color, weapon)` **présent dans `data/heroes.json`**, `Icon_Class_<Color>_<Weapon>.png` → `assets/icons/class-<color>-<weapon>.webp`
+    (`<Color>` ∈ Red/Blue/Green/Colorless ; `<Weapon>` capitalisé)
+  - `User-Agent` explicite, ~34 requêtes, écrit seulement si nouveau/différent.
+- Pastille de **couleur** : cercle CSS (rouge/bleu/vert/gris), pas d'image.
+- `assets/icons/` est commité (fait partie de l'app shell PWA en Plan D).
+
 ---
 
 ## 4. Structure du repo
@@ -138,8 +164,11 @@ Jointure par **nom de page** : `_pageName` de ces tables ≈ `"<Name>: <Title>"`
 /manifest.webmanifest        → PWA (name, icons, display standalone, start_url "./", theme_color)
 /sw.js                       → service worker (app shell cache-first ; heroes.json stale-while-revalidate)
 /icons/
-    icon-192.png             → généré (SVG→PNG), remplaçable
+    icon-192.png             → icône PWA, généré (SVG→PNG), remplaçable
     icon-512.png
+/assets/icons/               → icônes classe / déplacement rapatriées du wiki (commitées)
+    move-infantry.webp  move-cavalry.webp  move-flying.webp  move-armored.webp
+    class-r-sword.webp  class-b-lance.webp  …  (couples color×weapon présents dans heroes.json)
 /data/
     heroes.json              → catalogue complet normalisé (GÉNÉRÉ — ne pas éditer à la main)
     heroes.overrides.json    → ajouts / corrections manuels + épithètes FR
@@ -147,8 +176,9 @@ Jointure par **nom de page** : `_pageName` de ces tables ≈ `"<Name>: <Title>"`
     en.json
     fr.json
 /scripts/
-    fetch-heroes.mjs         → Cargo API (Units + 3 tables jointes), pagine, normalise, fusionne overrides, écrit data/heroes.json
-    make-icons.mjs           → (one-shot) génère icons/*.png depuis un SVG source
+    fetch-heroes.mjs         → Cargo API (Units + 3 tables jointes), pagine, normalise, dérive image/imageFull, fusionne overrides, écrit data/heroes.json
+    fetch-icons.mjs          → (one-shot / rejouable) rapatrie assets/icons/* depuis le wiki
+    make-icons.mjs           → (one-shot) génère icons/*.png (icône PWA) depuis un SVG source
     migrate-sheet.mjs        → (post-v1) convertit l'ancien Google Sheet en ma-collection.json
 /.github/workflows/
     update-heroes.yml        → workflow_dispatch (bouton) + schedule hebdo ; run script ; commit si diff
@@ -187,6 +217,8 @@ Aucun `package.json` requis si `fetch-heroes.mjs` n'utilise que `fetch` natif (N
       "artist": "Kaya8",
       "actorEn": ["Cherami Leigh"],
       "actorJp": ["Ai Kayano"],
+      "image": "https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face_FC.webp",
+      "imageFull": "https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face.webp",
       "releaseDate": "2026-08-31",
       "intId": 12345
     }
@@ -194,7 +226,7 @@ Aucun `package.json` requis si `fetch-heroes.mjs` n'utilise que `fetch` natif (N
 }
 ```
 
-Champs ajoutés en rév. 2026-09-08b : `person`, `gender`, `blessing`, `poolRarity`, `poolFlags`, `artist`, `actorEn`, `actorJp`. Valeurs d'exemple ci-dessus illustratives.
+Champs ajoutés en rév. 2026-09-08b : `person`, `gender`, `blessing`, `poolRarity`, `poolFlags`, `artist`, `actorEn`, `actorJp`. Rév. 2026-09-08c : `image`, `imageFull` (§3). Valeurs d'exemple ci-dessus illustratives.
 
 ### 5.2 `data/heroes.overrides.json` (manuel)
 ```json
@@ -295,12 +327,12 @@ Page unique, navigation par onglets (hash router : `#/collection`, `#/stats`, `#
 
 ### 6.1 Onglet Collection / Catalogue
 - Chargement : `fetch('data/heroes.json')` puis merge état possédé + wishlist depuis `localStorage` (avec migration v1→v2, §5.3).
-- Grille de cartes héros (nom + épithète, pastille couleur, icône arme, icône déplacement, badge catégorie, badge bénédiction si présent, badge rareté du pool si présent, badge « Possédé » / « Manquant », étoile « voulu » si dans `wanted`).
+- Grille de cartes héros : **portrait** (`image`, `<img loading="lazy">`, repli tuile couleur+arme si 404), nom + épithète, pastille couleur (cercle CSS), **icône arme** (`assets/icons/class-<color>-<weapon>.webp`), **icône déplacement** (`assets/icons/move-<move>.webp`), badge catégorie, badge bénédiction si présent, badge rareté du pool si présent, badge « Possédé » / « Manquant », étoile « voulu » si dans `wanted`.
 - **Filtres** (combinables) : couleur, arme, déplacement, catégorie, jeu d'origine, **genre**, **élément de bénédiction**, **rareté du pool** (3 / 4 / 5 / n. a.), statut (tous / possédés / manquants / voulus).
 - **Recherche** texte sur `name` + `title` + `artist` + `actorEn` + `actorJp`.
 - **Tri** : date de sortie (défaut, récent → ancien), nom A→Z.
 - **Toggle « Grouper par personnage »** (off par défaut) : regroupe par `person`. Carte-groupe = nom du perso + pastilles couleur par alt + « X / N possédés », dépliable vers les cartes d'alts. Les filtres et la recherche s'appliquent au sein des groupes (un groupe est masqué si aucun alt ne passe).
-- Clic sur une carte → **panneau détail** : toggle Possédé, `merges` (0–10), `ivPlus`, `ivMinus`, **`copies`** (stepper), `date`, `note`, bloc **Projet +10** (`targetMerges`, `targetIvPlus`, `notes`), bouton **Ajouter / retirer de la wishlist**. Infos catalogue en lecture : artiste, voix EN/JP, origine, bénédiction, rareté du pool. Sauvegarde immédiate en `localStorage`.
+- Clic sur une carte → **panneau détail** : **grand portrait** (`imageFull`, repli sur `image` puis tuile), toggle Possédé, `merges` (0–10), `ivPlus`, `ivMinus`, **`copies`** (stepper), `date`, `note`, bloc **Projet +10** (`targetMerges`, `targetIvPlus`, `notes`), bouton **Ajouter / retirer de la wishlist**. Infos catalogue en lecture : artiste, voix EN/JP, origine, bénédiction, rareté du pool. Sauvegarde immédiate en `localStorage`.
 - **Mode ajout rapide** (bouton `action.quickAdd`) : bascule la grille en version dense ; tap sur une carte = toggle Possédé ; stepper `merges` inline sur la carte ; pas de panneau détail. Re-tap `action.quickAdd` pour revenir au mode normal. Pas de concept de « session d'invocation ».
 - Perf : ~1000+ cartes → rendu virtualisé simple ou pagination/scroll infini (lot de 60). Le mode groupé pagine les groupes.
 
