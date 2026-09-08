@@ -49,7 +49,7 @@ export function parseListField(raw) {
 
 // Date de début de chaque « Livre » FEH (maj majeure annuelle, début février).
 // Ajouter la ligne du Livre suivant quand il sort.
-const BOOK_STARTS = [
+export const BOOK_STARTS = [
   ['1', '2017-02-02'], ['2', '2018-02-02'], ['3', '2019-02-08'], ['4', '2020-02-05'],
   ['5', '2021-02-04'], ['6', '2022-02-03'], ['7', '2023-02-02'], ['8', '2024-02-07'],
   ['9', '2025-02-06'], ['10', '2026-02-05'],

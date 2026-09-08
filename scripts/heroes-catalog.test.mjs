@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { originGroup } from '../js/catalog-view.mjs';
+import { BOOK_STARTS } from './lib/normalize.mjs';
 
 const HERO_KEYS = ['id', 'name', 'title', 'titleFr', 'person', 'color', 'weapon', 'move', 'gender', 'origin',
   'origins', 'category', 'properties', 'blessing', 'poolRarity', 'poolFlags', 'artist', 'actorEn', 'actorJp',
@@ -9,6 +10,19 @@ const HERO_KEYS = ['id', 'name', 'title', 'titleFr', 'person', 'color', 'weapon'
 const CATEGORIES = new Set(['mythic', 'legendary', 'emblem', 'rearmed', 'attuned', 'ascended',
   'duo', 'harmonized', 'aided', 'entwined', 'vista', 'chosen', 'refresher',
   'ghb', 'tempest', 'special', 'standard']);
+
+// Propriétés wiki connues (suffixe _<chiffres> retiré). Nouvelle valeur ->
+// soit un tag cosmétique à ajouter ici, soit un NOUVEAU TYPE de héros à câbler
+// dans CATEGORY_PRIORITY (js n'est pas au courant, le héros retombe en standard).
+const KNOWN_PROPS = new Set([
+  'aide', 'aided', 'ascended', 'askr', 'attuned', 'brave', 'chosen', 'demoted',
+  'dokkalfheimr', 'duo', 'embla', 'emblem', 'entwined', 'fallen', 'ghb', 'hair',
+  'harmonized', 'hat', 'hel', 'jotunheimr', 'legendary', 'limited', 'ljosalfheimr',
+  'mask', 'muspell', 'mythic', 'nidavellir', 'nifl', 'notRandomized', 'prologue',
+  'rearmed', 'refresher', 'resplendent', 'specDisplay', 'specRate', 'special',
+  'story', 'tempest', 'tiara', 'vanaheimr', 'vista', 'yggdrasill',
+]);
+const propStem = (p) => String(p).replace(/_\d{2,6}$/, '');
 
 const catalog = JSON.parse(await readFile(new URL('../data/heroes.json', import.meta.url), 'utf8'));
 
@@ -46,6 +60,35 @@ test('catalog: every origin maps to a GAME_GROUPS entry', () => {
   const ungrouped = [...new Set(catalog.heroes.flatMap((h) => h.origins))]
     .filter((o) => originGroup(o) === null);
   assert.deepEqual(ungrouped, [], `origines sans groupe: ${ungrouped.join(', ')}`);
+});
+test('catalog: no unrecognised hero property', () => {
+  // garde-fou : nouvelle propriété -> tag cosmétique (KNOWN_PROPS) ou nouveau type (CATEGORY_PRIORITY)
+  const seen = new Set(catalog.heroes.flatMap((h) => (h.properties ?? []).map(propStem)));
+  const unknown = [...seen].filter((p) => !KNOWN_PROPS.has(p)).sort();
+  assert.deepEqual(unknown, [], `propriétés inconnues: ${unknown.join(', ')}`);
+});
+test('catalog: color / weapon / move jamais null (nouvel enum wiki non mappé)', () => {
+  for (const f of ['color', 'weapon', 'move']) {
+    const bad = catalog.heroes.filter((h) => h[f] == null).map((h) => h.id);
+    assert.deepEqual(bad, [], `${f} null (mapper le nouvel enum dans scripts/lib/normalize.mjs): ${bad.slice(0, 5).join(', ')}`);
+  }
+});
+test('catalog: book is 1..10 (ou null)', () => {
+  const ok = new Set(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
+  const bad = [...new Set(catalog.heroes.map((h) => h.book))].filter((b) => b !== null && !ok.has(b));
+  assert.deepEqual(bad, [], `book hors 1..10: ${bad.join(', ')}`);
+});
+test('catalog: aucun héros trop postérieur au dernier Livre défini', () => {
+  // garde-fou : si un héros sort > ~14 mois après le début du dernier Livre connu,
+  // c'est qu'un nouveau Livre est sorti -> ajouter sa ligne dans BOOK_STARTS.
+  const [lastBook, lastStart] = BOOK_STARTS[BOOK_STARTS.length - 1];
+  const limit = new Date(lastStart);
+  limit.setMonth(limit.getMonth() + 14);
+  const cutoff = limit.toISOString().slice(0, 10);
+  const late = catalog.heroes
+    .filter((h) => h.releaseDate && h.releaseDate > cutoff)
+    .map((h) => `${h.id} (${h.releaseDate})`);
+  assert.deepEqual(late, [], `Livre ${Number(lastBook) + 1} probablement sorti — étendre BOOK_STARTS. En retard: ${late.join(', ')}`);
 });
 test('catalog: join keys unique per "Name: Title"', () => {
   const seen = new Map();
