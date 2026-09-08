@@ -143,6 +143,7 @@ export function normalizeUnit(raw) {
     imageFull,
     releaseDate,
     book: deriveBook(releaseDate),
+    partner: null, // rempli par fetch-heroes depuis data/partners.json (Duo/Harmonique)
     intId: Number.isFinite(intIdNum) ? intIdNum : null,
   };
 }
@@ -175,11 +176,13 @@ export function applyOverrides(heroes, overrides) {
 }
 
 export function buildCatalog(heroes, { generatedAt }) {
-  // backfill `book` pour les ajouts d'overrides qui ne le précisent pas
-  const withBook = heroes.map((h) => (
-    'book' in h ? h : { ...h, book: deriveBook(h.releaseDate ?? null) }
-  ));
-  const sorted = [...withBook].sort((a, b) => {
+  // backfill des champs dérivés pour les ajouts d'overrides qui ne les précisent pas
+  const filled = heroes.map((h) => ({
+    ...h,
+    book: 'book' in h ? h.book : deriveBook(h.releaseDate ?? null),
+    partner: 'partner' in h ? h.partner : null,
+  }));
+  const sorted = [...filled].sort((a, b) => {
     const da = a.releaseDate ?? '';
     const db = b.releaseDate ?? '';
     if (da !== db) return db < da ? -1 : 1;

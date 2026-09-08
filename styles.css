@@ -101,6 +101,8 @@ body { margin: 0; background: var(--bg); color: var(--fg);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card .epithet { display: block; font-size: .72rem; color: var(--muted);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card .partner { display: block; font-size: .66rem; color: var(--muted); opacity: .85;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: -.05rem; }
 .card .icons { display: flex; justify-content: center; gap: .3rem; margin-top: .3rem; }
 .card .icons img { width: 18px; height: 18px; }
 .card .pip { position: absolute; top: .5rem; left: .5rem; width: .7rem; height: .7rem;

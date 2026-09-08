@@ -153,6 +153,7 @@ test('normalizeUnit produit un héros normalisé sans jointures', () => {
   assert.deepEqual(h.actorJp, ['Ai Kayano']);
   assert.equal(h.releaseDate, '2026-08-31');
   assert.equal(h.book, '10');
+  assert.equal(h.partner, null);
   assert.equal(h.intId, 1234);
 });
 

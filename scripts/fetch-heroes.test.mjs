@@ -53,6 +53,8 @@ test('run normalise, joint, trie et écrit le catalogue', async () => {
   const outPath = path.join(os.tmpdir(), `feh-heroes-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
   const localePath = path.join(os.tmpdir(), `feh-locale-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
   await writeFile(localePath, JSON.stringify({ titles: { 'Rhea\u001fThe Final Child': "L'Enfant ultime" } }), 'utf8');
+  const partnersPath = path.join(os.tmpdir(), `feh-partners-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
+  await writeFile(partnersPath, JSON.stringify({ 'Rhea The Final Child': 'Seiros' }), 'utf8');
   const catalog = await run({
     fetchImpl: routeFetch(TABLES),
     sleepImpl: async () => {},
@@ -62,6 +64,7 @@ test('run normalise, joint, trie et écrit le catalogue', async () => {
     outPath,
     overridesPath: path.join(os.tmpdir(), 'feh-no-such-overrides.json'),
     localePath,
+    partnersPath,
   });
 
   assert.equal(catalog.count, 2);
@@ -76,6 +79,8 @@ test('run normalise, joint, trie et écrit le catalogue', async () => {
   const [first, second] = catalog.heroes;
   assert.equal(first.id, 'Rhea The Final Child');      // date la plus récente en tête
   assert.equal(first.titleFr, "L'Enfant ultime");      // jointure data/locale-fr.json
+  assert.equal(first.partner, 'Seiros');               // jointure data/partners.json
+  assert.equal(second.partner, null);
   assert.equal(first.blessing, 'fire');                // jointure LegendaryHero
   assert.equal(first.color, 'b');
   assert.equal(first.weapon, 'breath');

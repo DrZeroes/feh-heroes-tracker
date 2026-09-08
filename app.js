@@ -240,6 +240,12 @@ function card(hero) {
   name.className = 'name';
   name.textContent = hero.name;
   el.appendChild(name);
+  if (hero.partner) {
+    const pn = document.createElement('span');
+    pn.className = 'partner';
+    pn.textContent = `& ${hero.partner}`;
+    el.appendChild(pn);
+  }
   const ep = document.createElement('span');
   ep.className = 'epithet';
   ep.textContent = epithetFor(hero);
@@ -965,6 +971,7 @@ function openDetail(hero, unitIndex = 0) {
   };
   row('detail.category', state.t(`category.${hero.category || 'standard'}`)
     + (isDancer(hero) ? ` · ${state.t('category.refresher')}` : ''));
+  row('detail.partner', hero.partner ? `& ${hero.partner}` : '');
   row('detail.origin', (hero.origins || []).map(shortOrigin).join(' · '));
   row('detail.released', hero.releaseDate);
   row('detail.book', hero.book ? state.t(`book.${hero.book}`) : '');

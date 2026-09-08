@@ -24,6 +24,7 @@ export async function run({
   outPath = new URL('../data/heroes.json', import.meta.url),
   overridesPath = new URL('../data/heroes.overrides.json', import.meta.url),
   localePath = new URL('../data/locale-fr.json', import.meta.url),
+  partnersPath = new URL('../data/partners.json', import.meta.url),
 } = {}) {
   const common = { fetchImpl };
   if (sleepImpl) common.sleepImpl = sleepImpl;
@@ -84,6 +85,17 @@ export async function run({
   }
   for (const h of heroes) {
     h.titleFr = localeTitles[`${h.name}\u001f${h.title}`] ?? null;
+  }
+
+  let partners = {};
+  try {
+    partners = JSON.parse(await readFile(partnersPath, 'utf8'));
+  } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+  }
+  for (const h of heroes) {
+    const p = partners[h.id];
+    h.partner = typeof p === 'string' && p.trim() ? p.trim() : null;
   }
 
   const consumed = new Set(heroes.map((h) => normalizePageName(pageNameFor(h.name, h.title))));
