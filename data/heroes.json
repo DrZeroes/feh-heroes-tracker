@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-08T11:28:01.603Z",
+  "generatedAt": "2026-09-08T11:54:18.524Z",
   "source": "feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)",
-  "count": 1535,
+  "count": 1410,
   "heroes": [
     {
       "id": "Rhea The Final Child",
@@ -243,7 +243,7 @@
       "move": "infantry",
       "gender": "MF",
       "origin": "Fire Emblem: Mystery of the Emblem,Fire Emblem Awakening",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized"
@@ -274,7 +274,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem Awakening",
-      "category": "special",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "special"
@@ -303,7 +303,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Thracia 776,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem"
       ],
@@ -389,7 +389,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Engage",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -473,7 +473,7 @@
       "move": "infantry",
       "gender": "FF",
       "origin": "Fire Emblem: Three Houses,Fire Emblem Fates",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized"
@@ -677,7 +677,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem Heroes",
-      "category": "special",
+      "category": "rearmed",
       "properties": [
         "special",
         "rearmed"
@@ -734,7 +734,7 @@
       "move": "infantry",
       "gender": "MM",
       "origin": "Fire Emblem Echoes: Shadows of Valentia,Fire Emblem: The Blazing Blade",
-      "category": "brave",
+      "category": "harmonized",
       "properties": [
         "harmonized",
         "brave"
@@ -793,7 +793,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem: Radiant Dawn,Fire Emblem Fates",
-      "category": "brave",
+      "category": "harmonized",
       "properties": [
         "harmonized",
         "brave"
@@ -824,7 +824,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: The Binding Blade,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem"
       ],
@@ -939,7 +939,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem Heroes",
-      "category": "special",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "special"
@@ -1026,7 +1026,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Genealogy of the Holy War,Fire Emblem: Thracia 776",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "fallen"
@@ -1083,7 +1083,7 @@
       "move": "flying",
       "gender": "Male",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "fallen"
@@ -1225,7 +1225,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem: Genealogy of the Holy War",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -1397,7 +1397,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem: Three Houses",
-      "category": "special",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "special"
@@ -1426,7 +1426,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Awakening,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem"
       ],
@@ -1483,7 +1483,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -1620,7 +1620,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem: The Sacred Stones,Fire Emblem: Radiant Dawn",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -1652,7 +1652,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "special",
+      "category": "rearmed",
       "properties": [
         "special",
         "rearmed"
@@ -1739,7 +1739,7 @@
       "move": "infantry",
       "gender": "FF",
       "origin": "Fire Emblem Echoes: Shadows of Valentia,Fire Emblem Heroes",
-      "category": "brave",
+      "category": "harmonized",
       "properties": [
         "brave",
         "harmonized"
@@ -1800,7 +1800,7 @@
       "move": "armored",
       "gender": "MM",
       "origin": "Fire Emblem: The Blazing Blade,Fire Emblem: The Sacred Stones",
-      "category": "brave",
+      "category": "harmonized",
       "properties": [
         "brave",
         "harmonized"
@@ -1947,7 +1947,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Three Houses,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem",
         "refresher"
@@ -2033,7 +2033,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem: Three Houses,Fire Emblem: The Blazing Blade",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized"
@@ -2175,7 +2175,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "hat",
@@ -2377,7 +2377,7 @@
       "move": "armored",
       "gender": "Female",
       "origin": "Fire Emblem: Three Houses,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem"
       ],
@@ -2461,7 +2461,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem Engage,Fire Emblem Fates",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -2522,7 +2522,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Engage",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "specDisplay",
         "tempest"
@@ -2660,7 +2660,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -2688,7 +2688,7 @@
       "move": "infantry",
       "gender": "MM",
       "origin": "Fire Emblem: Path of Radiance,Fire Emblem: The Binding Blade",
-      "category": "brave",
+      "category": "harmonized",
       "properties": [
         "brave",
         "harmonized"
@@ -2719,7 +2719,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem: The Blazing Blade,Fire Emblem Awakening",
-      "category": "brave",
+      "category": "harmonized",
       "properties": [
         "brave",
         "harmonized",
@@ -2751,7 +2751,7 @@
       "move": "armored",
       "gender": "F",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -2898,7 +2898,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Warriors: Three Hopes",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -3127,7 +3127,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Path of Radiance",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -3270,7 +3270,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -3328,7 +3328,7 @@
       "move": "armored",
       "gender": "Female",
       "origin": "Fire Emblem Fates,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem"
       ],
@@ -3443,7 +3443,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -3471,7 +3471,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -3607,7 +3607,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem: The Binding Blade,Fire Emblem: The Blazing Blade",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -3667,7 +3667,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Mystery of the Emblem",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -3922,7 +3922,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: Thracia 776",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "specDisplay"
@@ -3951,7 +3951,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem: Three Houses,Fire Emblem: Thracia 776",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized"
@@ -4122,7 +4122,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: Thracia 776,Fire Emblem: Genealogy of the Holy War",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -4176,7 +4176,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Thracia 776",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -4230,7 +4230,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "specDisplay",
         "tempest",
@@ -4375,7 +4375,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Radiant Dawn,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem"
       ],
@@ -4403,7 +4403,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem Echoes: Shadows of Valentia,Fire Emblem: The Blazing Blade",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized"
@@ -4434,7 +4434,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Engage",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -4629,7 +4629,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -4657,7 +4657,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -4746,7 +4746,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem: Genealogy of the Holy War",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -4947,7 +4947,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "fallen"
@@ -5177,7 +5177,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Mystery of the Emblem",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -5320,7 +5320,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "specDisplay",
         "tempest"
@@ -5349,7 +5349,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem: The Sacred Stones,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem"
       ],
@@ -5406,7 +5406,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Echoes: Shadows of Valentia",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -5486,7 +5486,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Echoes: Shadows of Valentia",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "hat"
@@ -5543,7 +5543,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -5601,7 +5601,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem Heroes,Fire Emblem Awakening",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -5720,7 +5720,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Engage",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -5915,7 +5915,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -6089,7 +6089,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem: The Sacred Stones,Fire Emblem: Three Houses",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -6121,7 +6121,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Echoes: Shadows of Valentia",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -6209,7 +6209,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Genealogy of the Holy War",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -6375,7 +6375,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -6461,7 +6461,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: The Blazing Blade,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem",
         "tiara"
@@ -6521,7 +6521,7 @@
       "move": "cavalry",
       "gender": "M",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "specDisplay",
         "tempest"
@@ -6656,7 +6656,7 @@
       "move": "armored",
       "gender": "M",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -6682,7 +6682,7 @@
       "move": "infantry",
       "gender": "F",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -6927,7 +6927,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: The Binding Blade",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -6981,7 +6981,7 @@
       "move": "armored",
       "gender": "F",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -7096,7 +7096,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -7321,7 +7321,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -7405,7 +7405,7 @@
       "move": "armored",
       "gender": "FF",
       "origin": "Fire Emblem: New Mystery of the Emblem,Fire Emblem: The Binding Blade",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -7466,7 +7466,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -7496,7 +7496,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: Genealogy of the Holy War,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem"
       ],
@@ -7663,7 +7663,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Engage",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned",
         "hat"
@@ -7779,7 +7779,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -8095,7 +8095,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem: Path of Radiance,Fire Emblem Fates",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -8128,7 +8128,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -8247,7 +8247,7 @@
       "move": "armored",
       "gender": "Female",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "specRate_202608"
@@ -8278,7 +8278,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -8453,7 +8453,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -8483,7 +8483,7 @@
       "move": "infantry",
       "gender": "FF",
       "origin": "Fire Emblem Engage,Fire Emblem: Three Houses",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -8545,7 +8545,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Echoes: Shadows of Valentia,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem"
       ],
@@ -8695,7 +8695,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -8810,7 +8810,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -8838,7 +8838,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -8894,7 +8894,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Engage",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -9076,7 +9076,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Engage",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "hat",
@@ -9263,7 +9263,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned",
         "refresher",
@@ -9409,7 +9409,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -9526,7 +9526,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Radiant Dawn,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem"
       ],
@@ -9584,7 +9584,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Mystery of the Emblem",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -9641,7 +9641,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: Mystery of the Emblem",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "hat",
@@ -9699,7 +9699,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem Engage,Fire Emblem Awakening",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -9760,7 +9760,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -9878,7 +9878,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem Engage",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "tiara"
@@ -9907,7 +9907,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem Engage",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned",
         "hat",
@@ -10145,7 +10145,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -10206,7 +10206,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Mystery of the Emblem,Fire Emblem Engage",
-      "category": "standard",
+      "category": "emblem",
       "properties": [
         "emblem"
       ],
@@ -10263,7 +10263,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -10293,7 +10293,7 @@
       "move": "infantry",
       "gender": "FF",
       "origin": "Fire Emblem: The Binding Blade,Fire Emblem: The Blazing Blade",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized"
@@ -10438,7 +10438,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: Thracia 776",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -10555,7 +10555,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -10736,7 +10736,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -10909,7 +10909,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -11112,7 +11112,7 @@
       "move": "cavalry",
       "gender": "F",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "hat"
@@ -11201,7 +11201,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned"
       ],
@@ -11311,7 +11311,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -11516,7 +11516,7 @@
       "move": "flying",
       "gender": "F",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned",
         "refresher"
@@ -11545,7 +11545,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Echoes: Shadows of Valentia",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "hat"
@@ -11574,7 +11574,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "attuned",
       "properties": [
         "attuned",
         "refresher",
@@ -11604,7 +11604,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem Engage,Fire Emblem Awakening",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -11665,7 +11665,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -11814,7 +11814,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Genealogy of the Holy War,Fire Emblem: Thracia 776",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "specRate_202608"
@@ -11929,7 +11929,7 @@
       "move": "flying",
       "gender": "F",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "refresher",
         "rearmed",
@@ -12045,7 +12045,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -12291,7 +12291,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem: Genealogy of the Holy War,Fire Emblem: Three Houses",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized"
@@ -12406,7 +12406,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Genealogy of the Holy War",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -12495,7 +12495,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Engage",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -12613,7 +12613,7 @@
       "move": "cavalry",
       "gender": "F",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -12667,7 +12667,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -12726,7 +12726,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem Engage",
-      "category": "special",
+      "category": "tempest",
       "properties": [
         "special",
         "hat",
@@ -12846,7 +12846,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "special",
+      "category": "tempest",
       "properties": [
         "special",
         "tempest"
@@ -12935,7 +12935,7 @@
       "move": "flying",
       "gender": "Male",
       "origin": "Fire Emblem Warriors: Three Hopes",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -13019,7 +13019,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: The Binding Blade",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "tiara",
@@ -13193,7 +13193,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem Awakening",
-      "category": "special",
+      "category": "tempest",
       "properties": [
         "special",
         "hat",
@@ -13254,7 +13254,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -13314,7 +13314,7 @@
       "move": "armored",
       "gender": "FF",
       "origin": "Fire Emblem Awakening,Fire Emblem: Mystery of the Emblem",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -13440,7 +13440,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "fallen",
         "rearmed"
@@ -13588,7 +13588,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem Warriors: Three Hopes",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -13674,7 +13674,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "special",
+      "category": "tempest",
       "properties": [
         "special",
         "tempest"
@@ -13731,7 +13731,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -13907,7 +13907,7 @@
       "move": "flying",
       "gender": "Male",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "tiara"
@@ -14020,7 +14020,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem: Three Houses",
-      "category": "special",
+      "category": "tempest",
       "properties": [
         "special",
         "hat",
@@ -14050,7 +14050,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem: The Blazing Blade,Fire Emblem Heroes",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -14082,7 +14082,7 @@
       "move": "flying",
       "gender": "Male",
       "origin": "Fire Emblem: Mystery of the Emblem",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -14197,7 +14197,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "tiara",
@@ -14318,7 +14318,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -14439,7 +14439,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem Fates",
-      "category": "special",
+      "category": "tempest",
       "properties": [
         "special",
         "hat",
@@ -14588,7 +14588,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Engage",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -14733,7 +14733,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem: Mystery of the Emblem,Fire Emblem: Thracia 776",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -14768,7 +14768,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "special",
+      "category": "tempest",
       "properties": [
         "special",
         "specRate_202602",
@@ -14800,7 +14800,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -14863,7 +14863,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Heroes",
-      "category": "special",
+      "category": "tempest",
       "properties": [
         "special",
         "specRate_202602",
@@ -14989,7 +14989,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -15106,7 +15106,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -15138,7 +15138,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem Awakening,Fire Emblem Fates",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -15314,7 +15314,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed",
         "tiara"
@@ -15486,7 +15486,7 @@
       "move": "infantry",
       "gender": "F",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -15570,7 +15570,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Mystery of the Emblem",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "tiara",
@@ -15665,7 +15665,7 @@
       "move": "flying",
       "gender": "Male",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -15814,7 +15814,7 @@
       "move": "cavalry",
       "gender": "F",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "tiara",
@@ -15931,7 +15931,7 @@
       "move": "armored",
       "gender": "Female",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -16091,7 +16091,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "specDisplay",
@@ -16182,7 +16182,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Warriors: Three Hopes",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "tiara",
@@ -16214,7 +16214,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "rearmed",
       "properties": [
         "rearmed"
       ],
@@ -16361,7 +16361,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -16456,7 +16456,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem: The Sacred Stones,Fire Emblem Heroes",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -16771,7 +16771,7 @@
       "move": "flying",
       "gender": "Male",
       "origin": "Fire Emblem: Mystery of the Emblem",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -16913,7 +16913,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Echoes: Shadows of Valentia",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "specRate_202502"
@@ -17121,7 +17121,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -17272,7 +17272,7 @@
       "move": "armored",
       "gender": "FF",
       "origin": "Fire Emblem: Three Houses,Fire Emblem: Radiant Dawn",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -17306,7 +17306,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -17397,7 +17397,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "specRate_202502"
@@ -17598,7 +17598,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem: The Binding Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -17660,7 +17660,7 @@
       "move": "cavalry",
       "gender": "MM",
       "origin": "Fire Emblem: The Binding Blade,Fire Emblem: The Blazing Blade",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -17969,7 +17969,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Genealogy of the Holy War",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "tiara",
@@ -18057,7 +18057,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Path of Radiance",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -18355,7 +18355,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Thracia 776",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "specRate_202502"
@@ -18447,7 +18447,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Echoes: Shadows of Valentia",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -18510,7 +18510,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem Echoes: Shadows of Valentia,Fire Emblem Awakening",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -18660,7 +18660,7 @@
       "move": "armored",
       "gender": "Female",
       "origin": "Fire Emblem: The Binding Blade",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "specRate_202408"
@@ -18757,7 +18757,7 @@
       "move": "armored",
       "gender": "Female",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -18909,7 +18909,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem Fates,Fire Emblem: Path of Radiance",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -18944,7 +18944,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Echoes: Shadows of Valentia",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -19119,7 +19119,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "hat",
@@ -19279,7 +19279,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -19432,7 +19432,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -19464,7 +19464,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem: Three Houses,Fire Emblem: The Sacred Stones",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -19848,7 +19848,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "ascended",
         "specRate_202408"
@@ -20054,7 +20054,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -20172,7 +20172,7 @@
       "move": "armored",
       "gender": "F",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "ascended",
       "properties": [
         "tiara",
         "ascended",
@@ -20410,7 +20410,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem: The Binding Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -20750,7 +20750,7 @@
       "move": "cavalry",
       "gender": "MM",
       "origin": "Fire Emblem: Thracia 776,Fire Emblem: Genealogy of the Holy War",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -20814,7 +20814,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem: Thracia 776",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -21025,7 +21025,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Thracia 776",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -21384,7 +21384,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem: Mystery of the Emblem,Fire Emblem Heroes",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -21480,7 +21480,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: New Mystery of the Emblem",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -21566,7 +21566,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -21919,7 +21919,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: The Binding Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -21949,7 +21949,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem Echoes: Shadows of Valentia,Fire Emblem: The Binding Blade",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -22257,7 +22257,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -22645,7 +22645,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem: The Sacred Stones,Fire Emblem Awakening",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -22681,7 +22681,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -23185,7 +23185,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -23272,7 +23272,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem: Three Houses,Fire Emblem: Genealogy of the Holy War",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -23338,7 +23338,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: New Mystery of the Emblem",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -23573,7 +23573,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "specDisplay",
         "limited",
@@ -23730,7 +23730,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "specDisplay",
         "limited",
@@ -23760,7 +23760,7 @@
       "move": "infantry",
       "gender": "FF",
       "origin": "Fire Emblem: Radiant Dawn,Fire Emblem: Path of Radiance",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -24265,7 +24265,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "limited",
         "tempest",
@@ -24595,7 +24595,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "specDisplay",
         "tempest",
@@ -24688,7 +24688,7 @@
       "move": "flying",
       "gender": "FF",
       "origin": "Fire Emblem: Mystery of the Emblem,Fire Emblem: The Blazing Blade",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -24934,7 +24934,7 @@
       "move": "flying",
       "gender": "Male",
       "origin": "Fire Emblem: Genealogy of the Holy War",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "refresher",
         "tempest",
@@ -25315,7 +25315,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Shadow Dragon and the Blade of Light",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "specDisplay",
         "limited",
@@ -25405,7 +25405,7 @@
       "move": "cavalry",
       "gender": "FM",
       "origin": "Fire Emblem Heroes,Fire Emblem Fates",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "special",
         "harmonized",
@@ -25713,7 +25713,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Three Houses",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "specDisplay",
         "tempest",
@@ -25861,7 +25861,7 @@
       "move": "cavalry",
       "gender": "FF",
       "origin": "Fire Emblem: Radiant Dawn,Fire Emblem Awakening",
-      "category": "special",
+      "category": "harmonized",
       "properties": [
         "harmonized",
         "special",
@@ -25895,7 +25895,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: Radiant Dawn",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "specDisplay"
@@ -26156,7 +26156,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -26498,7 +26498,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem: Mystery of the Emblem",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -26836,7 +26836,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: The Binding Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -27445,7 +27445,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem Echoes: Shadows of Valentia",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -27536,7 +27536,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Tokyo Mirage Sessions ♯FE Encore",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited"
@@ -27876,7 +27876,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -27997,7 +27997,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -28361,7 +28361,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: The Binding Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited"
@@ -29031,7 +29031,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: Path of Radiance",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -29261,7 +29261,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Echoes: Shadows of Valentia",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "refresher",
         "tempest",
@@ -29450,7 +29450,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem: Path of Radiance",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited"
@@ -29976,7 +29976,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "specDisplay",
         "tempest",
@@ -30159,7 +30159,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "specDisplay",
@@ -30491,7 +30491,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -30833,7 +30833,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -31167,7 +31167,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -31659,7 +31659,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem: Path of Radiance",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -31844,7 +31844,7 @@
       "move": "flying",
       "gender": "Female",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -32244,7 +32244,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem Heroes",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "specDisplay",
         "tempest",
@@ -32336,7 +32336,7 @@
       "move": "armored",
       "gender": "Female",
       "origin": "Fire Emblem: The Binding Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -32614,7 +32614,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "refresher",
         "tempest",
@@ -32919,7 +32919,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "specDisplay",
@@ -33360,7 +33360,7 @@
       "move": "cavalry",
       "gender": "Female",
       "origin": "Fire Emblem: Genealogy of the Holy War",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited"
@@ -34272,7 +34272,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited"
@@ -34455,7 +34455,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: Mystery of the Emblem",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "specDisplay",
@@ -34884,7 +34884,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem: Thracia 776",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited"
@@ -35224,7 +35224,7 @@
       "move": "flying",
       "gender": "Male",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited"
@@ -35506,7 +35506,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem: The Blazing Blade",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "specDisplay",
@@ -35691,7 +35691,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "tiara",
@@ -35850,7 +35850,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Fates",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "specDisplay",
@@ -36409,7 +36409,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem: The Sacred Stones",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "hat",
@@ -36664,7 +36664,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem: Genealogy of the Holy War",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited"
@@ -36981,7 +36981,7 @@
       "move": "armored",
       "gender": "Male",
       "origin": "Fire Emblem: Path of Radiance",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited",
@@ -37403,7 +37403,7 @@
       "move": "cavalry",
       "gender": "Male",
       "origin": "Fire Emblem Echoes: Shadows of Valentia",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited"
@@ -37772,7 +37772,7 @@
       "move": "infantry",
       "gender": "Male",
       "origin": "Fire Emblem Echoes: Shadows of Valentia",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited"
@@ -38104,7 +38104,7 @@
       "move": "infantry",
       "gender": "Female",
       "origin": "Fire Emblem Awakening",
-      "category": "standard",
+      "category": "tempest",
       "properties": [
         "tempest",
         "limited"
@@ -42138,3403 +42138,6 @@
       ],
       "releaseDate": "2017-02-02",
       "intId": 86
-    },
-    {
-      "id": "Masked Knight ENEMY",
-      "name": "???",
-      "title": "Masked Knight",
-      "titleFr": null,
-      "person": "Bruno",
-      "color": "b",
-      "weapon": "tome",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "T. Axelrod"
-      ],
-      "actorJp": [
-        "三木眞一郎"
-      ],
-      "releaseDate": null,
-      "intId": 24
-    },
-    {
-      "id": "Summoned One ENEMY",
-      "name": "???",
-      "title": "Summoned One",
-      "titleFr": null,
-      "person": "???",
-      "color": "r",
-      "weapon": "sword",
-      "move": "infantry",
-      "gender": "N",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "ツッキー",
-      "actorEn": [
-        "???"
-      ],
-      "actorJp": [
-        "???"
-      ],
-      "releaseDate": null,
-      "intId": 64
-    },
-    {
-      "id": "Near and Dear ENEMY",
-      "name": "???",
-      "title": "Near and Dear",
-      "titleFr": null,
-      "person": "Alfonse",
-      "color": "r",
-      "weapon": "sword",
-      "move": "infantry",
-      "gender": "N",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "ツッキー",
-      "actorEn": [
-        "???"
-      ],
-      "actorJp": [
-        "???"
-      ],
-      "releaseDate": null,
-      "intId": 58
-    },
-    {
-      "id": "Alfador Celestial King ENEMY",
-      "name": "Alfaðör",
-      "title": "Celestial King",
-      "titleFr": null,
-      "person": "Alfaðör",
-      "color": "b",
-      "weapon": "tome",
-      "move": "flying",
-      "gender": "M",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "hat",
-        "tiara"
-      ],
-      "blessing": "astra",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "Luis Bermudez"
-      ],
-      "actorJp": [
-        "青山穣"
-      ],
-      "releaseDate": null,
-      "intId": 119
-    },
-    {
-      "id": "Ash Borrowed Power ENEMY",
-      "name": "Ash",
-      "title": "Borrowed Power",
-      "titleFr": null,
-      "person": "Ash",
-      "color": "g",
-      "weapon": "beast",
-      "move": "infantry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "u介",
-      "actorEn": [
-        "Lily Emil Lammers"
-      ],
-      "actorJp": [
-        "下地紫野"
-      ],
-      "releaseDate": null,
-      "intId": 118
-    },
-    {
-      "id": "Axe Cavalier ENEMY",
-      "name": "Axe Cavalier",
-      "title": "",
-      "titleFr": null,
-      "person": "Axe Cavalier",
-      "color": "v",
-      "weapon": "axe",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic",
-        "tiara"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 11
-    },
-    {
-      "id": "Axe Dragon ENEMY",
-      "name": "Axe Dragon",
-      "title": "",
-      "titleFr": null,
-      "person": "Axe Dragon",
-      "color": "v",
-      "weapon": "axe",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 28
-    },
-    {
-      "id": "Axe Fighter ENEMY",
-      "name": "Axe Fighter",
-      "title": "",
-      "titleFr": null,
-      "person": "Axe Fighter",
-      "color": "v",
-      "weapon": "axe",
-      "move": "infantry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 9
-    },
-    {
-      "id": "Axe Flier ENEMY",
-      "name": "Axe Flier",
-      "title": "",
-      "titleFr": null,
-      "person": "Axe Flier",
-      "color": "v",
-      "weapon": "axe",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 12
-    },
-    {
-      "id": "Axe Knight ENEMY",
-      "name": "Axe Knight",
-      "title": "",
-      "titleFr": null,
-      "person": "Axe Knight",
-      "color": "v",
-      "weapon": "axe",
-      "move": "armored",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 10
-    },
-    {
-      "id": "Baldr Celestial Sun God Weakened ENEMY",
-      "name": "Baldr",
-      "title": "Celestial Sun God",
-      "titleFr": null,
-      "person": "Baldr",
-      "color": "r",
-      "weapon": "sword",
-      "move": "flying",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "dark",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "Sam Slade"
-      ],
-      "actorJp": [
-        "津田美波"
-      ],
-      "releaseDate": null,
-      "intId": 114
-    },
-    {
-      "id": "Baldr Celestial Sun God ENEMY",
-      "name": "Baldr",
-      "title": "Celestial Sun God",
-      "titleFr": null,
-      "person": "Baldr",
-      "color": "r",
-      "weapon": "sword",
-      "move": "flying",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": "dark",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "Sam Slade"
-      ],
-      "actorJp": [
-        "津田美波"
-      ],
-      "releaseDate": null,
-      "intId": 112
-    },
-    {
-      "id": "Blue Bat ENEMY",
-      "name": "Blue Bat",
-      "title": "",
-      "titleFr": null,
-      "person": "Blue Bat",
-      "color": "b",
-      "weapon": "beast",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 85
-    },
-    {
-      "id": "Blue Bow ENEMY",
-      "name": "Blue Bow",
-      "title": "",
-      "titleFr": null,
-      "person": "Blue Bow",
-      "color": "b",
-      "weapon": "bow",
-      "move": "infantry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 42
-    },
-    {
-      "id": "Blue Cavalier ENEMY",
-      "name": "Blue Cavalier",
-      "title": "",
-      "titleFr": null,
-      "person": "Blue Cavalier",
-      "color": "b",
-      "weapon": "tome",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 19
-    },
-    {
-      "id": "Blue Fafnir ENEMY",
-      "name": "Blue Fáfnir",
-      "title": "",
-      "titleFr": null,
-      "person": "Blue Fáfnir",
-      "color": "b",
-      "weapon": "breath",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 48
-    },
-    {
-      "id": "Blue Flier ENEMY",
-      "name": "Blue Flier",
-      "title": "",
-      "titleFr": null,
-      "person": "Blue Flier",
-      "color": "b",
-      "weapon": "tome",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 39
-    },
-    {
-      "id": "Blue Mage ENEMY",
-      "name": "Blue Mage",
-      "title": "",
-      "titleFr": null,
-      "person": "Blue Mage",
-      "color": "b",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 18
-    },
-    {
-      "id": "Blue Manakete ENEMY",
-      "name": "Blue Manakete",
-      "title": "",
-      "titleFr": null,
-      "person": "Blue Manakete",
-      "color": "b",
-      "weapon": "breath",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 30
-    },
-    {
-      "id": "Blue Thief ENEMY",
-      "name": "Blue Thief",
-      "title": "",
-      "titleFr": null,
-      "person": "Blue Thief",
-      "color": "b",
-      "weapon": "dagger",
-      "move": "infantry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 45
-    },
-    {
-      "id": "Bow Cavalier ENEMY",
-      "name": "Bow Cavalier",
-      "title": "",
-      "titleFr": null,
-      "person": "Bow Cavalier",
-      "color": "g",
-      "weapon": "bow",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 14
-    },
-    {
-      "id": "Bow Fighter ENEMY",
-      "name": "Bow Fighter",
-      "title": "",
-      "titleFr": null,
-      "person": "Bow Fighter",
-      "color": "g",
-      "weapon": "bow",
-      "move": "infantry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 13
-    },
-    {
-      "id": "Bow Flier ENEMY",
-      "name": "Bow Flier",
-      "title": "",
-      "titleFr": null,
-      "person": "Bow Flier",
-      "color": "g",
-      "weapon": "bow",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 37
-    },
-    {
-      "id": "Bruno Prince Beset ENEMY",
-      "name": "Bruno",
-      "title": "Prince Beset",
-      "titleFr": null,
-      "person": "Bruno",
-      "color": "b",
-      "weapon": "tome",
-      "move": "cavalry",
-      "gender": "M",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "T. Axelrod"
-      ],
-      "actorJp": [
-        "三木眞一郎"
-      ],
-      "releaseDate": null,
-      "intId": 87
-    },
-    {
-      "id": "Bruno Prince Beset Unmasked ENEMY",
-      "name": "Bruno",
-      "title": "Prince Beset",
-      "titleFr": null,
-      "person": "Bruno",
-      "color": "b",
-      "weapon": "tome",
-      "move": "cavalry",
-      "gender": "M",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "T. Axelrod"
-      ],
-      "actorJp": [
-        "三木眞一郎"
-      ],
-      "releaseDate": null,
-      "intId": 90
-    },
-    {
-      "id": "Cleric ENEMY",
-      "name": "Cleric",
-      "title": "",
-      "titleFr": null,
-      "person": "Cleric",
-      "color": "g",
-      "weapon": "staff",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 22
-    },
-    {
-      "id": "Dagr Sunny Bloom ENEMY",
-      "name": "Dagr",
-      "title": "Sunny Bloom",
-      "titleFr": null,
-      "person": "Dagr",
-      "color": "r",
-      "weapon": "sword",
-      "move": "infantry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "aide"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "山田孝太郎",
-      "actorEn": [
-        "Alex Cazares"
-      ],
-      "actorJp": [
-        "高垣彩陽"
-      ],
-      "releaseDate": null,
-      "intId": 110
-    },
-    {
-      "id": "Dagr Suns Radiance ENEMY",
-      "name": "Dagr",
-      "title": "Sun's Radiance",
-      "titleFr": null,
-      "person": "Dagr",
-      "color": "v",
-      "weapon": "axe",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "light",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Alex Cazares"
-      ],
-      "actorJp": [
-        "高垣彩陽"
-      ],
-      "releaseDate": null,
-      "intId": 62
-    },
-    {
-      "id": "Eikthyrnir Quieting Strength ENEMY",
-      "name": "Eikþyrnir",
-      "title": "Quieting Strength",
-      "titleFr": null,
-      "person": "Eikþyrnir",
-      "color": "g",
-      "weapon": "beast",
-      "move": "cavalry",
-      "gender": "M",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "astra",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Alex Bankier"
-      ],
-      "actorJp": [
-        "武内駿輔"
-      ],
-      "releaseDate": null,
-      "intId": 106
-    },
-    {
-      "id": "Eir Life Ascendant ENEMY",
-      "name": "Eir",
-      "title": "Life Ascendant",
-      "titleFr": null,
-      "person": "Eir",
-      "color": "v",
-      "weapon": "dagger",
-      "move": "cavalry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
-      "artist": "HACCAN",
-      "actorEn": [
-        "Xanthe Huynh"
-      ],
-      "actorJp": [
-        "雨宮天"
-      ],
-      "releaseDate": null,
-      "intId": 91
-    },
-    {
-      "id": "Eitr Hand of Nothing ENEMY",
-      "name": "Eitr",
-      "title": "Hand of Nothing",
-      "titleFr": null,
-      "person": "Eitr",
-      "color": "b",
-      "weapon": "beast",
-      "move": "cavalry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "切符",
-      "actorEn": [
-        "Caitlyn Elizabeth"
-      ],
-      "actorJp": [
-        "和多田美咲"
-      ],
-      "releaseDate": null,
-      "intId": 98
-    },
-    {
-      "id": "Eitri Youthful Sage ENEMY",
-      "name": "Eitri",
-      "title": "Youthful Sage",
-      "titleFr": null,
-      "person": "Eitri",
-      "color": "v",
-      "weapon": "tome",
-      "move": "flying",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "hat",
-        "tiara"
-      ],
-      "blessing": "fire",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Lisa Reimold"
-      ],
-      "actorJp": [
-        "高山みなみ"
-      ],
-      "releaseDate": null,
-      "intId": 79
-    },
-    {
-      "id": "Elm Retainer to Embla ENEMY",
-      "name": "Elm",
-      "title": "Retainer to Embla",
-      "titleFr": null,
-      "person": "Elm",
-      "color": "r",
-      "weapon": "beast",
-      "move": "flying",
-      "gender": "Male",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "astra",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Landon McDonald"
-      ],
-      "actorJp": [
-        "入野自由"
-      ],
-      "releaseDate": null,
-      "intId": 80
-    },
-    {
-      "id": "Embla God of Closure ENEMY",
-      "name": "Embla",
-      "title": "God of Closure",
-      "titleFr": null,
-      "person": "Embla",
-      "color": "r",
-      "weapon": "beast",
-      "move": "flying",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": "dark",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Mayanna Berrin"
-      ],
-      "actorJp": [
-        "丹下桜"
-      ],
-      "releaseDate": null,
-      "intId": 94
-    },
-    {
-      "id": "Fafnir King of Desolation Dragon ENEMY",
-      "name": "Fáfnir",
-      "title": "King of Desolation",
-      "titleFr": null,
-      "person": "Fáfnir",
-      "color": "g",
-      "weapon": "breath",
-      "move": "armored",
-      "gender": "M",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Griffin Puatu"
-      ],
-      "actorJp": [
-        "加藤和樹"
-      ],
-      "releaseDate": null,
-      "intId": 76
-    },
-    {
-      "id": "Fafnir King of Desolation ENEMY",
-      "name": "Fáfnir",
-      "title": "King of Desolation",
-      "titleFr": null,
-      "person": "Fáfnir",
-      "color": "b",
-      "weapon": "lance",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Griffin Puatu"
-      ],
-      "actorJp": [
-        "加藤和樹"
-      ],
-      "releaseDate": null,
-      "intId": 60
-    },
-    {
-      "id": "Fimbulvetr The Bitter End ENEMY",
-      "name": "Fimbulvetr",
-      "title": "The Bitter End",
-      "titleFr": null,
-      "person": "Fimbulvetr",
-      "color": "g",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "四々九",
-      "actorEn": [
-        "Crystal Lee"
-      ],
-      "actorJp": [
-        "伊藤未来"
-      ],
-      "releaseDate": null,
-      "intId": 122
-    },
-    {
-      "id": "Fjorm Ice Ascendant ENEMY",
-      "name": "Fjorm",
-      "title": "Ice Ascendant",
-      "titleFr": null,
-      "person": "Fjorm",
-      "color": "v",
-      "weapon": "axe",
-      "move": "armored",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "Heather Watson"
-      ],
-      "actorJp": [
-        "高橋李依"
-      ],
-      "releaseDate": null,
-      "intId": 77
-    },
-    {
-      "id": "Freyja Lady of Nightmare ENEMY",
-      "name": "Freyja",
-      "title": "Lady of Nightmare",
-      "titleFr": null,
-      "person": "Freyja",
-      "color": "v",
-      "weapon": "beast",
-      "move": "cavalry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": "light",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "四々九",
-      "actorEn": [
-        "Stephanie Southerland"
-      ],
-      "actorJp": [
-        "林原めぐみ"
-      ],
-      "releaseDate": null,
-      "intId": 56
-    },
-    {
-      "id": "Freyr Dream-King ENEMY",
-      "name": "Freyr",
-      "title": "Dream-King",
-      "titleFr": null,
-      "person": "Freyr",
-      "color": "b",
-      "weapon": "beast",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "anima",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "四々九",
-      "actorEn": [
-        "Jason Marnocha"
-      ],
-      "actorJp": [
-        "古谷徹"
-      ],
-      "releaseDate": null,
-      "intId": 57
-    },
-    {
-      "id": "Ganglot Death Anew ENEMY",
-      "name": "Ganglöt",
-      "title": "Death Anew",
-      "titleFr": null,
-      "person": "Ganglöt",
-      "color": "v",
-      "weapon": "axe",
-      "move": "infantry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "麻谷知世",
-      "actorEn": [
-        "Shara Kirby"
-      ],
-      "actorJp": [
-        "大地葉"
-      ],
-      "releaseDate": null,
-      "intId": 93
-    },
-    {
-      "id": "Ginnungagap Ruler of Nihility ENEMY",
-      "name": "Ginnungagap",
-      "title": "Ruler of Nihility",
-      "titleFr": null,
-      "person": "Ginnungagap",
-      "color": "g",
-      "weapon": "dagger",
-      "move": "cavalry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "hat"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "hou",
-      "actorEn": [
-        "Marie Westbrook"
-      ],
-      "actorJp": [
-        "恒松あゆみ"
-      ],
-      "releaseDate": null,
-      "intId": 103
-    },
-    {
-      "id": "Green Bat ENEMY",
-      "name": "Green Bat",
-      "title": "",
-      "titleFr": null,
-      "person": "Green Bat",
-      "color": "v",
-      "weapon": "beast",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 86
-    },
-    {
-      "id": "Green Bow ENEMY",
-      "name": "Green Bow",
-      "title": "",
-      "titleFr": null,
-      "person": "Green Bow",
-      "color": "v",
-      "weapon": "bow",
-      "move": "infantry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 43
-    },
-    {
-      "id": "Green Cavalier ENEMY",
-      "name": "Green Cavalier",
-      "title": "",
-      "titleFr": null,
-      "person": "Green Cavalier",
-      "color": "v",
-      "weapon": "tome",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 21
-    },
-    {
-      "id": "Green Fafnir ENEMY",
-      "name": "Green Fáfnir",
-      "title": "",
-      "titleFr": null,
-      "person": "Green Fáfnir",
-      "color": "v",
-      "weapon": "breath",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 49
-    },
-    {
-      "id": "Green Flier ENEMY",
-      "name": "Green Flier",
-      "title": "",
-      "titleFr": null,
-      "person": "Green Flier",
-      "color": "v",
-      "weapon": "tome",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 40
-    },
-    {
-      "id": "Green Mage ENEMY",
-      "name": "Green Mage",
-      "title": "",
-      "titleFr": null,
-      "person": "Green Mage",
-      "color": "v",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 20
-    },
-    {
-      "id": "Green Manakete ENEMY",
-      "name": "Green Manakete",
-      "title": "",
-      "titleFr": null,
-      "person": "Green Manakete",
-      "color": "v",
-      "weapon": "breath",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 31
-    },
-    {
-      "id": "Green Thief ENEMY",
-      "name": "Green Thief",
-      "title": "",
-      "titleFr": null,
-      "person": "Green Thief",
-      "color": "v",
-      "weapon": "dagger",
-      "move": "infantry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 46
-    },
-    {
-      "id": "Groa Future Daughter ENEMY",
-      "name": "Gróa",
-      "title": "Future Daughter",
-      "titleFr": null,
-      "person": "Gróa",
-      "color": "b",
-      "weapon": "tome",
-      "move": "flying",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "light",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "ひと和",
-      "actorEn": [
-        "Alice Himora"
-      ],
-      "actorJp": [
-        "島袋美由利"
-      ],
-      "releaseDate": null,
-      "intId": 124
-    },
-    {
-      "id": "Gullveig Golden Seer ENEMY",
-      "name": "Gullveig",
-      "title": "Golden Seer",
-      "titleFr": null,
-      "person": "Gullveig",
-      "color": "g",
-      "weapon": "tome",
-      "move": "cavalry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "hat",
-        "tiara"
-      ],
-      "blessing": "anima",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "四々九",
-      "actorEn": [
-        "Alice Himora"
-      ],
-      "actorJp": [
-        "三森すずこ"
-      ],
-      "releaseDate": null,
-      "intId": 95
-    },
-    {
-      "id": "Gustav Exsanguinator ENEMY",
-      "name": "Gustav",
-      "title": "Exsanguinator",
-      "titleFr": null,
-      "person": "Gustav",
-      "color": "v",
-      "weapon": "axe",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Edward Bosco"
-      ],
-      "actorJp": [
-        "中田譲治"
-      ],
-      "releaseDate": null,
-      "intId": 53
-    },
-    {
-      "id": "Heidr Cursed Goddess ENEMY",
-      "name": "Heiðr",
-      "title": "Cursed Goddess",
-      "titleFr": null,
-      "person": "Heiðr",
-      "color": "v",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "四々九",
-      "actorEn": [
-        "Alice Himora"
-      ],
-      "actorJp": [
-        "三森すずこ"
-      ],
-      "releaseDate": null,
-      "intId": 99
-    },
-    {
-      "id": "Heidr Cursed Goddess Serpent ENEMY",
-      "name": "Heiðr",
-      "title": "Cursed Goddess",
-      "titleFr": null,
-      "person": "Heiðr",
-      "color": "v",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "四々九",
-      "actorEn": [
-        "Alice Himora"
-      ],
-      "actorJp": [
-        "三森すずこ"
-      ],
-      "releaseDate": null,
-      "intId": 100
-    },
-    {
-      "id": "Heimdallr God of Foresight ENEMY",
-      "name": "Heimdallr",
-      "title": "God of Foresight",
-      "titleFr": null,
-      "person": "Heimdallr",
-      "color": "b",
-      "weapon": "tome",
-      "move": "cavalry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": "anima",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "Elsie Lovelock"
-      ],
-      "actorJp": [
-        "内山夕実"
-      ],
-      "releaseDate": null,
-      "intId": 115
-    },
-    {
-      "id": "Hel Death Sovereign ENEMY",
-      "name": "Hel",
-      "title": "Death Sovereign",
-      "titleFr": null,
-      "person": "Hel",
-      "color": "v",
-      "weapon": "axe",
-      "move": "flying",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "dark",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Barbara Goodson"
-      ],
-      "actorJp": [
-        "小山茉美"
-      ],
-      "releaseDate": null,
-      "intId": 52
-    },
-    {
-      "id": "Helbindi Savage Scourge ENEMY",
-      "name": "Helbindi",
-      "title": "Savage Scourge",
-      "titleFr": null,
-      "person": "Helbindi",
-      "color": "v",
-      "weapon": "axe",
-      "move": "infantry",
-      "gender": "Male",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "Raymond K. Essel"
-      ],
-      "actorJp": [
-        "中井和哉"
-      ],
-      "releaseDate": null,
-      "intId": 36
-    },
-    {
-      "id": "Hodr Dusk Shadow God ENEMY",
-      "name": "Höðr",
-      "title": "Dusk Shadow God",
-      "titleFr": null,
-      "person": "Höðr",
-      "color": "b",
-      "weapon": "bow",
-      "move": "flying",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "anima",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "Emi Lo"
-      ],
-      "actorJp": [
-        "青山吉能"
-      ],
-      "releaseDate": null,
-      "intId": 113
-    },
-    {
-      "id": "Hraesvelgr Quieting Blade ENEMY",
-      "name": "Hræsvelgr",
-      "title": "Quieting Blade",
-      "titleFr": null,
-      "person": "Hræsvelgr",
-      "color": "b",
-      "weapon": "beast",
-      "move": "flying",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "hat"
-      ],
-      "blessing": "light",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Justine Lee"
-      ],
-      "actorJp": [
-        "若山詩音"
-      ],
-      "releaseDate": null,
-      "intId": 104
-    },
-    {
-      "id": "Jormungandr Dormant God ENEMY",
-      "name": "Jörmungandr",
-      "title": "Dormant God",
-      "titleFr": null,
-      "person": "Jörmungandr",
-      "color": "g",
-      "weapon": "beast",
-      "move": "armored",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "astra",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "四々九",
-      "actorEn": [
-        "Jennifer Sun Bell"
-      ],
-      "actorJp": [
-        "皆口裕子"
-      ],
-      "releaseDate": null,
-      "intId": 123
-    },
-    {
-      "id": "Kiran Hero Summoner ENEMY",
-      "name": "Kiran",
-      "title": "Hero Summoner",
-      "titleFr": null,
-      "person": "Kiran",
-      "color": "g",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "XMF",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 61
-    },
-    {
-      "id": "Kiran Hero Summoner Sword ENEMY",
-      "name": "Kiran",
-      "title": "Hero Summoner",
-      "titleFr": null,
-      "person": "Kiran",
-      "color": "r",
-      "weapon": "sword",
-      "move": "infantry",
-      "gender": "XMF",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 65
-    },
-    {
-      "id": "Kiran Hero Summoner Lance ENEMY",
-      "name": "Kiran",
-      "title": "Hero Summoner",
-      "titleFr": null,
-      "person": "Kiran",
-      "color": "b",
-      "weapon": "lance",
-      "move": "infantry",
-      "gender": "XMF",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 66
-    },
-    {
-      "id": "Kiran Hero Summoner Axe ENEMY",
-      "name": "Kiran",
-      "title": "Hero Summoner",
-      "titleFr": null,
-      "person": "Kiran",
-      "color": "v",
-      "weapon": "axe",
-      "move": "infantry",
-      "gender": "XMF",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 67
-    },
-    {
-      "id": "Kiran Hero Summoner Red Tome ENEMY",
-      "name": "Kiran",
-      "title": "Hero Summoner",
-      "titleFr": null,
-      "person": "Kiran",
-      "color": "r",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "XMF",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 68
-    },
-    {
-      "id": "Kiran Hero Summoner Blue Tome ENEMY",
-      "name": "Kiran",
-      "title": "Hero Summoner",
-      "titleFr": null,
-      "person": "Kiran",
-      "color": "b",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "XMF",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 69
-    },
-    {
-      "id": "Kiran Hero Summoner Green Tome ENEMY",
-      "name": "Kiran",
-      "title": "Hero Summoner",
-      "titleFr": null,
-      "person": "Kiran",
-      "color": "v",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "XMF",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 70
-    },
-    {
-      "id": "Kvasir Seer of the Past ENEMY",
-      "name": "Kvasir",
-      "title": "Seer of the Past",
-      "titleFr": null,
-      "person": "Kvasir",
-      "color": "r",
-      "weapon": "tome",
-      "move": "cavalry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "dark",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "四々九",
-      "actorEn": [
-        "Valeria Rodriguez"
-      ],
-      "actorJp": [
-        "羊宮妃那"
-      ],
-      "releaseDate": null,
-      "intId": 97
-    },
-    {
-      "id": "Laegjarn Sheathed Steel ENEMY",
-      "name": "Laegjarn",
-      "title": "Sheathed Steel",
-      "titleFr": null,
-      "person": "Laegjarn",
-      "color": "r",
-      "weapon": "sword",
-      "move": "flying",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "Alicia Stratten"
-      ],
-      "actorJp": [
-        "田村ゆかり"
-      ],
-      "releaseDate": null,
-      "intId": 35
-    },
-    {
-      "id": "Laeradr Quieting Heart ENEMY",
-      "name": "Læraðr",
-      "title": "Quieting Heart",
-      "titleFr": null,
-      "person": "Læraðr",
-      "color": "g",
-      "weapon": "beast",
-      "move": "armored",
-      "gender": "M",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": "dark",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Bob Carter"
-      ],
-      "actorJp": [
-        "山崎たくみ"
-      ],
-      "releaseDate": null,
-      "intId": 108
-    },
-    {
-      "id": "Laevatein Searing Steel ENEMY",
-      "name": "Laevatein",
-      "title": "Searing Steel",
-      "titleFr": null,
-      "person": "Laevatein",
-      "color": "r",
-      "weapon": "sword",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "Sarah Williams"
-      ],
-      "actorJp": [
-        "釘宮理恵"
-      ],
-      "releaseDate": null,
-      "intId": 34
-    },
-    {
-      "id": "Lance Cavalier ENEMY",
-      "name": "Lance Cavalier",
-      "title": "",
-      "titleFr": null,
-      "person": "Lance Cavalier",
-      "color": "b",
-      "weapon": "lance",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic",
-        "tiara"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 7
-    },
-    {
-      "id": "Lance Dragon ENEMY",
-      "name": "Lance Dragon",
-      "title": "",
-      "titleFr": null,
-      "person": "Lance Dragon",
-      "color": "b",
-      "weapon": "lance",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 27
-    },
-    {
-      "id": "Lance Fighter ENEMY",
-      "name": "Lance Fighter",
-      "title": "",
-      "titleFr": null,
-      "person": "Lance Fighter",
-      "color": "b",
-      "weapon": "lance",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 5
-    },
-    {
-      "id": "Lance Flier ENEMY",
-      "name": "Lance Flier",
-      "title": "",
-      "titleFr": null,
-      "person": "Lance Flier",
-      "color": "b",
-      "weapon": "lance",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 8
-    },
-    {
-      "id": "Lance Knight ENEMY",
-      "name": "Lance Knight",
-      "title": "",
-      "titleFr": null,
-      "person": "Lance Knight",
-      "color": "b",
-      "weapon": "lance",
-      "move": "armored",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 6
-    },
-    {
-      "id": "Letizia Curse Director Dark ENEMY",
-      "name": "Letizia",
-      "title": "Curse Director",
-      "titleFr": null,
-      "person": "Letizia",
-      "color": "v",
-      "weapon": "tome",
-      "move": "cavalry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Kelly Baskin"
-      ],
-      "actorJp": [
-        "M・A・O"
-      ],
-      "releaseDate": null,
-      "intId": 83
-    },
-    {
-      "id": "Letizia Curse Director ENEMY",
-      "name": "Letizia",
-      "title": "Curse Director",
-      "titleFr": null,
-      "person": "Letizia",
-      "color": "v",
-      "weapon": "tome",
-      "move": "cavalry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Kelly Baskin"
-      ],
-      "actorJp": [
-        "M・A・O"
-      ],
-      "releaseDate": null,
-      "intId": 82
-    },
-    {
-      "id": "Lif Arcane Blade ENEMY",
-      "name": "Líf",
-      "title": "Arcane Blade",
-      "titleFr": null,
-      "person": "Líf",
-      "color": "r",
-      "weapon": "sword",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Edward Bosco"
-      ],
-      "actorJp": [
-        "前野智昭"
-      ],
-      "releaseDate": null,
-      "intId": 89
-    },
-    {
-      "id": "Lif Lethal Swordsman ENEMY",
-      "name": "Líf",
-      "title": "Lethal Swordsman",
-      "titleFr": null,
-      "person": "Líf",
-      "color": "r",
-      "weapon": "sword",
-      "move": "infantry",
-      "gender": "Male",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "anima",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Edward Bosco"
-      ],
-      "actorJp": [
-        "前野智昭"
-      ],
-      "releaseDate": null,
-      "intId": 50
-    },
-    {
-      "id": "Lif Deadly Miracle ENEMY",
-      "name": "Líf",
-      "title": "Deadly Miracle",
-      "titleFr": null,
-      "person": "Líf",
-      "color": "v",
-      "weapon": "axe",
-      "move": "cavalry",
-      "gender": "M",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Edward Bosco"
-      ],
-      "actorJp": [
-        "前野智昭"
-      ],
-      "releaseDate": null,
-      "intId": 125
-    },
-    {
-      "id": "Loki The Trickster ENEMY",
-      "name": "Loki",
-      "title": "The Trickster",
-      "titleFr": null,
-      "person": "Loki",
-      "color": "g",
-      "weapon": "staff",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "hat",
-        "tiara"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "Erika Ishii"
-      ],
-      "actorJp": [
-        "新井里美"
-      ],
-      "releaseDate": null,
-      "intId": 33
-    },
-    {
-      "id": "Meliai Warrior Wanderer ENEMY",
-      "name": "Melíai",
-      "title": "Warrior Wanderer",
-      "titleFr": null,
-      "person": "Melíai",
-      "color": "v",
-      "weapon": "beast",
-      "move": "armored",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [],
-      "artist": "ekao",
-      "actorEn": [
-        "Lily Emil Lammers"
-      ],
-      "actorJp": [
-        "下地紫野"
-      ],
-      "releaseDate": null,
-      "intId": 116
-    },
-    {
-      "id": "Muspell Flame God ENEMY",
-      "name": "Múspell",
-      "title": "Flame God",
-      "titleFr": null,
-      "person": "Múspell",
-      "color": "r",
-      "weapon": "breath",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
-      "artist": "ヤスダスズヒト",
-      "actorEn": [
-        "Jason Charles Miller"
-      ],
-      "actorJp": [
-        "玄田哲章"
-      ],
-      "releaseDate": null,
-      "intId": 75
-    },
-    {
-      "id": "Nerthuz God of the Land ENEMY",
-      "name": "Nerþuz",
-      "title": "God of the Land",
-      "titleFr": null,
-      "person": "Nerþuz",
-      "color": "b",
-      "weapon": "beast",
-      "move": "cavalry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": "light",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "四々九",
-      "actorEn": [
-        "Cristina \"Vee\" Valenzuela"
-      ],
-      "actorJp": [
-        "日髙のり子"
-      ],
-      "releaseDate": null,
-      "intId": 96
-    },
-    {
-      "id": "Nidavellir Founding King ENEMY",
-      "name": "Niðavellir",
-      "title": "Founding King",
-      "titleFr": null,
-      "person": "Niðavellir",
-      "color": "g",
-      "weapon": "bow",
-      "move": "cavalry",
-      "gender": "M",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "hat",
-        "mask",
-        "tiara"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
-      "artist": "Daisuke Izuka",
-      "actorEn": [
-        "AJ Beckles"
-      ],
-      "actorJp": [
-        "三上哲"
-      ],
-      "releaseDate": null,
-      "intId": 107
-    },
-    {
-      "id": "Nidhoggr Quieting Dose ENEMY",
-      "name": "Níðhöggr",
-      "title": "Quieting Dose",
-      "titleFr": null,
-      "person": "Níðhöggr",
-      "color": "r",
-      "weapon": "beast",
-      "move": "armored",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": "astra",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Anjali Kunapaneni"
-      ],
-      "actorJp": [
-        "豊崎愛生"
-      ],
-      "releaseDate": null,
-      "intId": 105
-    },
-    {
-      "id": "Nifl God of Ice ENEMY",
-      "name": "Nifl",
-      "title": "God of Ice",
-      "titleFr": null,
-      "person": "Nifl",
-      "color": "b",
-      "weapon": "breath",
-      "move": "cavalry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
-      "artist": "ヤスダスズヒト",
-      "actorEn": [
-        "Anairis Quiñones"
-      ],
-      "actorJp": [
-        "高橋李依"
-      ],
-      "releaseDate": null,
-      "intId": 74
-    },
-    {
-      "id": "Nott Moons Elegance ENEMY",
-      "name": "Nótt",
-      "title": "Moon's Elegance",
-      "titleFr": null,
-      "person": "Nótt",
-      "color": "b",
-      "weapon": "lance",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "dark",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Erika Harlacher"
-      ],
-      "actorJp": [
-        "水樹奈々"
-      ],
-      "releaseDate": null,
-      "intId": 63
-    },
-    {
-      "id": "Otr Kingsbrother ENEMY",
-      "name": "Ótr",
-      "title": "Kingsbrother",
-      "titleFr": null,
-      "person": "Ótr",
-      "color": "v",
-      "weapon": "axe",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "hat",
-        "mask",
-        "tiara"
-      ],
-      "blessing": "anima",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Tyler Shamy"
-      ],
-      "actorJp": [
-        "吉野裕行"
-      ],
-      "releaseDate": null,
-      "intId": 59
-    },
-    {
-      "id": "Peony Cherished Dream ENEMY",
-      "name": "Peony",
-      "title": "Cherished Dream",
-      "titleFr": null,
-      "person": "Peony",
-      "color": "v",
-      "weapon": "axe",
-      "move": "flying",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "refresher"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "四々九",
-      "actorEn": [
-        "Ryan Bartley"
-      ],
-      "actorJp": [
-        "和氣あず未"
-      ],
-      "releaseDate": null,
-      "intId": 102
-    },
-    {
-      "id": "Plumeria Rapturous Dream ENEMY",
-      "name": "Plumeria",
-      "title": "Rapturous Dream",
-      "titleFr": null,
-      "person": "Plumeria",
-      "color": "b",
-      "weapon": "tome",
-      "move": "flying",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "refresher",
-        "tiara"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "kainown",
-      "actorEn": [
-        "Nicole Gose"
-      ],
-      "actorJp": [
-        "堀江由衣"
-      ],
-      "releaseDate": null,
-      "intId": 101
-    },
-    {
-      "id": "Plumeria Lewd Dream ENEMY",
-      "name": "Plumeria",
-      "title": "Lewd Dream",
-      "titleFr": null,
-      "person": "Plumeria",
-      "color": "r",
-      "weapon": "tome",
-      "move": "flying",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "refresher",
-        "tiara"
-      ],
-      "blessing": "astra",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "四々九",
-      "actorEn": [
-        "Nicole Gose"
-      ],
-      "actorJp": [
-        "堀江由衣"
-      ],
-      "releaseDate": null,
-      "intId": 55
-    },
-    {
-      "id": "Red Bat ENEMY",
-      "name": "Red Bat",
-      "title": "",
-      "titleFr": null,
-      "person": "Red Bat",
-      "color": "r",
-      "weapon": "beast",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 84
-    },
-    {
-      "id": "Red Bow ENEMY",
-      "name": "Red Bow",
-      "title": "",
-      "titleFr": null,
-      "person": "Red Bow",
-      "color": "r",
-      "weapon": "bow",
-      "move": "infantry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 41
-    },
-    {
-      "id": "Red Cavalier ENEMY",
-      "name": "Red Cavalier",
-      "title": "",
-      "titleFr": null,
-      "person": "Red Cavalier",
-      "color": "r",
-      "weapon": "tome",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 17
-    },
-    {
-      "id": "Red Fafnir ENEMY",
-      "name": "Red Fáfnir",
-      "title": "",
-      "titleFr": null,
-      "person": "Red Fáfnir",
-      "color": "r",
-      "weapon": "breath",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 47
-    },
-    {
-      "id": "Red Flier ENEMY",
-      "name": "Red Flier",
-      "title": "",
-      "titleFr": null,
-      "person": "Red Flier",
-      "color": "r",
-      "weapon": "tome",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 38
-    },
-    {
-      "id": "Red Mage ENEMY",
-      "name": "Red Mage",
-      "title": "",
-      "titleFr": null,
-      "person": "Red Mage",
-      "color": "r",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 16
-    },
-    {
-      "id": "Red Manakete ENEMY",
-      "name": "Red Manakete",
-      "title": "",
-      "titleFr": null,
-      "person": "Red Manakete",
-      "color": "r",
-      "weapon": "breath",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 29
-    },
-    {
-      "id": "Red Thief ENEMY",
-      "name": "Red Thief",
-      "title": "",
-      "titleFr": null,
-      "person": "Red Thief",
-      "color": "r",
-      "weapon": "dagger",
-      "move": "infantry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 44
-    },
-    {
-      "id": "Reginn Dvergr Heir ENEMY",
-      "name": "Reginn",
-      "title": "Dvergr Heir",
-      "titleFr": null,
-      "person": "Reginn",
-      "color": "b",
-      "weapon": "lance",
-      "move": "cavalry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "hat",
-        "mask",
-        "tiara",
-        "aide"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "エシュアル",
-      "actorEn": [
-        "Megan Shipman"
-      ],
-      "actorJp": [
-        "小原好美"
-      ],
-      "releaseDate": null,
-      "intId": 109
-    },
-    {
-      "id": "Sharena Borrowed Divinity ENEMY",
-      "name": "Sharena",
-      "title": "Borrowed Divinity",
-      "titleFr": null,
-      "person": "Sharena",
-      "color": "b",
-      "weapon": "lance",
-      "move": "cavalry",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Julie Maddalena"
-      ],
-      "actorJp": [
-        "内田真礼"
-      ],
-      "releaseDate": null,
-      "intId": 120
-    },
-    {
-      "id": "Steam Axe ENEMY",
-      "name": "Steam Axe",
-      "title": "",
-      "titleFr": null,
-      "person": "Steam Axe",
-      "color": "v",
-      "weapon": "axe",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 73
-    },
-    {
-      "id": "Steam Lance ENEMY",
-      "name": "Steam Lance",
-      "title": "",
-      "titleFr": null,
-      "person": "Steam Lance",
-      "color": "b",
-      "weapon": "lance",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 72
-    },
-    {
-      "id": "Steam Sword ENEMY",
-      "name": "Steam Sword",
-      "title": "",
-      "titleFr": null,
-      "person": "Steam Sword",
-      "color": "r",
-      "weapon": "sword",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 71
-    },
-    {
-      "id": "Surtr Ruler of Flame ENEMY",
-      "name": "Surtr",
-      "title": "Ruler of Flame",
-      "titleFr": null,
-      "person": "Surtr",
-      "color": "v",
-      "weapon": "axe",
-      "move": "armored",
-      "gender": "Male",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "hat"
-      ],
-      "blessing": null,
-      "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "—"
-      ],
-      "actorJp": [
-        "玄田哲章"
-      ],
-      "releaseDate": null,
-      "intId": 32
-    },
-    {
-      "id": "Sword Cavalier ENEMY",
-      "name": "Sword Cavalier",
-      "title": "",
-      "titleFr": null,
-      "person": "Sword Cavalier",
-      "color": "r",
-      "weapon": "sword",
-      "move": "cavalry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic",
-        "tiara"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 3
-    },
-    {
-      "id": "Sword Dragon ENEMY",
-      "name": "Sword Dragon",
-      "title": "",
-      "titleFr": null,
-      "person": "Sword Dragon",
-      "color": "r",
-      "weapon": "sword",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 26
-    },
-    {
-      "id": "Sword Fighter ENEMY",
-      "name": "Sword Fighter",
-      "title": "",
-      "titleFr": null,
-      "person": "Sword Fighter",
-      "color": "r",
-      "weapon": "sword",
-      "move": "infantry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 1
-    },
-    {
-      "id": "Sword Flier ENEMY",
-      "name": "Sword Flier",
-      "title": "",
-      "titleFr": null,
-      "person": "Sword Flier",
-      "color": "r",
-      "weapon": "sword",
-      "move": "flying",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 4
-    },
-    {
-      "id": "Sword Knight ENEMY",
-      "name": "Sword Knight",
-      "title": "",
-      "titleFr": null,
-      "person": "Sword Knight",
-      "color": "r",
-      "weapon": "sword",
-      "move": "armored",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 2
-    },
-    {
-      "id": "Thief ENEMY",
-      "name": "Thief",
-      "title": "",
-      "titleFr": null,
-      "person": "Thief",
-      "color": "g",
-      "weapon": "dagger",
-      "move": "infantry",
-      "gender": "Male",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 15
-    },
-    {
-      "id": "Thorr War God ENEMY",
-      "name": "Thórr",
-      "title": "War God",
-      "titleFr": null,
-      "person": "Thórr",
-      "color": "v",
-      "weapon": "axe",
-      "move": "flying",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "astra",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "Laila Berzins"
-      ],
-      "actorJp": [
-        "佐藤利奈"
-      ],
-      "releaseDate": null,
-      "intId": 78
-    },
-    {
-      "id": "Thrasir Omnicidal Witch ENEMY",
-      "name": "Thrasir",
-      "title": "Omnicidal Witch",
-      "titleFr": null,
-      "person": "Thrasir",
-      "color": "v",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "anima",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Lizzie Freeman"
-      ],
-      "actorJp": [
-        "小倉唯"
-      ],
-      "releaseDate": null,
-      "intId": 51
-    },
-    {
-      "id": "Triandra Nightmare ENEMY",
-      "name": "Triandra",
-      "title": "Nightmare",
-      "titleFr": null,
-      "person": "Triandra",
-      "color": "v",
-      "weapon": "tome",
-      "move": "flying",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "refresher",
-        "hat"
-      ],
-      "blessing": "dark",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "四々九",
-      "actorEn": [
-        "Lexi Klein"
-      ],
-      "actorJp": [
-        "井口裕香"
-      ],
-      "releaseDate": null,
-      "intId": 54
-    },
-    {
-      "id": "Troubadour ENEMY",
-      "name": "Troubadour",
-      "title": "",
-      "titleFr": null,
-      "person": "Troubadour",
-      "color": "g",
-      "weapon": "staff",
-      "move": "cavalry",
-      "gender": "Female",
-      "origin": null,
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "generic"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": null,
-      "actorEn": [],
-      "actorJp": [],
-      "releaseDate": null,
-      "intId": 23
-    },
-    {
-      "id": "Vali God of Vengeance ENEMY",
-      "name": "Váli",
-      "title": "God of Vengeance",
-      "titleFr": null,
-      "person": "Váli",
-      "color": "v",
-      "weapon": "tome",
-      "move": "flying",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": "dark",
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "前嶋重機",
-      "actorEn": [
-        "Mia Paige"
-      ],
-      "actorJp": [
-        "会沢紗弥"
-      ],
-      "releaseDate": null,
-      "intId": 117
-    },
-    {
-      "id": "Vanitas Hollow God ENEMY",
-      "name": "Vanitas",
-      "title": "Hollow God",
-      "titleFr": null,
-      "person": "Vanitas",
-      "color": "v",
-      "weapon": "breath",
-      "move": "armored",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "創-taro",
-      "actorEn": [
-        "Kelsey Jaffer"
-      ],
-      "actorJp": [
-        "古賀葵"
-      ],
-      "releaseDate": null,
-      "intId": 121
-    },
-    {
-      "id": "Veronica Emblian Princess ENEMY",
-      "name": "Veronica",
-      "title": "Emblian Princess",
-      "titleFr": null,
-      "person": "Veronica",
-      "color": "v",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy",
-        "tiara"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Wendee Lee"
-      ],
-      "actorJp": [
-        "日高里菜"
-      ],
-      "releaseDate": null,
-      "intId": 25
-    },
-    {
-      "id": "Veronica Princess Beset ENEMY",
-      "name": "Veronica",
-      "title": "Princess Beset",
-      "titleFr": null,
-      "person": "Veronica",
-      "color": "v",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Wendee Lee"
-      ],
-      "actorJp": [
-        "日高里菜"
-      ],
-      "releaseDate": null,
-      "intId": 81
-    },
-    {
-      "id": "Veronica Princess Beset Dark ENEMY",
-      "name": "Veronica",
-      "title": "Princess Beset",
-      "titleFr": null,
-      "person": "Veronica",
-      "color": "v",
-      "weapon": "tome",
-      "move": "infantry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Wendee Lee"
-      ],
-      "actorJp": [
-        "日高里菜"
-      ],
-      "releaseDate": null,
-      "intId": 88
-    },
-    {
-      "id": "Veronica Princess Beset Legendary ENEMY",
-      "name": "Veronica",
-      "title": "Princess Beset",
-      "titleFr": null,
-      "person": "Veronica",
-      "color": "r",
-      "weapon": "tome",
-      "move": "cavalry",
-      "gender": "Female",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "コザキユースケ",
-      "actorEn": [
-        "Wendee Lee"
-      ],
-      "actorJp": [
-        "日高里菜"
-      ],
-      "releaseDate": null,
-      "intId": 92
-    },
-    {
-      "id": "Thjazi Ruthless Jotun ENEMY",
-      "name": "Þjazi",
-      "title": "Ruthless Jötun",
-      "titleFr": null,
-      "person": "Þjazi",
-      "color": "v",
-      "weapon": "axe",
-      "move": "armored",
-      "gender": "F",
-      "origin": "Fire Emblem Heroes",
-      "category": "standard",
-      "properties": [
-        "enemy"
-      ],
-      "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
-      "artist": "チーコ",
-      "actorEn": [
-        "Stephanie Kerbis"
-      ],
-      "actorJp": [
-        "松嵜麗"
-      ],
-      "releaseDate": null,
-      "intId": 111
     }
   ]
 }
