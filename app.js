@@ -1327,8 +1327,14 @@ async function main() {
     }
     saveCollection();
     const catalogIds = new Set(state.heroes.map((h) => h.id));
-    const unknown = Object.keys(state.collection.owned).filter((id) => !catalogIds.has(id)).length;
-    if (unknown) alert(state.t('import.unknown', { n: unknown }));
+    const unknownIds = new Set(
+      [
+        ...Object.keys(state.collection.owned),
+        ...Object.keys(state.collection.wanted),
+        ...Object.keys(state.collection.manuals),
+      ].filter((id) => !catalogIds.has(id)),
+    );
+    if (unknownIds.size) alert(state.t('import.unknown', { n: unknownIds.size }));
     updateCollectionCount();
     renderView();
   });
