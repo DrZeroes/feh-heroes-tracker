@@ -1,4 +1,8 @@
-﻿// scripts/lib/locale.mjs — construit un index d'épithètes FR depuis les dumps de messages. Pur.
+// scripts/lib/locale.mjs — construit un index d'épithètes FR depuis les dumps de messages. Pur.
+
+// Séparateur name/title dans les clés composites : U+001F (Unit Separator), improbable dans un texte.
+const SEP = String.fromCharCode(0x1f);
+const APOSTROPHES = /[‘’ʼ]/g;
 
 export function indexMessages(entries) {
   const out = {};
@@ -11,11 +15,11 @@ export function indexMessages(entries) {
 export function normalizeTitleKey(name, title) {
   const norm = (s) => String(s ?? '')
     .toLowerCase()
-    .replace(/[‘’ʼ]/g, "'")
+    .replace(APOSTROPHES, "'")
     .replace(/&/g, ' and ')
     .replace(/\s+/g, ' ')
     .trim();
-  return `${norm(name)}${norm(title)}`;
+  return `${norm(name)}${SEP}${norm(title)}`;
 }
 
 export function buildFrTitleIndex(enMsg, frMsg) {
@@ -28,7 +32,7 @@ export function buildFrTitleIndex(enMsg, frMsg) {
     const enHonor = enMsg[`MPID_HONOR_${jp}`];
     const frHonor = frMsg[`MPID_HONOR_${jp}`];
     if (!enName || !enHonor || !frHonor) continue;
-    exact.set(`${enName}${enHonor}`, frHonor);
+    exact.set(`${enName}${SEP}${enHonor}`, frHonor);
     norm.set(normalizeTitleKey(enName, enHonor), frHonor);
   }
   return { exact, norm };
@@ -36,7 +40,7 @@ export function buildFrTitleIndex(enMsg, frMsg) {
 
 export function frTitleFor(name, title, index) {
   return (
-    index.exact.get(`${name}${title}`)
+    index.exact.get(`${name}${SEP}${title}`)
     ?? index.norm.get(normalizeTitleKey(name, title))
     ?? null
   );
