@@ -4,88 +4,46 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FEH Collection Tracker</title>
-  <style>
-    :root {
-      color-scheme: light dark;
-      --bg: #f7f7f8;
-      --fg: #1b1b1f;
-      --muted: #5a5a66;
-      --card: #ffffff;
-      --border: #e3e3e8;
-      --accent: #3b6fd4;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #16161a;
-        --fg: #ececf0;
-        --muted: #a0a0ad;
-        --card: #202027;
-        --border: #33333c;
-        --accent: #6f9bff;
-      }
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 2rem 1.25rem;
-      background: var(--bg);
-      color: var(--fg);
-      font: 15px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    }
-    main {
-      width: 100%;
-      max-width: 32rem;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.75rem 1.75rem 1.5rem;
-    }
-    h1 { margin: 0 0 .25rem; font-size: 1.3rem; }
-    p.sub { margin: 0 0 1.25rem; color: var(--muted); }
-    ul { margin: 0; padding-left: 1.1rem; }
-    li { margin: .35rem 0; }
-    li.todo { color: var(--muted); }
-    .tag {
-      display: inline-block;
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: .02em;
-      text-transform: uppercase;
-      padding: .15rem .5rem;
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--accent) 15%, transparent);
-      color: var(--accent);
-      vertical-align: middle;
-    }
-    footer { margin-top: 1.5rem; font-size: .85rem; color: var(--muted); }
-    a { color: var(--accent); }
-    code {
-      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-      font-size: .85em;
-      background: color-mix(in srgb, var(--fg) 8%, transparent);
-      padding: .1rem .35rem;
-      border-radius: 5px;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main>
-    <h1>FEH Collection Tracker <span class="tag">Chantier</span></h1>
-    <p class="sub">Suivi de collection Fire Emblem Heroes — site statique.</p>
-    <ul>
-      <li><strong>Pipeline de données</strong> — en place : <code>data/heroes.json</code> (1410 héros),
-        régénéré chaque semaine par GitHub Actions.</li>
-      <li class="todo">Catalogue navigable (filtres, recherche, vue groupée) — Plan B</li>
-      <li class="todo">Ma collection : fusions, IV, doubles, wishlist, projets +10 — Plan C</li>
-      <li class="todo">PWA hors-ligne + export résumé — Plan D</li>
-    </ul>
-    <footer>
-      Code &amp; conception :
-      <a href="https://github.com/DrZeroes/feh-heroes-tracker">github.com/DrZeroes/feh-heroes-tracker</a>
-    </footer>
-  </main>
+  <header class="topbar">
+    <div class="brand">
+      <strong data-i18n="app.title">FEH Collection Tracker</strong>
+      <span class="tagline" data-i18n="app.tagline">Catalogue Fire Emblem Heroes</span>
+    </div>
+    <button id="lang-toggle" type="button" class="lang" aria-label="language">EN</button>
+  </header>
+
+  <section class="controls">
+    <input id="search" type="search" autocomplete="off" data-i18n-attr="placeholder:search.placeholder" placeholder="Rechercher…">
+    <div id="filters" class="filters"></div>
+    <label class="sort">
+      <span data-i18n="sort.label">Tri</span>
+      <select id="sort">
+        <option value="release-desc" data-i18n="sort.releaseDesc">Plus récents</option>
+        <option value="name-asc" data-i18n="sort.nameAsc">Nom A–Z</option>
+      </select>
+    </label>
+    <label class="group">
+      <input id="group-toggle" type="checkbox">
+      <span data-i18n="group.byPerson">Grouper par personnage</span>
+    </label>
+  </section>
+
+  <p id="grid-count" class="grid-count" aria-live="polite"></p>
+  <main id="grid" class="grid"></main>
+  <div id="load-more-sentinel" aria-hidden="true"></div>
+
+  <aside id="detail" class="detail" hidden>
+    <button id="detail-close" type="button" class="detail-close" data-i18n="detail.close">Fermer</button>
+    <div id="detail-body"></div>
+  </aside>
+
+  <footer class="foot">
+    <a href="https://github.com/DrZeroes/feh-heroes-tracker">github.com/DrZeroes/feh-heroes-tracker</a>
+  </footer>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>
