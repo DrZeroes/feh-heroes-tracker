@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   splitWeaponType, normalizeMoveType, parseListField, deriveCategory,
   pageNameFor, normalizePageName, blessingFromEffect, pickPoolRarity,
-  normalizeUnit, mergeJoins,
+  normalizeUnit, mergeJoins, applyOverrides, buildCatalog,
 } from './normalize.mjs';
 
 test('splitWeaponType sépare couleur et arme', () => {
@@ -158,4 +158,43 @@ test('mergeJoins laisse les valeurs par défaut si aucune correspondance', () =>
   assert.equal(merged.blessing, null);
   assert.equal(merged.poolRarity, null);
   assert.deepEqual(merged.poolFlags, []);
+});
+
+const H = (id, extra = {}) => ({
+  id, name: id, title: '', titleFr: null, person: id, color: 'r', weapon: 'sword',
+  move: 'infantry', gender: 'M', origin: 'X', category: 'standard', properties: [],
+  blessing: null, poolRarity: null, poolFlags: [], artist: null, actorEn: [], actorJp: [],
+  releaseDate: '2020-01-01', intId: 1, ...extra,
+});
+
+test('applyOverrides applique patch puis add', () => {
+  const base = [H('A'), H('B')];
+  const out = applyOverrides(base, {
+    patch: { A: { titleFr: 'Alpha' }, ZZ: { titleFr: 'ignoré' } },
+    add: [H('C', { name: 'Cee' }), H('B', { name: 'B2' })],
+  });
+  const byId = Object.fromEntries(out.map((h) => [h.id, h]));
+  assert.equal(byId.A.titleFr, 'Alpha');
+  assert.equal(byId.B.name, 'B2');
+  assert.equal(byId.C.name, 'Cee');
+  assert.equal(out.length, 3);
+  assert.ok(!('ZZ' in byId));
+});
+
+test('applyOverrides tolère un objet overrides vide ou partiel', () => {
+  const base = [H('A')];
+  assert.deepEqual(applyOverrides(base, {}), base);
+  assert.deepEqual(applyOverrides(base, { add: [] }), base);
+});
+
+test('buildCatalog trie par date desc puis nom asc et compte', () => {
+  const cat = buildCatalog([
+    H('old', { name: 'old', releaseDate: '2019-05-05' }),
+    H('newB', { name: 'B', releaseDate: '2026-01-01' }),
+    H('newA', { name: 'A', releaseDate: '2026-01-01' }),
+  ], { generatedAt: '2026-09-08T00:00:00.000Z' });
+  assert.equal(cat.count, 3);
+  assert.equal(cat.generatedAt, '2026-09-08T00:00:00.000Z');
+  assert.equal(cat.source, 'feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)');
+  assert.deepEqual(cat.heroes.map((h) => h.id), ['newA', 'newB', 'old']);
 });

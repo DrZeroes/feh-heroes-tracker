@@ -122,3 +122,29 @@ export function mergeJoins(hero, { blessingByPage, poolByPage }) {
     poolFlags: pool.poolFlags,
   };
 }
+
+const SOURCE = 'feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)';
+
+export function applyOverrides(heroes, overrides) {
+  const add = Array.isArray(overrides?.add) ? overrides.add : [];
+  const patch = (overrides && typeof overrides.patch === 'object' && overrides.patch) || {};
+  const byId = new Map(heroes.map((h) => [h.id, { ...h }]));
+  for (const [id, fields] of Object.entries(patch)) {
+    if (byId.has(id)) byId.set(id, { ...byId.get(id), ...fields });
+  }
+  for (const entry of add) {
+    if (!entry || !entry.id) continue;
+    byId.set(entry.id, { ...(byId.get(entry.id) ?? {}), ...entry });
+  }
+  return [...byId.values()];
+}
+
+export function buildCatalog(heroes, { generatedAt }) {
+  const sorted = [...heroes].sort((a, b) => {
+    const da = a.releaseDate ?? '';
+    const db = b.releaseDate ?? '';
+    if (da !== db) return db < da ? -1 : 1;
+    return String(a.name).localeCompare(String(b.name));
+  });
+  return { generatedAt, source: SOURCE, count: sorted.length, heroes: sorted };
+}
