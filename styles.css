@@ -38,6 +38,27 @@ body { margin: 0; background: var(--bg); color: var(--fg);
 .card { position: relative; background: var(--card); border: 1px solid var(--border);
   border-radius: 12px; padding: .6rem; text-align: center; cursor: pointer; box-shadow: var(--shadow); }
 .card:hover { border-color: var(--accent); }
+.card {
+  border-width: 1px 1px 1px 4px;
+  border-left-color: var(--card-accent, var(--border));
+}
+.card .rarity {
+  position: absolute; bottom: .45rem; left: .5rem;
+  font-size: .66rem; font-weight: 700;
+  background: color-mix(in srgb, var(--fg) 12%, transparent);
+  color: var(--fg); border-radius: 6px; padding: .02rem .3rem;
+}
+.reset {
+  border: 1px solid var(--border); background: var(--card); color: var(--fg);
+  border-radius: 8px; padding: .4rem .7rem; cursor: pointer; font-size: .85rem;
+}
+.reset:hover { border-color: var(--accent); }
+.sortbtn {
+  border: 1px solid var(--border); background: var(--card); color: var(--fg);
+  border-radius: 8px; padding: .35rem .6rem; cursor: pointer; font: inherit;
+}
+.sortbtn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.sortbtn[aria-pressed="true"]::after { content: attr(data-dir); margin-left: .3rem; }
 .card .portrait { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px;
   background: var(--bg); }
 .card .fallback { width: 100%; aspect-ratio: 1/1; border-radius: 10px; display: grid;
