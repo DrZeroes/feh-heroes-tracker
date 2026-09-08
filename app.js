@@ -476,6 +476,48 @@ async function main() {
   $('#detail-close').addEventListener('click', closeDetail);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDetail(); });
 
+  $('#export-btn').addEventListener('click', () => {
+    const out = { ...state.collection, updated: new Date().toISOString().slice(0, 10) };
+    const blob = new Blob([`${JSON.stringify(out, null, 2)}\n`], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ma-collection.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  $('#import-btn').addEventListener('click', () => $('#import-file').click());
+  $('#import-file').addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    let incoming;
+    try {
+      incoming = migrateCollection(JSON.parse(await file.text()));
+    } catch { alert(state.t('import.mode')); return; }
+    const merge = window.confirm(`${state.t('import.mode')}\n\nOK = ${state.t('import.merge')} / Annuler = ${state.t('import.replace')}`);
+    if (merge) {
+      state.collection = migrateCollection({
+        ...state.collection,
+        owned: { ...state.collection.owned, ...incoming.owned },
+      });
+    } else {
+      state.collection = incoming;
+    }
+    saveCollection();
+    const catalogIds = new Set(state.heroes.map((h) => h.id));
+    const unknown = Object.keys(state.collection.owned).filter((id) => !catalogIds.has(id)).length;
+    if (unknown) alert(state.t('import.unknown', { n: unknown }));
+    // re-render tout
+    for (const el of document.querySelectorAll('.card')) {
+      const id = el.dataset.id;
+      el.classList.toggle('is-owned', isOwned(id));
+      el.classList.toggle('is-missing', !isOwned(id) && state.status !== 'owned');
+    }
+    updateCollectionCount();
+    recompute();
+  });
+
   const sentinel = document.getElementById('load-more-sentinel');
   new IntersectionObserver((entries) => {
     if (entries[0].isIntersecting && !state.group && state.shown < state.view.length) renderGridPage();
