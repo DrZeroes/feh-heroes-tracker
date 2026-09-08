@@ -41,10 +41,21 @@ body { margin: 0; background: var(--bg); color: var(--fg);
 
 .card { position: relative; background: var(--card); border: 1px solid var(--border);
   border-radius: 12px; padding: .6rem; text-align: center; cursor: pointer; box-shadow: var(--shadow); }
-.card:hover { border-color: var(--accent); }
 .card {
   border-width: 1px 1px 1px 4px;
   border-left-color: var(--card-accent, var(--border));
+}
+.card:hover,
+.card:focus-visible {
+  border-color: var(--accent);
+  border-left-color: var(--card-accent, var(--accent));
+  outline: none;
+}
+.filters select.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--accent) 8%, var(--card));
 }
 .card .rarity {
   position: absolute; bottom: .45rem; left: .5rem;
@@ -53,10 +64,13 @@ body { margin: 0; background: var(--bg); color: var(--fg);
   color: var(--fg); border-radius: 6px; padding: .02rem .3rem;
 }
 .reset {
-  border: 1px solid var(--border); background: var(--card); color: var(--fg);
-  border-radius: 8px; padding: .4rem .7rem; cursor: pointer; font-size: .85rem;
+  border: 1px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, var(--card));
+  color: var(--accent);
+  border-radius: 8px; padding: .4rem .75rem; cursor: pointer; font: inherit; font-weight: 600;
 }
-.reset:hover { border-color: var(--accent); }
+.reset::before { content: "\21ba  "; }
+.reset:hover { background: color-mix(in srgb, var(--accent) 20%, var(--card)); }
 .sortbtn {
   border: 1px solid var(--border); background: var(--card); color: var(--fg);
   border-radius: 8px; padding: .35rem .6rem; cursor: pointer; font: inherit;

@@ -107,3 +107,13 @@ test('blessing : none + any dans les facettes, filtrage', () => {
   assert.equal(applyFilters(heroes, { blessing: 'any' }, '').length, 2);
   assert.equal(applyFilters(heroes, { blessing: 'fire' }, '').length, 1);
 });
+
+test('applyFilters : blessing null/"" ne filtre rien', () => {
+  const heroes = [
+    { blessing: 'fire', color: 'r', weapon: 'sword', move: 'infantry', category: 'standard', gender: 'male', origins: [], poolRarity: null },
+    { blessing: null, color: 'b', weapon: 'lance', move: 'flying', category: 'standard', gender: 'male', origins: [], poolRarity: null },
+  ];
+  assert.equal(applyFilters(heroes, { blessing: null }, '').length, 2);
+  assert.equal(applyFilters(heroes, { blessing: '' }, '').length, 2);
+  assert.equal(applyFilters(heroes, {}, '').length, 2);
+});

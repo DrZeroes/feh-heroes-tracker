@@ -27,6 +27,9 @@ function readPrefs() {
     const p = JSON.parse(localStorage.getItem(LS_PREFS) || '{}');
     if (p && typeof p === 'object') {
       Object.assign(state.filters, p.filters || {});
+      for (const f of FACETS) {
+        if (state.filters[f] === '') state.filters[f] = null;
+      }
       if (typeof p.query === 'string') state.query = p.query;
       if (p.sort) state.sort = p.sort;
       state.group = !!p.group;
@@ -94,10 +97,18 @@ function buildFilterControls() {
     }
     sel.addEventListener('change', () => {
       state.filters[f] = sel.value || null;
+      syncFilterControls();
       writePrefs();
       recompute();
     });
     box.appendChild(sel);
+  }
+  syncFilterControls();
+}
+
+function syncFilterControls() {
+  for (const sel of document.querySelectorAll('#filters select')) {
+    sel.classList.toggle('is-active', sel.value !== '');
   }
 }
 
@@ -330,8 +341,13 @@ async function main() {
   $('#filter-reset').addEventListener('click', () => {
     for (const f of FACETS) state.filters[f] = null;
     state.query = '';
+    state.sort = 'release-desc';
+    state.group = false;
     $('#search').value = '';
+    $('#group-toggle').checked = false;
     for (const sel of document.querySelectorAll('#filters select')) sel.value = '';
+    syncFilterControls();
+    syncSortButtons();
     writePrefs();
     recompute();
   });
