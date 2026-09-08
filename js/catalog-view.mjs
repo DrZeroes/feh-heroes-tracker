@@ -54,15 +54,38 @@ function cmpReleaseDesc(a, b) {
   return String(a.name).localeCompare(String(b.name));
 }
 
+function cmpName(a, b) {
+  return String(a.name).localeCompare(String(b.name));
+}
+
+function cmpReleaseDateAsc(a, b) {
+  const da = a.releaseDate ?? '';
+  const db = b.releaseDate ?? '';
+  return da < db ? -1 : da > db ? 1 : 0;
+}
+
 export function sortHeroes(heroes, key = 'release-desc') {
   const out = [...heroes];
-  if (key === 'name-asc') {
-    out.sort((a, b) => {
-      const n = String(a.name).localeCompare(String(b.name));
-      return n !== 0 ? n : cmpReleaseDesc(a, b);
-    });
-  } else {
-    out.sort(cmpReleaseDesc);
+  switch (key) {
+    case 'release-asc':
+      out.sort((a, b) => {
+        const d = cmpReleaseDateAsc(a, b);
+        return d !== 0 ? d : cmpName(a, b);
+      });
+      break;
+    case 'name-asc':
+      out.sort((a, b) => cmpName(a, b) || cmpReleaseDesc(a, b));
+      break;
+    case 'name-desc':
+      out.sort((a, b) => {
+        const n = -cmpName(a, b);
+        return n !== 0 ? n : cmpReleaseDateAsc(a, b);
+      });
+      break;
+    case 'release-desc':
+    default:
+      out.sort(cmpReleaseDesc);
+      break;
   }
   return out;
 }

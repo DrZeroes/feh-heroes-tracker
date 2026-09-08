@@ -54,6 +54,23 @@ test('sortHeroes : name-asc', () => {
   assert.deepEqual(out.map((h) => `${h.name}${h.title}`), ['Alpha', 'Bravo', 'CharlieAlt', 'Charlie']);
 });
 
+test('sortHeroes : release-asc (plus anciens d\'abord)', () => {
+  const out = sortHeroes(DATA, 'release-asc');
+  assert.deepEqual(out.map((h) => h.name), ['Bravo', 'Charlie', 'Charlie', 'Alpha']);
+});
+
+test('sortHeroes : name-desc', () => {
+  const out = sortHeroes(DATA, 'name-desc');
+  assert.deepEqual(out.map((h) => `${h.name}${h.title}`), ['Charlie', 'CharlieAlt', 'Bravo', 'Alpha']);
+});
+
+test('sortHeroes : clé inconnue -> release-desc', () => {
+  assert.deepEqual(
+    sortHeroes(DATA, 'bogus').map((h) => h.name),
+    sortHeroes(DATA, 'release-desc').map((h) => h.name),
+  );
+});
+
 test('groupByPerson : regroupe, trie groupes par date max desc, couleurs ordonnées', () => {
   const groups = groupByPerson(DATA);
   assert.deepEqual(groups.map((g) => g.person), ['Alpha', 'Charlie', 'Bravo']);
