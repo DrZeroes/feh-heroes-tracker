@@ -2,6 +2,10 @@
 import { resolveLang, makeTranslator } from './js/i18n.mjs';
 import { colorHex, classIconPath, moveIconPath, imageCandidates, shortOrigin } from './js/hero-media.mjs';
 import { buildFacetOptions, applyFilters, sortHeroes, groupByPerson } from './js/catalog-view.mjs';
+import {
+  migrateCollection, emptyCollection, setOwned, setSupport, clampMerges,
+  ownedIdSet, collectionStats, filterByStatus,
+} from './js/collection.mjs';
 
 const SUPPORTED = ['en', 'fr'];
 const FACETS = ['color', 'weapon', 'move', 'category', 'origin', 'gender', 'blessing', 'poolRarity'];
@@ -9,6 +13,7 @@ const PAGE = 60;
 const LS_LANG = 'feh-lang';
 const LS_PREFS = 'feh-catalog-prefs';
 const LS_THEME = 'feh-theme';
+const LS_COLLECTION = 'feh-collection-v1';
 
 const $ = (sel) => document.querySelector(sel);
 const state = {
@@ -16,7 +21,23 @@ const state = {
   filters: Object.fromEntries(FACETS.map((f) => [f, null])),
   query: '', sort: 'release-desc', group: false,
   view: [], shown: 0,
+  collection: emptyCollection(), status: 'all',
 };
+
+function loadCollection() {
+  try {
+    const raw = localStorage.getItem(LS_COLLECTION);
+    state.collection = migrateCollection(raw ? JSON.parse(raw) : null);
+  } catch { state.collection = emptyCollection(); }
+}
+function saveCollection() {
+  try { localStorage.setItem(LS_COLLECTION, JSON.stringify(state.collection)); } catch { /* ignore */ }
+}
+function isOwned(id) { return !!state.collection.owned[id]; }
+function updateCollectionCount() {
+  const s = collectionStats(state.collection, state.heroes);
+  $('#collection-count').textContent = state.t('collection.count', s);
+}
 
 function epithetFor(hero) {
   return state.lang === 'fr' && hero.titleFr ? hero.titleFr : hero.title;
@@ -138,6 +159,8 @@ function portrait(hero, cls, srcs) {
 function card(hero) {
   const el = document.createElement('article');
   el.className = 'card';
+  el.dataset.id = hero.id;
+  el.classList.toggle('is-owned', isOwned(hero.id));
   el.style.setProperty('--card-accent', colorHex(hero.color));
   el.tabIndex = 0;
 
@@ -185,6 +208,13 @@ function card(hero) {
   el.addEventListener('click', open);
   el.addEventListener('keydown', (e) => { if (e.key === 'Enter') open(); });
   return el;
+}
+
+function refreshCard(id) {
+  for (const el of document.querySelectorAll(`.card[data-id="${CSS.escape(id)}"]`)) {
+    el.classList.toggle('is-owned', isOwned(id));
+    el.classList.toggle('is-missing', !isOwned(id) && state.status !== 'owned');
+  }
 }
 
 function renderGridPage() {
@@ -264,6 +294,83 @@ function openDetail(hero) {
   row('detail.properties', (hero.properties || []).join(', '));
   body.appendChild(dl);
 
+  const ed = document.createElement('div');
+  ed.className = 'editor';
+  const ownedRow = document.createElement('label');
+  ownedRow.className = 'owned-row';
+  const ownedCb = document.createElement('input');
+  ownedCb.type = 'checkbox';
+  ownedCb.checked = isOwned(hero.id);
+  const ownedTxt = document.createElement('span');
+  ownedTxt.textContent = state.t('field.owned');
+  ownedRow.append(ownedCb, ownedTxt);
+  ed.appendChild(ownedRow);
+  ownedCb.addEventListener('change', () => {
+    state.collection = setOwned(state.collection, hero.id, ownedCb.checked);
+    saveCollection();
+    refreshCard(hero.id);
+    updateCollectionCount();
+    openDetail(hero); // re-render l'éditeur
+  });
+
+  if (isOwned(hero.id)) {
+    const entry = state.collection.owned[hero.id];
+    const addRow = (key, node) => {
+      const l = document.createElement('label');
+      l.textContent = state.t(key);
+      ed.append(l, node);
+    };
+    const merges = document.createElement('input');
+    merges.type = 'number'; merges.min = '0'; merges.max = '10'; merges.value = String(entry.merges);
+    merges.addEventListener('change', () => {
+      const v = clampMerges(merges.value);
+      merges.value = String(v);
+      state.collection.owned[hero.id] = { ...entry, merges: v };
+      state.collection.updated = new Date().toISOString().slice(0, 10);
+      saveCollection();
+    });
+    addRow('field.merges', merges);
+
+    const ivSelect = (cur, onChange) => {
+      const s = document.createElement('select');
+      for (const v of ['none', 'hp', 'atk', 'spd', 'def', 'res']) {
+        const o = document.createElement('option');
+        o.value = v === 'none' ? '' : v;
+        o.textContent = state.t(`iv.${v}`);
+        if ((cur ?? '') === o.value) o.selected = true;
+        s.appendChild(o);
+      }
+      s.addEventListener('change', () => onChange(s.value || null));
+      return s;
+    };
+    addRow('field.ivPlus', ivSelect(entry.ivPlus, (v) => {
+      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], ivPlus: v };
+      state.collection.updated = new Date().toISOString().slice(0, 10);
+      saveCollection();
+    }));
+    addRow('field.ivMinus', ivSelect(entry.ivMinus, (v) => {
+      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], ivMinus: v };
+      state.collection.updated = new Date().toISOString().slice(0, 10);
+      saveCollection();
+    }));
+
+    const sup = document.createElement('select');
+    for (const v of ['none', 'C', 'B', 'A', 'S']) {
+      const o = document.createElement('option');
+      o.value = v === 'none' ? '' : v;
+      o.textContent = state.t(`support.${v}`);
+      if ((entry.support ?? '') === o.value) o.selected = true;
+      sup.appendChild(o);
+    }
+    sup.addEventListener('change', () => {
+      state.collection = setSupport(state.collection, hero.id, sup.value || null);
+      saveCollection();
+    });
+    addRow('field.support', sup);
+  }
+
+  body.appendChild(ed);
+
   $('#detail').hidden = false;
 }
 function closeDetail() { $('#detail').hidden = true; }
@@ -294,6 +401,7 @@ function setLang(lang) {
   state.t = makeTranslator(state.dicts, lang);
   try { localStorage.setItem(LS_LANG, lang); } catch { /* ignore */ }
   applyStaticI18n();
+  updateCollectionCount();
   applyThemeButton();
   syncSortButtons();
   buildFilterControls();
@@ -309,6 +417,7 @@ async function main() {
   state.dicts = { en: await enRes.json(), fr: await frRes.json() };
 
   readPrefs();
+  loadCollection();
   let stored = null;
   try { stored = localStorage.getItem(LS_LANG); } catch { /* ignore */ }
   state.lang = resolveLang(stored, navigator.languages || [navigator.language], SUPPORTED);
@@ -322,6 +431,7 @@ async function main() {
   $('#group-toggle').checked = state.group;
 
   applyStaticI18n();
+  updateCollectionCount();
   applyThemeButton();
   syncSortButtons();
   buildFilterControls();
