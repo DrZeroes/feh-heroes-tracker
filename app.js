@@ -963,6 +963,8 @@ function openDetail(hero, unitIndex = 0) {
     dd.textContent = val;
     dl.append(dt, dd);
   };
+  row('detail.category', state.t(`category.${hero.category || 'standard'}`)
+    + (isDancer(hero) ? ` · ${state.t('category.refresher')}` : ''));
   row('detail.origin', (hero.origins || []).map(shortOrigin).join(' · '));
   row('detail.released', hero.releaseDate);
   row('detail.book', hero.book ? state.t(`book.${hero.book}`) : '');

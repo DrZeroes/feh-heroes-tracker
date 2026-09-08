@@ -5,9 +5,9 @@ export const COLOR_ORDER = ['r', 'b', 'v', 'g'];
 export const WEAPON_ORDER = ['sword', 'lance', 'axe', 'tome', 'bow', 'dagger', 'staff', 'breath', 'beast'];
 export const MOVE_ORDER = ['infantry', 'cavalry', 'flying', 'armored'];
 export const CATEGORY_ORDER = [
+  'standard', 'special',
   'legendary', 'mythic', 'duo', 'harmonized', 'ascended', 'rearmed', 'attuned', 'emblem',
   'aided', 'entwined', 'chosen', 'vista',
-  'standard', 'special',
   'refresher', // « Danse »
   'ghb', 'tempest', // unités Orbes héroïques : après la danse
 ];

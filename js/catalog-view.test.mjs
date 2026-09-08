@@ -25,7 +25,7 @@ test('buildFacetOptions liste les valeurs présentes, dans l\'ordre d\'affichage
   const f = buildFacetOptions(DATA);
   assert.deepEqual(f.color, ['r', 'b', 'g']); // r, b, v, g -> v absent
   assert.deepEqual(f.origin, ['Awakening', 'Engage', 'Fates']);
-  assert.deepEqual(f.category, ['legendary', 'standard']); // ordre CATEGORY_ORDER
+  assert.deepEqual(f.category, ['standard', 'legendary']); // ordre CATEGORY_ORDER
   assert.deepEqual(f.poolRarity, ['low', '5', 'na']);
 });
 
@@ -43,7 +43,7 @@ test('buildFacetOptions : armes et catégories dans l\'ordre voulu', () => {
     mk('bow', 'standard'), mk('sword', 'refresher'), mk('tome', 'legendary'), mk('staff', 'vista'),
   ]);
   assert.deepEqual(f.weapon, ['sword', 'tome', 'bow', 'staff']);
-  assert.deepEqual(f.category, ['legendary', 'vista', 'standard', 'refresher']);
+  assert.deepEqual(f.category, ['standard', 'legendary', 'vista', 'refresher']);
 });
 
 test('applyFilters : couleur', () => {
