@@ -17,6 +17,10 @@ const state = {
   view: [], shown: 0,
 };
 
+function epithetFor(hero) {
+  return state.lang === 'fr' && hero.titleFr ? hero.titleFr : hero.title;
+}
+
 function readPrefs() {
   try {
     const p = JSON.parse(localStorage.getItem(LS_PREFS) || '{}');
@@ -108,6 +112,7 @@ function portrait(hero, cls, srcs) {
 function card(hero) {
   const el = document.createElement('article');
   el.className = 'card';
+  el.style.setProperty('--card-accent', colorHex(hero.color));
   el.tabIndex = 0;
 
   const pip = document.createElement('span');
@@ -130,7 +135,7 @@ function card(hero) {
   el.appendChild(name);
   const ep = document.createElement('span');
   ep.className = 'epithet';
-  ep.textContent = hero.title;
+  ep.textContent = epithetFor(hero);
   el.appendChild(ep);
 
   const icons = document.createElement('div');
@@ -142,6 +147,13 @@ function card(hero) {
     icons.appendChild(i);
   }
   el.appendChild(icons);
+
+  if (hero.poolRarity != null) {
+    const r = document.createElement('span');
+    r.className = 'rarity';
+    r.textContent = `${hero.poolRarity}★`;
+    el.appendChild(r);
+  }
 
   const open = () => openDetail(hero);
   el.addEventListener('click', open);
@@ -204,7 +216,7 @@ function openDetail(hero) {
   h.textContent = hero.name;
   const ep = document.createElement('p');
   ep.className = 'epithet';
-  ep.textContent = hero.title;
+  ep.textContent = epithetFor(hero);
   body.append(h, ep);
 
   const dl = document.createElement('dl');
@@ -230,11 +242,33 @@ function openDetail(hero) {
 }
 function closeDetail() { $('#detail').hidden = true; }
 
+function syncSortButtons() {
+  const dim = state.sort.startsWith('name') ? 'name' : 'release';
+  const dir = state.sort.endsWith('asc') ? 'asc' : 'desc';
+  for (const btn of document.querySelectorAll('.sortbtn')) {
+    const active = btn.dataset.sortkey === dim;
+    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    btn.dataset.dir = active ? (dir === 'asc' ? '▲' : '▼') : '';
+  }
+}
+function onSortClick(dim) {
+  const cur = state.sort;
+  if (cur.startsWith(dim)) {
+    state.sort = cur.endsWith('asc') ? `${dim}-desc` : `${dim}-asc`;
+  } else {
+    state.sort = dim === 'name' ? 'name-asc' : 'release-desc';
+  }
+  writePrefs();
+  syncSortButtons();
+  recompute();
+}
+
 function setLang(lang) {
   state.lang = lang;
   state.t = makeTranslator(state.dicts, lang);
   try { localStorage.setItem(LS_LANG, lang); } catch { /* ignore */ }
   applyStaticI18n();
+  syncSortButtons();
   buildFilterControls();
   recompute();
 }
@@ -254,17 +288,26 @@ async function main() {
   state.t = makeTranslator(state.dicts, state.lang);
 
   $('#search').value = state.query;
-  $('#sort').value = state.sort;
   $('#group-toggle').checked = state.group;
 
   applyStaticI18n();
+  syncSortButtons();
   buildFilterControls();
   recompute();
 
   $('#lang-toggle').addEventListener('click', () => setLang(state.lang === 'en' ? 'fr' : 'en'));
   $('#search').addEventListener('input', (e) => { state.query = e.target.value; writePrefs(); recompute(); });
-  $('#sort').addEventListener('change', (e) => { state.sort = e.target.value; writePrefs(); recompute(); });
+  $('#sort-date').addEventListener('click', () => onSortClick('release'));
+  $('#sort-name').addEventListener('click', () => onSortClick('name'));
   $('#group-toggle').addEventListener('change', (e) => { state.group = e.target.checked; writePrefs(); recompute(); });
+  $('#filter-reset').addEventListener('click', () => {
+    for (const f of FACETS) state.filters[f] = null;
+    state.query = '';
+    $('#search').value = '';
+    for (const sel of document.querySelectorAll('#filters select')) sel.value = '';
+    writePrefs();
+    recompute();
+  });
   $('#detail-close').addEventListener('click', closeDetail);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDetail(); });
 
