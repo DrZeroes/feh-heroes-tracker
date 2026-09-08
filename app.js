@@ -7,6 +7,7 @@ import { buildFacetOptions, applyFilters, sortHeroes, groupByPerson } from './js
 import {
   migrateCollection, emptyCollection, setOwned, setSupport, clampMerges,
   ownedIdSet, collectionStats, filterByStatus,
+  setCopies, setDate, setWanted, wantedIdSet,
 } from './js/collection.mjs';
 
 const SUPPORTED = ['en', 'fr'];
@@ -438,7 +439,36 @@ function openDetail(hero) {
       saveCollection();
     });
     addRow('field.support', sup);
+
+    const copies = document.createElement('input');
+    copies.type = 'number'; copies.min = '0'; copies.value = String(entry.copies ?? 0);
+    copies.addEventListener('change', () => {
+      state.collection = setCopies(state.collection, hero.id, copies.value);
+      copies.value = String(state.collection.owned[hero.id].copies);
+      saveCollection();
+    });
+    addRow('field.copies', copies);
+
+    const date = document.createElement('input');
+    date.type = 'date'; date.value = entry.date ?? '';
+    date.addEventListener('change', () => {
+      state.collection = setDate(state.collection, hero.id, date.value || null);
+      saveCollection();
+    });
+    addRow('field.date', date);
   }
+
+  const wantRow = document.createElement('label');
+  wantRow.className = 'owned-row';
+  const wantCb = document.createElement('input');
+  wantCb.type = 'checkbox';
+  wantCb.checked = wantedIdSet(state.collection).has(hero.id);
+  wantCb.addEventListener('change', () => {
+    state.collection = setWanted(state.collection, hero.id, wantCb.checked);
+    saveCollection();
+  });
+  wantRow.append(wantCb, document.createTextNode(` ${state.t('field.wanted')}`));
+  ed.appendChild(wantRow);
 
   body.appendChild(ed);
 
