@@ -54,6 +54,7 @@ function readPrefs() {
       if (typeof p.query === 'string') state.query = p.query;
       if (p.sort) state.sort = p.sort;
       state.group = !!p.group;
+      if (['all', 'owned', 'missing'].includes(p.status)) state.status = p.status;
     }
   } catch { /* ignore */ }
 }
@@ -61,6 +62,7 @@ function writePrefs() {
   try {
     localStorage.setItem(LS_PREFS, JSON.stringify({
       filters: state.filters, query: state.query, sort: state.sort, group: state.group,
+      status: state.status,
     }));
   } catch { /* ignore */ }
 }
@@ -161,6 +163,7 @@ function card(hero) {
   el.className = 'card';
   el.dataset.id = hero.id;
   el.classList.toggle('is-owned', isOwned(hero.id));
+  el.classList.toggle('is-missing', !isOwned(hero.id) && state.status !== 'owned');
   el.style.setProperty('--card-accent', colorHex(hero.color));
   el.tabIndex = 0;
 
@@ -251,6 +254,7 @@ function renderGroups() {
 function recompute() {
   const filtered = applyFilters(state.heroes, state.filters, state.query);
   state.view = sortHeroes(filtered, state.sort);
+  state.view = filterByStatus(state.view, ownedIdSet(state.collection), state.status);
   state.shown = 0;
   const grid = $('#grid');
   grid.innerHTML = '';
@@ -448,11 +452,19 @@ async function main() {
   $('#sort-date').addEventListener('click', () => onSortClick('release'));
   $('#sort-name').addEventListener('click', () => onSortClick('name'));
   $('#group-toggle').addEventListener('change', (e) => { state.group = e.target.checked; writePrefs(); recompute(); });
+  $('#status-filter').value = state.status;
+  $('#status-filter').addEventListener('change', (e) => {
+    state.status = e.target.value;
+    writePrefs();
+    recompute();
+  });
   $('#filter-reset').addEventListener('click', () => {
     for (const f of FACETS) state.filters[f] = null;
     state.query = '';
     state.sort = 'release-desc';
     state.group = false;
+    state.status = 'all';
+    $('#status-filter').value = 'all';
     $('#search').value = '';
     $('#group-toggle').checked = false;
     for (const sel of document.querySelectorAll('#filters select')) sel.value = '';
