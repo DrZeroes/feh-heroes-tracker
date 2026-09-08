@@ -331,7 +331,93 @@ function setView(v, { push = true } = {}) {
   renderView();
 }
 
-function renderCaserne() { $('#view-caserne').innerHTML = ''; }
+function ivOptions(sel, cur) {
+  for (const v of ['none', 'hp', 'atk', 'spd', 'def', 'res']) {
+    const o = document.createElement('option');
+    o.value = v === 'none' ? '' : v;
+    o.textContent = state.t(`iv.${v}`);
+    if ((cur ?? '') === o.value) o.selected = true;
+    sel.appendChild(o);
+  }
+}
+
+function renderCaserne() {
+  const box = $('#view-caserne');
+  box.innerHTML = '';
+  const ids = Object.keys(state.collection.owned);
+  const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
+  const list = ids.map((id) => heroesById.get(id)).filter(Boolean);
+  list.sort((a, b) => sortHeroes([a, b], 'release-desc')[0] === a ? -1 : 1);
+  if (!list.length) {
+    box.innerHTML = `<p class="empty-note">${state.t('caserne.empty')}</p>`;
+    return;
+  }
+  const wrap = document.createElement('div');
+  wrap.className = 'roster';
+  for (const hero of list) {
+    const entry = state.collection.owned[hero.id];
+    const row = document.createElement('div');
+    row.className = 'roster-row';
+
+    const img = document.createElement('img');
+    img.loading = 'lazy'; img.alt = ''; img.src = hero.image || '';
+    row.appendChild(img);
+
+    const who = document.createElement('div');
+    who.className = 'who';
+    who.innerHTML = `<b></b><span></span>`;
+    who.querySelector('b').textContent = hero.name;
+    who.querySelector('span').textContent = epithetFor(hero);
+    row.appendChild(who);
+
+    const merges = document.createElement('input');
+    merges.type = 'number'; merges.min = '0'; merges.max = '10'; merges.value = String(entry.merges);
+    merges.addEventListener('change', () => {
+      const v = clampMerges(merges.value);
+      merges.value = String(v);
+      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], merges: v };
+      state.collection.updated = new Date().toISOString().slice(0, 10);
+      saveCollection();
+    });
+    row.appendChild(merges);
+
+    const ivP = document.createElement('select');
+    ivOptions(ivP, entry.ivPlus);
+    ivP.addEventListener('change', () => {
+      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], ivPlus: ivP.value || null };
+      state.collection.updated = new Date().toISOString().slice(0, 10);
+      saveCollection();
+    });
+    row.appendChild(ivP);
+
+    const ivM = document.createElement('select');
+    ivOptions(ivM, entry.ivMinus);
+    ivM.addEventListener('change', () => {
+      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], ivMinus: ivM.value || null };
+      state.collection.updated = new Date().toISOString().slice(0, 10);
+      saveCollection();
+    });
+    row.appendChild(ivM);
+
+    const sup = document.createElement('select');
+    for (const v of ['none', 'C', 'B', 'A', 'S']) {
+      const o = document.createElement('option');
+      o.value = v === 'none' ? '' : v;
+      o.textContent = state.t(`support.${v}`);
+      if ((entry.support ?? '') === o.value) o.selected = true;
+      sup.appendChild(o);
+    }
+    sup.addEventListener('change', () => {
+      state.collection = setSupport(state.collection, hero.id, sup.value || null);
+      saveCollection();
+      renderCaserne(); // re-render : la règle un-seul-S peut changer une autre ligne
+    });
+    row.appendChild(sup);
+
+    wrap.appendChild(row);
+  }
+  box.appendChild(wrap);
+}
 function renderStats() { $('#view-stats').innerHTML = ''; }
 function renderWishlist() { $('#view-wishlist').innerHTML = ''; }
 function renderManuels() { $('#view-manuels').innerHTML = ''; }
