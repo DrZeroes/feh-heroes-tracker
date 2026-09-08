@@ -70,6 +70,8 @@
   "blessing.dark": "Ténèbres",
   "blessing.astra": "Astral",
   "blessing.anima": "Anima",
+  "blessing.none": "Sans bénédiction",
+  "blessing.any": "Bénis",
   "gender.female": "Féminin",
   "gender.male": "Masculin",
   "gender.multi": "Duo",

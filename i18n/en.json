@@ -70,6 +70,8 @@
   "blessing.dark": "Dark",
   "blessing.astra": "Astra",
   "blessing.anima": "Anima",
+  "blessing.none": "No blessing",
+  "blessing.any": "Blessed",
   "gender.female": "Female",
   "gender.male": "Male",
   "gender.multi": "Pair",

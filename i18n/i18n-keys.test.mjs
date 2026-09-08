@@ -22,6 +22,7 @@ const REQUIRED = [
   'category.tempest', 'category.special', 'category.standard',
   'blessing.fire', 'blessing.water', 'blessing.wind', 'blessing.earth',
   'blessing.light', 'blessing.dark', 'blessing.astra', 'blessing.anima',
+  'blessing.none', 'blessing.any',
   'gender.female', 'gender.male', 'gender.multi', 'gender.other',
   'poolRarity.3', 'poolRarity.4', 'poolRarity.5', 'poolRarity.na',
 ];

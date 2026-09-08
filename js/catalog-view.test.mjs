@@ -96,3 +96,14 @@ test('buildFacetOptions.origin est en ordre de sortie des jeux', () => {
     'Zzz Unknown Game',
   ]);
 });
+
+test('blessing : none + any dans les facettes, filtrage', () => {
+  const H2 = (b) => ({ color: 'r', weapon: 'sword', move: 'infantry', category: 'standard',
+    gender: 'male', origins: ['G1'], poolRarity: null, blessing: b });
+  const heroes = [H2('fire'), H2('water'), H2(null), H2(null)];
+  const { blessing } = buildFacetOptions(heroes);
+  assert.deepEqual(blessing, ['none', 'any', 'fire', 'water']);
+  assert.equal(applyFilters(heroes, { blessing: 'none' }, '').length, 2);
+  assert.equal(applyFilters(heroes, { blessing: 'any' }, '').length, 2);
+  assert.equal(applyFilters(heroes, { blessing: 'fire' }, '').length, 1);
+});

@@ -52,12 +52,18 @@ export function buildFacetOptions(heroes) {
     category: uniqSorted(heroes.map((h) => h.category).filter(Boolean)),
     origin: [...new Set(heroes.flatMap((h) => h.origins ?? []))].sort(compareOrigin),
     gender: uniqSorted(heroes.map((h) => h.gender).filter(Boolean)),
-    blessing: uniqSorted(heroes.map((h) => h.blessing).filter(Boolean)),
+    blessing: (() => {
+      const present = uniqSorted(heroes.map((h) => h.blessing).filter(Boolean));
+      const head = [];
+      if (heroes.some((h) => h.blessing == null)) head.push('none');
+      if (present.length) head.push('any');
+      return [...head, ...present];
+    })(),
     poolRarity: pool,
   };
 }
 
-const SCALAR_FACETS = ['color', 'weapon', 'move', 'category', 'gender', 'blessing'];
+const SCALAR_FACETS = ['color', 'weapon', 'move', 'category', 'gender'];
 
 export function applyFilters(heroes, filters = {}, query = '') {
   const terms = String(query).toLowerCase().split(/\s+/).filter(Boolean);
@@ -66,6 +72,11 @@ export function applyFilters(heroes, filters = {}, query = '') {
       if (filters[f] && h[f] !== filters[f]) return false;
     }
     if (filters.origin && !(h.origins ?? []).includes(filters.origin)) return false;
+    if (filters.blessing) {
+      if (filters.blessing === 'none') { if (h.blessing != null) return false; }
+      else if (filters.blessing === 'any') { if (h.blessing == null) return false; }
+      else if (h.blessing !== filters.blessing) return false;
+    }
     if (filters.poolRarity) {
       const want = filters.poolRarity;
       const have = h.poolRarity == null ? 'na' : String(h.poolRarity);
