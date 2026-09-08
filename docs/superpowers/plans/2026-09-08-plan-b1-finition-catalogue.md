@@ -774,6 +774,137 @@ Puis ouvrir le site, passer en **FR**, vérifier qu'une carte d'un héros ancien
 
 ---
 
+## Task 10: Filtre « Jeu » — ordre chronologique + libellés courts
+
+**Files:**
+- Modify: `g:\GITHUB\feh-comp\js\catalog-view.mjs`
+- Modify: `g:\GITHUB\feh-comp\js\catalog-view.test.mjs` (append)
+- Modify: `g:\GITHUB\feh-comp\js\hero-media.mjs`
+- Modify: `g:\GITHUB\feh-comp\js\hero-media.test.mjs` (append)
+- Modify: `g:\GITHUB\feh-comp\app.js`
+
+**Interfaces:**
+- `js/catalog-view.mjs` : `buildFacetOptions(heroes).origin` est trié par **ordre de sortie des jeux** (pas alpha) ; un jeu inconnu de l'ordre curé est placé après, en alpha.
+- `js/hero-media.mjs` : `shortOrigin(name: string) -> string` — retire le préfixe `Fire Emblem` / `Fire Emblem:` (ex. `Fire Emblem: Three Houses` → `Three Houses`, `Fire Emblem Echoes: Shadows of Valentia` → `Echoes: Shadows of Valentia`, `Fire Emblem Heroes` → `Heroes`) ; renvoie l'entrée telle quelle si le motif ne s'applique pas.
+- `app.js` : les `<option>` du filtre `origin` et la ligne `detail.origin` affichent `shortOrigin(...)`.
+
+- [ ] **Step 1: Tests (RED)**
+
+Ajouter à `js/hero-media.test.mjs` :
+```js
+import { shortOrigin } from './hero-media.mjs';
+
+test('shortOrigin retire le préfixe Fire Emblem', () => {
+  assert.equal(shortOrigin('Fire Emblem: Three Houses'), 'Three Houses');
+  assert.equal(shortOrigin('Fire Emblem Echoes: Shadows of Valentia'), 'Echoes: Shadows of Valentia');
+  assert.equal(shortOrigin('Fire Emblem Heroes'), 'Heroes');
+  assert.equal(shortOrigin('Fire Emblem Warriors: Three Hopes'), 'Warriors: Three Hopes');
+  assert.equal(shortOrigin('Tokyo Mirage Sessions ♯FE Encore'), 'Tokyo Mirage Sessions ♯FE Encore');
+  assert.equal(shortOrigin(''), '');
+});
+```
+
+Ajouter à `js/catalog-view.test.mjs` (le `H()`/`DATA` existent ; ajouter un bloc dédié) :
+```js
+test('buildFacetOptions.origin est en ordre de sortie des jeux', () => {
+  const heroes = [
+    { origins: ['Fire Emblem Engage'] },
+    { origins: ['Fire Emblem: Mystery of the Emblem'] },
+    { origins: ['Fire Emblem Awakening'] },
+    { origins: ['Fire Emblem Heroes', 'Zzz Unknown Game'] },
+  ].map((o) => ({ color: 'r', weapon: 'sword', move: 'infantry', category: 'standard',
+    gender: 'male', blessing: null, poolRarity: null, ...o }));
+  const { origin } = buildFacetOptions(heroes);
+  assert.deepEqual(origin, [
+    'Fire Emblem: Mystery of the Emblem',
+    'Fire Emblem Awakening',
+    'Fire Emblem Heroes',
+    'Fire Emblem Engage',
+    'Zzz Unknown Game',
+  ]);
+});
+```
+
+Run: `node --test js/hero-media.test.mjs js/catalog-view.test.mjs` → FAIL.
+
+- [ ] **Step 2: `shortOrigin` dans `js/hero-media.mjs`**
+
+```js
+export function shortOrigin(name) {
+  return String(name ?? '').replace(/^Fire Emblem:?\s+/, '');
+}
+```
+
+- [ ] **Step 3: Ordre des jeux dans `js/catalog-view.mjs`**
+
+Ajouter en tête du module :
+```js
+// Ordre de sortie (JP) des jeux Fire Emblem + spin-offs présents/à venir dans FEH.
+const GAME_ORDER = [
+  'Fire Emblem: Shadow Dragon and the Blade of Light', // 1990
+  'Fire Emblem Gaiden',                                // 1992
+  'Fire Emblem: Mystery of the Emblem',                // 1994
+  'Fire Emblem: Genealogy of the Holy War',            // 1996
+  'Fire Emblem: Thracia 776',                          // 1999
+  'Fire Emblem: The Binding Blade',                    // 2002
+  'Fire Emblem: The Blazing Blade',                    // 2003
+  'Fire Emblem: The Sacred Stones',                    // 2004
+  'Fire Emblem: Path of Radiance',                     // 2005
+  'Fire Emblem: Radiant Dawn',                         // 2007
+  'Fire Emblem: Shadow Dragon',                        // 2008 (DS remake)
+  'Fire Emblem: New Mystery of the Emblem',            // 2010
+  'Fire Emblem Awakening',                             // 2012
+  'Tokyo Mirage Sessions ♯FE Encore',                 // 2015 / Encore 2020
+  'Fire Emblem Fates',                                 // 2015
+  'Fire Emblem Heroes',                                // 2017
+  'Fire Emblem Echoes: Shadows of Valentia',           // 2017
+  'Fire Emblem Warriors',                              // 2017
+  'Fire Emblem: Three Houses',                         // 2019
+  'Fire Emblem Warriors: Three Hopes',                 // 2022
+  'Fire Emblem Engage',                                // 2023
+  'Fire Emblem Shadows',                               // 2025 (mobile, social deduction)
+  "Fire Emblem: Fortune's Weave",                      // 2026 (Switch 2)
+];
+const GAME_RANK = new Map(GAME_ORDER.map((g, i) => [g, i]));
+
+function compareOrigin(a, b) {
+  const ra = GAME_RANK.has(a) ? GAME_RANK.get(a) : Number.MAX_SAFE_INTEGER;
+  const rb = GAME_RANK.has(b) ? GAME_RANK.get(b) : Number.MAX_SAFE_INTEGER;
+  if (ra !== rb) return ra - rb;
+  return String(a).localeCompare(String(b));
+}
+```
+
+Dans `buildFacetOptions`, remplacer la ligne `origin: uniqSorted(heroes.flatMap((h) => h.origins ?? [])),` par :
+```js
+    origin: [...new Set(heroes.flatMap((h) => h.origins ?? []))].sort(compareOrigin),
+```
+
+- [ ] **Step 4: `app.js`**
+
+- Importer `shortOrigin` : `import { colorHex, classIconPath, moveIconPath, imageCandidates, shortOrigin } from './js/hero-media.mjs';`
+- Dans `buildFilterControls`, pour le remplissage des `<option>` : `opt.textContent = f === 'origin' ? shortOrigin(v) : labelFor(f, v);`
+- Dans `openDetail`, `row('detail.origin', (hero.origins || []).map(shortOrigin).join(' · '));`
+
+- [ ] **Step 5: GREEN + vérif servie**
+
+Run: `node --test` → tout vert.
+```bash
+node scripts/serve.mjs 8143 & SV=$!; sleep 1
+curl -s http://localhost:8143/js/hero-media.mjs | grep -c 'shortOrigin'   # >=1
+curl -s http://localhost:8143/app.js | grep -c 'shortOrigin'             # >=2
+kill $SV
+```
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add js/catalog-view.mjs js/catalog-view.test.mjs js/hero-media.mjs js/hero-media.test.mjs app.js
+git commit -m "$(printf 'feat: game filter in release order with short labels\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>')"
+```
+
+---
+
 ## Self-Review
 
 **Couverture des 5 demandes utilisateur :**
