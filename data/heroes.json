@@ -1,8 +1,141 @@
 {
-  "generatedAt": "2026-09-08T16:39:32.801Z",
+  "generatedAt": "2026-09-08T20:29:45.978Z",
   "source": "feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)",
-  "count": 1410,
+  "count": 1414,
   "heroes": [
+    {
+      "id": "Cai Child of Ribeira",
+      "name": "Cai",
+      "title": "Child of Ribeira",
+      "titleFr": null,
+      "person": "Cai",
+      "color": "b",
+      "weapon": "lance",
+      "move": "cavalry",
+      "gender": "male",
+      "origin": "Fire Emblem: Fortune's Weave",
+      "origins": [
+        "Fire Emblem: Fortune's Weave"
+      ],
+      "category": "standard",
+      "properties": [
+        "entwined"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "はなだ",
+      "actorEn": [
+        "Zeno Robinson"
+      ],
+      "actorJp": [
+        "山下大輝"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/c/c5/Cai_Child_of_Ribeira_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/7/7f/Cai_Child_of_Ribeira_Face.webp",
+      "releaseDate": "2026-09-08",
+      "intId": 1411
+    },
+    {
+      "id": "Dietrich Alluring Killer",
+      "name": "Dietrich",
+      "title": "Alluring Killer",
+      "titleFr": null,
+      "person": "Dietrich",
+      "color": "r",
+      "weapon": "sword",
+      "move": "infantry",
+      "gender": "male",
+      "origin": "Fire Emblem: Fortune's Weave",
+      "origins": [
+        "Fire Emblem: Fortune's Weave"
+      ],
+      "category": "standard",
+      "properties": [
+        "vista"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "bikku",
+      "actorEn": [
+        "Xander Mobus"
+      ],
+      "actorJp": [
+        "日野聡"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/1/11/Dietrich_Alluring_Killer_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/1/14/Dietrich_Alluring_Killer_Face.webp",
+      "releaseDate": "2026-09-08",
+      "intId": 1412
+    },
+    {
+      "id": "Leda Rose of Caelus",
+      "name": "Leda",
+      "title": "Rose of Caelus",
+      "titleFr": null,
+      "person": "Leda",
+      "color": "g",
+      "weapon": "bow",
+      "move": "infantry",
+      "gender": "female",
+      "origin": "Fire Emblem: Fortune's Weave",
+      "origins": [
+        "Fire Emblem: Fortune's Weave"
+      ],
+      "category": "standard",
+      "properties": [
+        "refresher",
+        "vista"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "ekao",
+      "actorEn": [
+        "Katiana Sarkissian"
+      ],
+      "actorJp": [
+        "伊瀬茉莉也"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/5/5d/Leda_Rose_of_Caelus_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/d/de/Leda_Rose_of_Caelus_Face.webp",
+      "releaseDate": "2026-09-08",
+      "intId": 1414
+    },
+    {
+      "id": "Theodora Mighty Queen",
+      "name": "Theodora",
+      "title": "Mighty Queen",
+      "titleFr": null,
+      "person": "Theodora",
+      "color": "b",
+      "weapon": "lance",
+      "move": "infantry",
+      "gender": "female",
+      "origin": "Fire Emblem: Fortune's Weave",
+      "origins": [
+        "Fire Emblem: Fortune's Weave"
+      ],
+      "category": "attuned",
+      "properties": [
+        "attuned"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "Azusa",
+      "actorEn": [
+        "Shara Kirby"
+      ],
+      "actorJp": [
+        "高山みなみ"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/a/a0/Theodora_Mighty_Queen_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/c/c4/Theodora_Mighty_Queen_Face.webp",
+      "releaseDate": "2026-09-08",
+      "intId": 1413
+    },
     {
       "id": "Rhea The Final Child",
       "name": "Rhea",
