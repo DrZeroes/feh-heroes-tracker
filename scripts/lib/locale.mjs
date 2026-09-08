@@ -1,4 +1,4 @@
-// scripts/lib/locale.mjs — construit un index d'épithètes FR depuis les dumps de messages. Pur.
+﻿// scripts/lib/locale.mjs — construit un index d'épithètes FR depuis les dumps de messages. Pur.
 
 export function indexMessages(entries) {
   const out = {};
