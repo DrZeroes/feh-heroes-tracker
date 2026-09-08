@@ -118,8 +118,11 @@ test('normalizeUnit produit un héros normalisé sans jointures', () => {
   assert.equal(h.color, 'b');
   assert.equal(h.weapon, 'breath');
   assert.equal(h.move, 'infantry');
-  assert.equal(h.gender, 'F');
+  assert.equal(h.gender, 'female'); // RAW_RHEA.Gender = 'F' -> normalisé
   assert.equal(h.origin, 'Fire Emblem: Three Houses');
+  assert.deepEqual(h.origins, ['Fire Emblem: Three Houses']);
+  assert.equal(h.image, 'https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face_FC.webp');
+  assert.equal(h.imageFull, 'https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face.webp');
   assert.equal(h.category, 'legendary');
   assert.deepEqual(h.properties, ['legendary', 'hat']);
   assert.equal(h.blessing, null);
@@ -137,7 +140,9 @@ test('normalizeUnit tolère les champs manquants', () => {
   assert.equal(h.person, null);
   assert.equal(h.color, null);
   assert.equal(h.move, null);
-  assert.equal(h.gender, null);
+  assert.equal(h.gender, 'other');
+  assert.deepEqual(h.origins, []);
+  assert.equal(h.image, 'https://feheroes.fandom.com/wiki/Special:FilePath/X_Face_FC.webp');
   assert.equal(h.intId, null);
   assert.equal(h.releaseDate, null);
   assert.deepEqual(h.actorEn, []);

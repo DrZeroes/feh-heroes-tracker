@@ -76,6 +76,9 @@ test('run normalise, joint, trie et écrit le catalogue', async () => {
   assert.equal(first.color, 'b');
   assert.equal(first.weapon, 'breath');
   assert.deepEqual(first.actorEn, ['Cherami Leigh']);
+  assert.equal(first.gender, 'female'); // RAW fixture Gender 'F'
+  assert.deepEqual(first.origins, ['Fire Emblem: Three Houses']);
+  assert.equal(first.image, 'https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face_FC.webp');
 
   assert.equal(second.id, 'Greeny The Older');
   assert.equal(second.poolRarity, 4);                  // StartTime le plus récent

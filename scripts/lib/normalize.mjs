@@ -89,6 +89,8 @@ export function normalizeUnit(raw) {
   const properties = parseListField(raw.Properties);
   const releaseDate = String(raw.ReleaseDate ?? '').slice(0, 10) || null;
   const intIdNum = Number.parseInt(raw.IntID, 10);
+  const origin = String(raw.Origin ?? '').trim() || null;
+  const { image, imageFull } = heroImageUrls(raw.WikiName);
   return {
     id: String(raw.WikiName ?? '').trim(),
     name: String(raw.Name ?? '').trim(),
@@ -98,8 +100,9 @@ export function normalizeUnit(raw) {
     color,
     weapon,
     move: normalizeMoveType(raw.MoveType),
-    gender: String(raw.Gender ?? '').trim() || null,
-    origin: String(raw.Origin ?? '').trim() || null,
+    gender: normalizeGender(raw.Gender),
+    origin,
+    origins: parseOrigins(raw.Origin),
     category: deriveCategory(properties),
     properties,
     blessing: null,
@@ -108,6 +111,8 @@ export function normalizeUnit(raw) {
     artist: String(raw.Artist ?? '').trim() || null,
     actorEn: parseListField(raw.ActorEN),
     actorJp: parseListField(raw.ActorJP),
+    image,
+    imageFull,
     releaseDate,
     intId: Number.isFinite(intIdNum) ? intIdNum : null,
   };

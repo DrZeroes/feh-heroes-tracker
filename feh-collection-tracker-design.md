@@ -104,11 +104,13 @@ Vérifié contre les données réelles 2026-09 (1535 lignes `Units` brutes → 1
 
 **`ReleaseDate`** : ISO `YYYY-MM-DD`. Sert au tri « Nouveaux héros ».
 
-**`Gender`** : garder tel quel (`M` / `F` / autre). Filtre + affichage détail.
+**`Gender`** : brut du wiki = `Female/Male/F/M/MF/FM/FF/MM/N/NF/…`. Normalisé → `female | male | multi | other` (`multi` = code à 2 lettres d'une paire duo/harmonique). Filtre + affichage.
 
 **`Artist`**, **`ActorEN`** (list), **`ActorJP`** (list) : `Artist` → string ; `ActorEN` / `ActorJP` → array (split `,`). Affichage détail + recherche texte.
 
 **`Person`** : identifiant du personnage de base, commun à tous ses alts. Sert de clé pour la **vue groupée par personnage**. Conserver tel quel.
+
+**`Origin`** : peut contenir plusieurs jeux joints par `,`. Conserver `origin` (string brute, affichage) **et** `origins` (array scindé, filtre/facette).
 
 **Clé primaire** : `WikiName` (unique, stable). C'est aussi la clé dans le fichier collection utilisateur.
 
@@ -207,8 +209,9 @@ Aucun `package.json` requis si `fetch-heroes.mjs` n'utilise que `fetch` natif (N
       "color": "b",
       "weapon": "breath",
       "move": "infantry",
-      "gender": "F",
+      "gender": "female",
       "origin": "Fire Emblem: Three Houses",
+      "origins": ["Fire Emblem: Three Houses"],
       "category": "legendary",
       "properties": ["legendary", "hat"],
       "blessing": "fire",
@@ -226,7 +229,7 @@ Aucun `package.json` requis si `fetch-heroes.mjs` n'utilise que `fetch` natif (N
 }
 ```
 
-Champs ajoutés en rév. 2026-09-08b : `person`, `gender`, `blessing`, `poolRarity`, `poolFlags`, `artist`, `actorEn`, `actorJp`. Rév. 2026-09-08c : `image`, `imageFull` (§3). Valeurs d'exemple ci-dessus illustratives.
+Champs ajoutés en rév. 2026-09-08b : `person`, `gender`, `blessing`, `poolRarity`, `poolFlags`, `artist`, `actorEn`, `actorJp`. Rév. 2026-09-08c : `image`, `imageFull` (§3). Rév. 2026-09-08d : `origins`, `gender` normalisé. Valeurs d'exemple ci-dessus illustratives.
 
 ### 5.2 `data/heroes.overrides.json` (manuel)
 ```json

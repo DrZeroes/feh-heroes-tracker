@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const HERO_KEYS = ['id', 'name', 'title', 'titleFr', 'person', 'color', 'weapon', 'move', 'gender', 'origin',
-  'category', 'properties', 'blessing', 'poolRarity', 'poolFlags', 'artist', 'actorEn', 'actorJp', 'releaseDate', 'intId'];
+  'origins', 'category', 'properties', 'blessing', 'poolRarity', 'poolFlags', 'artist', 'actorEn', 'actorJp',
+  'image', 'imageFull', 'releaseDate', 'intId'];
 const CATEGORIES = new Set(['mythic', 'legendary', 'emblem', 'rearmed', 'attuned', 'ascended',
   'duo', 'harmonized', 'brave', 'ghb', 'tempest', 'special', 'standard']);
 
@@ -16,7 +17,7 @@ test('catalog: source string exact', () => {
   assert.equal(catalog.source,
     'feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)');
 });
-test('catalog: every hero has exactly the 20 keys', () => {
+test('catalog: every hero has exactly the 23 keys', () => {
   const want = [...HERO_KEYS].sort();
   for (const h of catalog.heroes) {
     assert.deepEqual(Object.keys(h).sort(), want, `bad shape: ${h.id}`);
@@ -55,4 +56,16 @@ test('catalog: all legendary & mythic heroes have a blessing', () => {
     (h) => (h.category === 'legendary' || h.category === 'mythic') && !h.blessing,
   );
   assert.deepEqual(missing.map((h) => h.id), []);
+});
+test('catalog: gender ∈ {female,male,multi,other}', () => {
+  const bad = [...new Set(catalog.heroes.map((h) => h.gender))].filter(
+    (g) => !['female', 'male', 'multi', 'other'].includes(g),
+  );
+  assert.deepEqual(bad, []);
+});
+test('catalog: image/imageFull are Special:FilePath URLs', () => {
+  for (const h of catalog.heroes) {
+    assert.match(h.image, /^https:\/\/feheroes\.fandom\.com\/wiki\/Special:FilePath\/.+_Face_FC\.webp$/, h.id);
+    assert.match(h.imageFull, /_Face\.webp$/, h.id);
+  }
 });
