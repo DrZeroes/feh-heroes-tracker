@@ -100,7 +100,7 @@ https://feheroes.fandom.com/api.php?action=cargoquery&format=json
 **`Properties`** (liste) → dériver `category` + flags. Valeurs vues : `legendary, mythic, brave, duo, harmonized, ghb, tempest, special, emblem, rearmed, attuned, ascended, limited, refresher, hat`, etc.
 Proposition de `category` (priorité haut → bas) : `mythic` → `legendary` → `emblem` → `rearmed` → `attuned` → `ascended` → `duo` → `harmonized` → `brave` → `ghb` → `tempest` → `special` → sinon `standard`.
 Conserver aussi `properties` brut (array) pour filtres fins. `refresher` (danseur) = flag utile.
-Vérifié contre les données réelles 2026-09 (1535 héros).
+Vérifié contre les données réelles 2026-09 (1535 lignes `Units` brutes → 1410 héros après filtre `enemy`).
 
 **`ReleaseDate`** : ISO `YYYY-MM-DD`. Sert au tri « Nouveaux héros ».
 

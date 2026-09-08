@@ -60,24 +60,28 @@ test('cargoQuery retire les clés __precision', async () => {
   assert.deepEqual(rows, [{ StartTime: '2026-01-01 00:00:00' }]);
 });
 
-test('cargoQuery retente sur HTTP 500 puis jette', async () => {
-  const fetchImpl = async () => resp({ garbage: true }, 500);
+test('cargoQuery retente sur HTTP 500 puis jette (maxRetries + 1 appels)', async () => {
+  let calls = 0;
+  const fetchImpl = async () => { calls += 1; return resp({ garbage: true }, 500); };
   await assert.rejects(
     cargoQuery({
       table: 'Units', fields: 'Name', fetchImpl, sleepImpl: noSleep, pauseMs: 0, maxRetries: 2,
     }),
     /HTTP 500/,
   );
+  assert.equal(calls, 3);
 });
 
-test('cargoQuery retente sur HTTP 429 sans corps exploitable puis jette', async () => {
-  const fetchImpl = async () => resp({ servedBy: 'node-1' }, 429);
+test('cargoQuery retente sur HTTP 429 sans corps exploitable puis jette (maxRetries + 1 appels)', async () => {
+  let calls = 0;
+  const fetchImpl = async () => { calls += 1; return resp({ servedBy: 'node-1' }, 429); };
   await assert.rejects(
     cargoQuery({
       table: 'Units', fields: 'Name', fetchImpl, sleepImpl: noSleep, pauseMs: 0, maxRetries: 2,
     }),
     /HTTP 429/,
   );
+  assert.equal(calls, 3);
 });
 
 test('cargoQuery jette immédiatement sur HTTP 404 (un seul appel)', async () => {
