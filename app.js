@@ -9,8 +9,15 @@ import {
   ownedIdSet, collectionStats, filterByStatus,
   setCopies, setDate, setWanted, wantedIdSet,
   setManualCount, manualsTotal,
+  setWantedPriority, setWantedNote, setProject,
 } from './js/collection.mjs';
-import { distribution, acquisitionTimeline, topCopies, wishlistSummary } from './js/stats.mjs';
+import {
+  distribution, acquisitionTimeline, topCopies, wishlistSummary,
+  wishlistByPriority, projectProgress,
+} from './js/stats.mjs';
+import {
+  buildOverrideEntry, overridesSnippet, COLORS, WEAPONS, MOVES, CATEGORIES,
+} from './js/overrides.mjs';
 
 const SUPPORTED = ['en', 'fr'];
 const FACETS = ['color', 'weapon', 'move', 'category', 'origin', 'gender', 'blessing', 'poolRarity'];
@@ -20,15 +27,18 @@ const LS_PREFS = 'feh-catalog-prefs';
 const LS_THEME = 'feh-theme';
 const LS_COLLECTION = 'feh-collection-v1';
 const LS_VIEW = 'feh-view';
-const VIEWS = ['catalogue', 'caserne', 'stats', 'wishlist', 'manuels'];
+const VIEWS = ['catalogue', 'caserne', 'new', 'stats', 'wishlist', 'manuels', 'add', 'about'];
+const STATUSES = ['all', 'owned', 'missing', 'wanted'];
+const GH_REPO = 'DrZeroes/feh-heroes-tracker';
+const APP_VERSION = '0.3.0';
 
 const $ = (sel) => document.querySelector(sel);
 const state = {
   heroes: [], dicts: {}, lang: 'en', t: (k) => k,
   filters: Object.fromEntries(FACETS.map((f) => [f, null])),
-  query: '', sort: 'release-desc', group: false,
+  query: '', sort: 'release-desc', group: false, quickAdd: false,
   list: [], shown: 0, view: 'catalogue',
-  collection: emptyCollection(), status: 'all',
+  collection: emptyCollection(), status: 'all', wishMissingOnly: false,
 };
 
 function loadCollection() {
@@ -61,7 +71,8 @@ function readPrefs() {
       if (typeof p.query === 'string') state.query = p.query;
       if (p.sort) state.sort = p.sort;
       state.group = !!p.group;
-      if (['all', 'owned', 'missing'].includes(p.status)) state.status = p.status;
+      state.quickAdd = !!p.quickAdd;
+      if (STATUSES.includes(p.status)) state.status = p.status;
     }
   } catch { /* ignore */ }
 }
@@ -69,7 +80,7 @@ function writePrefs() {
   try {
     localStorage.setItem(LS_PREFS, JSON.stringify({
       filters: state.filters, query: state.query, sort: state.sort, group: state.group,
-      status: state.status,
+      status: state.status, quickAdd: state.quickAdd,
     }));
   } catch { /* ignore */ }
 }
@@ -182,6 +193,7 @@ function card(hero) {
   el.dataset.id = hero.id;
   el.classList.toggle('is-owned', isOwned(hero.id));
   el.classList.toggle('is-missing', !isOwned(hero.id) && state.status !== 'owned');
+  el.classList.toggle('is-wanted', wantedIdSet(state.collection).has(hero.id));
   el.style.setProperty('--card-accent', colorHex(hero.color));
   el.tabIndex = 0;
 
@@ -189,6 +201,13 @@ function card(hero) {
   pip.className = 'pip';
   pip.style.background = colorHex(hero.color);
   el.appendChild(pip);
+
+  const star = document.createElement('span');
+  star.className = 'card-star';
+  star.textContent = '★';
+  star.title = state.t('card.wanted');
+  star.hidden = !wantedIdSet(state.collection).has(hero.id);
+  el.appendChild(star);
 
   if (hero.category && hero.category !== 'standard') {
     const b = document.createElement('span');
@@ -229,33 +248,77 @@ function card(hero) {
   const add = document.createElement('button');
   add.type = 'button';
   add.className = 'card-add';
-  const syncAdd = () => {
-    const owned = isOwned(hero.id);
-    add.textContent = owned ? '✓' : '+';
-    add.setAttribute('aria-label', state.t(owned ? 'card.remove' : 'card.add'));
-    add.title = add.getAttribute('aria-label');
-  };
-  syncAdd();
   add.addEventListener('click', (e) => {
     e.stopPropagation();
-    state.collection = setOwned(state.collection, hero.id, !isOwned(hero.id));
-    saveCollection();
-    refreshCard(hero.id);
-    syncAdd();
-    updateCollectionCount();
+    toggleOwned(hero.id);
   });
   el.appendChild(add);
 
-  const open = () => openDetail(hero);
+  const mrg = document.createElement('div');
+  mrg.className = 'card-merges';
+  mrg.hidden = !(state.quickAdd && isOwned(hero.id));
+  mrg.addEventListener('click', (e) => e.stopPropagation());
+  const mInput = document.createElement('input');
+  mInput.type = 'number'; mInput.min = '0'; mInput.max = '10';
+  mInput.value = String(state.collection.owned[hero.id]?.merges ?? 0);
+  mInput.addEventListener('change', (e) => {
+    e.stopPropagation();
+    const v = clampMerges(mInput.value);
+    mInput.value = String(v);
+    if (state.collection.owned[hero.id]) {
+      state.collection.owned[hero.id] = { ...state.collection.owned[hero.id], merges: v };
+      state.collection.updated = new Date().toISOString().slice(0, 10);
+      saveCollection();
+    }
+  });
+  mrg.append('+', mInput);
+  el.appendChild(mrg);
+
+  syncCardControls(el, hero.id);
+
+  const open = () => (state.quickAdd ? toggleOwned(hero.id) : openDetail(hero));
   el.addEventListener('click', open);
   el.addEventListener('keydown', (e) => { if (e.key === 'Enter') open(); });
   return el;
 }
 
+function toggleOwned(id) {
+  const next = !isOwned(id);
+  state.collection = setOwned(state.collection, id, next);
+  saveCollection();
+  updateCollectionCount();
+  if (state.view === 'catalogue' && (state.status === 'owned' || state.status === 'missing')) {
+    recompute();
+  } else {
+    refreshCard(id);
+  }
+}
+
+function syncCardControls(el, id) {
+  const owned = isOwned(id);
+  const wanted = wantedIdSet(state.collection).has(id);
+  el.classList.toggle('is-owned', owned);
+  el.classList.toggle('is-missing', !owned && state.status !== 'owned');
+  el.classList.toggle('is-wanted', wanted);
+  const add = el.querySelector('.card-add');
+  if (add) {
+    add.textContent = owned ? '✓' : '+';
+    add.setAttribute('aria-label', state.t(owned ? 'card.remove' : 'card.add'));
+    add.title = add.getAttribute('aria-label');
+  }
+  const star = el.querySelector('.card-star');
+  if (star) star.hidden = !wanted;
+  const mrg = el.querySelector('.card-merges');
+  if (mrg) {
+    mrg.hidden = !(state.quickAdd && owned);
+    const input = mrg.querySelector('input');
+    if (input) input.value = String(state.collection.owned[id]?.merges ?? 0);
+  }
+}
+
 function refreshCard(id) {
   for (const el of document.querySelectorAll(`.card[data-id="${CSS.escape(id)}"]`)) {
-    el.classList.toggle('is-owned', isOwned(id));
-    el.classList.toggle('is-missing', !isOwned(id) && state.status !== 'owned');
+    syncCardControls(el, id);
   }
 }
 
@@ -294,11 +357,17 @@ function recompute() {
   syncResetButton();
   const filtered = applyFilters(state.heroes, state.filters, state.query);
   state.list = sortHeroes(filtered, state.sort);
-  state.list = filterByStatus(state.list, ownedIdSet(state.collection), state.status);
+  if (state.status === 'wanted') {
+    const w = wantedIdSet(state.collection);
+    state.list = state.list.filter((h) => w.has(h.id));
+  } else {
+    state.list = filterByStatus(state.list, ownedIdSet(state.collection), state.status);
+  }
   state.shown = 0;
   const grid = $('#grid');
   grid.innerHTML = '';
   grid.classList.toggle('grouped', state.group);
+  grid.classList.toggle('quick', state.quickAdd);
   $('#grid-count').textContent = state.t('grid.count', { n: state.list.length });
   if (!state.list.length) {
     grid.innerHTML = `<p class="grid-count">${state.t('grid.empty')}</p>`;
@@ -321,9 +390,12 @@ function renderView() {
   }
   if (v === 'catalogue') recompute();
   else if (v === 'caserne') renderCaserne();
+  else if (v === 'new') renderNew();
   else if (v === 'stats') renderStats();
   else if (v === 'wishlist') renderWishlist();
   else if (v === 'manuels') renderManuels();
+  else if (v === 'add') renderAdd();
+  else if (v === 'about') renderAbout();
 }
 
 function setView(v, { push = true } = {}) {
@@ -355,20 +427,38 @@ function renderCaserne() {
   }
   const wrap = document.createElement('div');
   wrap.className = 'roster';
+
+  const head = document.createElement('div');
+  head.className = 'roster-row roster-head';
+  for (const label of [
+    '', state.t('caserne.colHero'), state.t('field.merges'),
+    state.t('field.ivPlus'), state.t('field.ivMinus'), state.t('field.support'), '',
+  ]) {
+    const c = document.createElement('span');
+    c.textContent = label;
+    head.appendChild(c);
+  }
+  wrap.appendChild(head);
+
   for (const hero of list) {
     const entry = state.collection.owned[hero.id];
     const row = document.createElement('div');
     row.className = 'roster-row';
 
     const img = document.createElement('img');
-    img.loading = 'lazy'; img.alt = ''; img.src = hero.image || '';
+    img.loading = 'lazy'; img.alt = hero.name; img.src = hero.image || '';
+    img.className = 'roster-portrait';
+    img.title = epithetFor(hero);
+    img.addEventListener('click', () => openDetail(hero));
     row.appendChild(img);
 
-    const who = document.createElement('div');
+    const who = document.createElement('button');
+    who.type = 'button';
     who.className = 'who';
     who.innerHTML = `<b></b><span></span>`;
     who.querySelector('b').textContent = hero.name;
     who.querySelector('span').textContent = epithetFor(hero);
+    who.addEventListener('click', () => openDetail(hero));
     row.appendChild(who);
 
     const merges = document.createElement('input');
@@ -415,19 +505,40 @@ function renderCaserne() {
     });
     row.appendChild(sup);
 
+    const rm = document.createElement('button');
+    rm.type = 'button';
+    rm.className = 'roster-remove';
+    rm.textContent = '✕';
+    rm.title = state.t('caserne.remove');
+    rm.setAttribute('aria-label', state.t('caserne.remove'));
+    rm.addEventListener('click', () => {
+      if (!window.confirm(state.t('caserne.removeConfirm', { name: hero.name }))) return;
+      state.collection = setOwned(state.collection, hero.id, false);
+      saveCollection();
+      refreshCard(hero.id);
+      updateCollectionCount();
+      renderCaserne();
+    });
+    row.appendChild(rm);
+
     wrap.appendChild(row);
   }
   box.appendChild(wrap);
 }
+// rows: { label, owned, total }  -> jauge de complétion (pleine à 100 % = owned === total)
+//       { label, count }          -> barre relative au max du bloc
 function barBlock(titleKey, rows) {
   const b = document.createElement('div');
   b.className = 'stat-block';
   const h = document.createElement('h3');
   h.textContent = state.t(titleKey);
   b.appendChild(h);
-  const max = Math.max(1, ...rows.map((r) => r.total ?? r.count ?? 0));
+  const max = Math.max(1, ...rows.map((r) => r.count ?? 0));
   for (const r of rows) {
-    const v = r.total ?? r.count ?? 0;
+    const ratio = r.owned != null
+      ? (r.total ? r.owned / r.total : 0)
+      : (r.count ?? 0) / max;
+    const pct = Math.max(0, Math.min(100, Math.round(ratio * 100)));
     const row = document.createElement('div');
     row.className = 'bar-row';
     const label = document.createElement('span');
@@ -435,11 +546,12 @@ function barBlock(titleKey, rows) {
     const bar = document.createElement('div');
     bar.className = 'bar';
     const fill = document.createElement('i');
-    fill.style.width = `${Math.round((v / max) * 100)}%`;
+    fill.style.width = `${pct}%`;
+    if (r.owned != null && r.total && r.owned >= r.total) fill.classList.add('done');
     bar.appendChild(fill);
     const num = document.createElement('span');
     num.className = 'num';
-    num.textContent = r.owned != null ? `${r.owned} / ${r.total}` : String(v);
+    num.textContent = r.owned != null ? `${r.owned} / ${r.total}` : String(r.count ?? 0);
     row.append(label, bar, num);
     b.appendChild(row);
   }
@@ -478,22 +590,156 @@ function renderStats() {
     .map((h) => ({ label: `${h.name}${h.title ? ` (${h.title})` : ''}`, count: h.copies }));
   if (tc.length) box.appendChild(barBlock('stats.topCopies', tc));
 
+  const pp = projectProgress(state.collection, state.heroes);
+  if (pp.length) {
+    const rows = pp.map((p) => ({
+      label: p.targetIvPlus
+        ? `${p.name} · ${state.t('project.ivReminder', { iv: state.t(`iv.${p.targetIvPlus}`) })}`
+        : p.name,
+      owned: p.merges,
+      total: p.targetMerges,
+    }));
+    box.appendChild(barBlock('stats.projects', rows));
+  }
+
   const w = wishlistSummary(state.collection, ownedSet);
   const wl = document.createElement('p');
   wl.className = 'stat-block';
   wl.textContent = state.t('stats.wishlistLine', w);
   box.appendChild(wl);
+
+  const wbp = wishlistByPriority(state.collection, ownedSet);
+  if (w.total) {
+    const missWord = state.t('wishlist.missing').toLowerCase();
+    const wl2 = document.createElement('p');
+    wl2.className = 'stat-block';
+    wl2.style.color = 'var(--muted)';
+    wl2.textContent = `${state.t('stats.wishlistByPriority')} — `
+      + `${state.t('priority.high')}: ${wbp.high.total} (${wbp.high.missing} ${missWord}) · `
+      + `${state.t('priority.normal')}: ${wbp.normal.total} (${wbp.normal.missing} ${missWord})`;
+    box.appendChild(wl2);
+  }
 }
+const PRIO_RANK = { high: 0, normal: 1 };
+
 function renderWishlist() {
   const box = $('#view-wishlist');
   box.innerHTML = '';
   const ids = [...wantedIdSet(state.collection)];
-  const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
-  const list = sortHeroes(ids.map((id) => heroesById.get(id)).filter(Boolean), 'release-desc');
-  if (!list.length) {
+  if (!ids.length) {
     box.innerHTML = `<p class="empty-note">${state.t('wishlist.empty')}</p>`;
     return;
   }
+  const ownedSet = ownedIdSet(state.collection);
+  const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
+
+  const bar = document.createElement('label');
+  bar.className = 'status wishlist-bar';
+  const only = document.createElement('input');
+  only.type = 'checkbox';
+  only.checked = state.wishMissingOnly;
+  only.addEventListener('change', () => { state.wishMissingOnly = only.checked; renderWishlist(); });
+  bar.append(only, document.createTextNode(` ${state.t('wishlist.missingOnly')}`));
+  box.appendChild(bar);
+
+  let list = ids
+    .map((id) => ({ id, hero: heroesById.get(id), w: state.collection.wanted[id] }))
+    .filter((x) => x.hero);
+  if (state.wishMissingOnly) list = list.filter((x) => !ownedSet.has(x.id));
+  list.sort((a, b) => (
+    (PRIO_RANK[a.w.priority] ?? 1) - (PRIO_RANK[b.w.priority] ?? 1)
+    || String(b.hero.releaseDate || '').localeCompare(String(a.hero.releaseDate || ''))
+  ));
+
+  if (!list.length) {
+    const p = document.createElement('p');
+    p.className = 'empty-note';
+    p.textContent = state.t('wishlist.empty');
+    box.appendChild(p);
+    return;
+  }
+
+  const wrap = document.createElement('div');
+  wrap.className = 'wishlist';
+  for (const { id, hero, w } of list) {
+    const isOwn = ownedSet.has(id);
+    const row = document.createElement('div');
+    row.className = 'wish-row';
+    row.classList.toggle('is-owned', isOwn);
+
+    const img = document.createElement('img');
+    img.loading = 'lazy'; img.alt = hero.name; img.src = hero.image || '';
+    img.className = 'roster-portrait';
+    img.addEventListener('click', () => openDetail(hero));
+    row.appendChild(img);
+
+    const who = document.createElement('button');
+    who.type = 'button';
+    who.className = 'who';
+    who.innerHTML = '<b></b><span></span>';
+    who.querySelector('b').textContent = hero.name;
+    who.querySelector('span').textContent = epithetFor(hero);
+    who.addEventListener('click', () => openDetail(hero));
+    row.appendChild(who);
+
+    const st = document.createElement('span');
+    st.className = `wish-status ${isOwn ? 'ok' : 'ko'}`;
+    st.textContent = state.t(isOwn ? 'wishlist.owned' : 'wishlist.missing');
+    row.appendChild(st);
+
+    const prio = document.createElement('select');
+    for (const p of ['high', 'normal']) {
+      const o = document.createElement('option');
+      o.value = p;
+      o.textContent = state.t(`priority.${p}`);
+      if (w.priority === p) o.selected = true;
+      prio.appendChild(o);
+    }
+    prio.addEventListener('change', () => {
+      state.collection = setWantedPriority(state.collection, id, prio.value);
+      saveCollection();
+      renderWishlist();
+    });
+    row.appendChild(prio);
+
+    const note = document.createElement('input');
+    note.type = 'text';
+    note.value = w.note || '';
+    note.placeholder = state.t('wishlist.notePlaceholder');
+    note.addEventListener('change', () => {
+      state.collection = setWantedNote(state.collection, id, note.value);
+      saveCollection();
+    });
+    row.appendChild(note);
+
+    const rm = document.createElement('button');
+    rm.type = 'button';
+    rm.className = 'roster-remove';
+    rm.textContent = '✕';
+    rm.title = state.t('wishlist.remove');
+    rm.setAttribute('aria-label', state.t('wishlist.remove'));
+    rm.addEventListener('click', () => {
+      state.collection = setWanted(state.collection, id, false);
+      saveCollection();
+      refreshCard(id);
+      renderWishlist();
+    });
+    row.appendChild(rm);
+
+    wrap.appendChild(row);
+  }
+  box.appendChild(wrap);
+}
+
+function renderNew() {
+  const box = $('#view-new');
+  box.innerHTML = '';
+  const intro = document.createElement('p');
+  intro.className = 'grid-count';
+  intro.style.margin = '.75rem 1rem 0';
+  intro.textContent = state.t('new.intro');
+  box.appendChild(intro);
+  const list = sortHeroes(state.heroes, 'release-desc').slice(0, 30);
   const grid = document.createElement('main');
   grid.className = 'grid';
   for (const hero of list) grid.appendChild(card(hero));
@@ -573,6 +819,175 @@ function renderManuels() {
     row.append(label, minus, count, plus);
     box.appendChild(row);
   }
+}
+
+function selectFrom(values, i18nPrefix, cur) {
+  const sel = document.createElement('select');
+  for (const v of values) {
+    const o = document.createElement('option');
+    o.value = v;
+    o.textContent = i18nPrefix ? state.t(`${i18nPrefix}.${v}`) : v;
+    if (v === cur) o.selected = true;
+    sel.appendChild(o);
+  }
+  return sel;
+}
+
+function renderAdd() {
+  const box = $('#view-add');
+  box.innerHTML = '';
+
+  const intro = document.createElement('p');
+  intro.className = 'about-block';
+  intro.textContent = state.t('add.intro');
+  box.appendChild(intro);
+
+  const form = document.createElement('div');
+  form.className = 'add-form';
+  const fields = {};
+  const addField = (key, node) => {
+    const l = document.createElement('label');
+    l.textContent = state.t(key);
+    form.append(l, node);
+  };
+
+  fields.name = document.createElement('input');
+  fields.name.type = 'text';
+  addField('add.name', fields.name);
+  fields.title = document.createElement('input');
+  fields.title.type = 'text';
+  addField('add.title', fields.title);
+  fields.color = selectFrom(COLORS, 'color', 'r');
+  addField('filter.color', fields.color);
+  fields.weapon = selectFrom(WEAPONS, 'weapon', 'sword');
+  addField('filter.weapon', fields.weapon);
+  fields.move = selectFrom(MOVES, 'move', 'infantry');
+  addField('filter.move', fields.move);
+  fields.category = selectFrom(CATEGORIES, 'category', 'standard');
+  addField('filter.category', fields.category);
+  fields.origin = document.createElement('input');
+  fields.origin.type = 'text';
+  fields.origin.placeholder = 'Fire Emblem Awakening';
+  addField('add.origin', fields.origin);
+  fields.releaseDate = document.createElement('input');
+  fields.releaseDate.type = 'date';
+  addField('add.releaseDate', fields.releaseDate);
+
+  box.appendChild(form);
+
+  const genBtn = document.createElement('button');
+  genBtn.type = 'button';
+  genBtn.className = 'reset';
+  genBtn.textContent = state.t('add.generate');
+  box.appendChild(genBtn);
+
+  const out = document.createElement('div');
+  out.className = 'add-output';
+  out.hidden = true;
+  const pre = document.createElement('pre');
+  pre.className = 'snippet';
+  const actions = document.createElement('div');
+  actions.className = 'add-actions';
+  const copyBtn = document.createElement('button');
+  copyBtn.type = 'button';
+  copyBtn.className = 'lang';
+  copyBtn.textContent = state.t('add.copy');
+  const editLink = document.createElement('a');
+  editLink.className = 'lang';
+  editLink.href = `https://github.com/${GH_REPO}/edit/main/data/heroes.overrides.json`;
+  editLink.target = '_blank';
+  editLink.rel = 'noopener';
+  editLink.textContent = state.t('add.openEditor');
+  const hint = document.createElement('p');
+  hint.className = 'about-block';
+  hint.textContent = state.t('add.hint');
+  actions.append(copyBtn, editLink);
+  out.append(pre, actions, hint);
+  box.appendChild(out);
+
+  const err = document.createElement('p');
+  err.className = 'about-block';
+  err.style.color = '#c0392b';
+  err.hidden = true;
+  box.appendChild(err);
+
+  genBtn.addEventListener('click', () => {
+    const entry = buildOverrideEntry({
+      name: fields.name.value,
+      title: fields.title.value,
+      color: fields.color.value,
+      weapon: fields.weapon.value,
+      move: fields.move.value,
+      category: fields.category.value,
+      origin: fields.origin.value,
+      releaseDate: fields.releaseDate.value,
+    });
+    if (!entry) {
+      err.hidden = false;
+      err.textContent = state.t('add.needName');
+      out.hidden = true;
+      return;
+    }
+    err.hidden = true;
+    pre.textContent = overridesSnippet(entry);
+    out.hidden = false;
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(pre.textContent);
+      copyBtn.textContent = state.t('add.copied');
+      setTimeout(() => { copyBtn.textContent = state.t('add.copy'); }, 1500);
+    } catch { /* clipboard indisponible : l'utilisateur copie à la main */ }
+  });
+}
+
+function aboutSection(titleKey, bodyKey) {
+  const wrap = document.createElement('section');
+  wrap.className = 'about-block';
+  const h = document.createElement('h3');
+  h.textContent = state.t(titleKey);
+  const p = document.createElement('p');
+  p.textContent = state.t(bodyKey);
+  wrap.append(h, p);
+  return wrap;
+}
+
+function renderAbout() {
+  const box = $('#view-about');
+  box.innerHTML = '';
+
+  const h = document.createElement('h2');
+  h.className = 'about-block';
+  h.textContent = state.t('about.title');
+  box.appendChild(h);
+
+  const lead = document.createElement('p');
+  lead.className = 'about-block';
+  lead.textContent = state.t('about.body');
+  box.appendChild(lead);
+
+  box.appendChild(aboutSection('about.dataTitle', 'about.dataBody'));
+  box.appendChild(aboutSection('about.updateTitle', 'about.updateBody'));
+  box.appendChild(aboutSection('about.privacyTitle', 'about.privacyBody'));
+  box.appendChild(aboutSection('about.legalTitle', 'about.legalBody'));
+
+  const src = document.createElement('section');
+  src.className = 'about-block';
+  const sh = document.createElement('h3');
+  sh.textContent = state.t('about.sourceTitle');
+  const sp = document.createElement('p');
+  const a = document.createElement('a');
+  a.href = `https://github.com/${GH_REPO}`;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  a.textContent = `github.com/${GH_REPO}`;
+  sp.appendChild(a);
+  const ver = document.createElement('p');
+  ver.style.color = 'var(--muted)';
+  ver.textContent = state.t('about.version', { v: APP_VERSION });
+  src.append(sh, sp, ver);
+  box.appendChild(src);
 }
 
 function openDetail(hero) {
@@ -695,6 +1110,42 @@ function openDetail(hero) {
       saveCollection();
     });
     addRow('field.date', date);
+
+    const projRow = document.createElement('label');
+    projRow.className = 'owned-row';
+    const projCb = document.createElement('input');
+    projCb.type = 'checkbox';
+    projCb.checked = !!entry.project;
+    projCb.addEventListener('change', () => {
+      state.collection = setProject(state.collection, hero.id, projCb.checked ? {} : null);
+      saveCollection();
+      openDetail(hero);
+    });
+    projRow.append(projCb, document.createTextNode(` ${state.t('project.enable')}`));
+    ed.appendChild(projRow);
+
+    if (entry.project) {
+      const tm = document.createElement('input');
+      tm.type = 'number'; tm.min = '0'; tm.max = '10';
+      tm.value = String(entry.project.targetMerges);
+      tm.addEventListener('change', () => {
+        state.collection = setProject(state.collection, hero.id, { targetMerges: tm.value });
+        tm.value = String(state.collection.owned[hero.id].project.targetMerges);
+        saveCollection();
+      });
+      addRow('project.targetMerges', tm);
+      addRow('project.targetIvPlus', ivSelect(entry.project.targetIvPlus, (v) => {
+        state.collection = setProject(state.collection, hero.id, { targetIvPlus: v });
+        saveCollection();
+      }));
+      const pn = document.createElement('input');
+      pn.type = 'text'; pn.value = entry.project.notes || '';
+      pn.addEventListener('change', () => {
+        state.collection = setProject(state.collection, hero.id, { notes: pn.value });
+        saveCollection();
+      });
+      addRow('project.notes', pn);
+    }
   }
 
   const wantRow = document.createElement('label');
@@ -705,9 +1156,60 @@ function openDetail(hero) {
   wantCb.addEventListener('change', () => {
     state.collection = setWanted(state.collection, hero.id, wantCb.checked);
     saveCollection();
+    refreshCard(hero.id);
+    openDetail(hero);
   });
   wantRow.append(wantCb, document.createTextNode(` ${state.t('field.wanted')}`));
   ed.appendChild(wantRow);
+
+  if (wantedIdSet(state.collection).has(hero.id)) {
+    const w = state.collection.wanted[hero.id];
+    const pl = document.createElement('label');
+    pl.textContent = state.t('field.wantedPriority');
+    const psel = document.createElement('select');
+    for (const p of ['high', 'normal']) {
+      const o = document.createElement('option');
+      o.value = p;
+      o.textContent = state.t(`priority.${p}`);
+      if (w.priority === p) o.selected = true;
+      psel.appendChild(o);
+    }
+    psel.addEventListener('change', () => {
+      state.collection = setWantedPriority(state.collection, hero.id, psel.value);
+      saveCollection();
+    });
+    ed.append(pl, psel);
+
+    const nl = document.createElement('label');
+    nl.textContent = state.t('field.wantedNote');
+    const ni = document.createElement('input');
+    ni.type = 'text'; ni.value = w.note || '';
+    ni.addEventListener('change', () => {
+      state.collection = setWantedNote(state.collection, hero.id, ni.value);
+      saveCollection();
+    });
+    ed.append(nl, ni);
+  }
+
+  const manRow = document.createElement('div');
+  manRow.className = 'owned-row manual-inline';
+  const manBtn = document.createElement('button');
+  manBtn.type = 'button';
+  manBtn.className = 'lang';
+  manBtn.textContent = state.t('detail.addManual');
+  const manCount = document.createElement('span');
+  const syncMan = () => {
+    const n = state.collection.manuals[hero.id] || 0;
+    manCount.textContent = n ? `${state.t('detail.manuals')}: ${n}` : '';
+  };
+  syncMan();
+  manBtn.addEventListener('click', () => {
+    state.collection = setManualCount(state.collection, hero.id, (state.collection.manuals[hero.id] || 0) + 1);
+    saveCollection();
+    syncMan();
+  });
+  manRow.append(manBtn, manCount);
+  ed.appendChild(manRow);
 
   body.appendChild(ed);
 
@@ -770,6 +1272,7 @@ async function main() {
 
   $('#search').value = state.query;
   $('#group-toggle').checked = state.group;
+  $('#quick-add').setAttribute('aria-pressed', state.quickAdd ? 'true' : 'false');
 
   applyStaticI18n();
   updateCollectionCount();
@@ -796,6 +1299,12 @@ async function main() {
   $('#sort-date').addEventListener('click', () => onSortClick('release'));
   $('#sort-name').addEventListener('click', () => onSortClick('name'));
   $('#group-toggle').addEventListener('change', (e) => { state.group = e.target.checked; writePrefs(); recompute(); });
+  $('#quick-add').addEventListener('click', () => {
+    state.quickAdd = !state.quickAdd;
+    $('#quick-add').setAttribute('aria-pressed', state.quickAdd ? 'true' : 'false');
+    writePrefs();
+    recompute();
+  });
   $('#status-filter').value = state.status;
   $('#status-filter').addEventListener('change', (e) => {
     state.status = e.target.value;
@@ -807,8 +1316,10 @@ async function main() {
     state.query = '';
     state.sort = 'release-desc';
     state.group = false;
+    state.quickAdd = false;
     state.status = 'all';
     $('#status-filter').value = 'all';
+    $('#quick-add').setAttribute('aria-pressed', 'false');
     $('#search').value = '';
     $('#group-toggle').checked = false;
     for (const sel of document.querySelectorAll('#filters select')) sel.value = '';
@@ -846,6 +1357,8 @@ async function main() {
       state.collection = migrateCollection({
         ...state.collection,
         owned: { ...state.collection.owned, ...incoming.owned },
+        wanted: { ...state.collection.wanted, ...incoming.wanted },
+        manuals: { ...state.collection.manuals, ...incoming.manuals },
       });
     } else {
       state.collection = incoming;
@@ -854,14 +1367,8 @@ async function main() {
     const catalogIds = new Set(state.heroes.map((h) => h.id));
     const unknown = Object.keys(state.collection.owned).filter((id) => !catalogIds.has(id)).length;
     if (unknown) alert(state.t('import.unknown', { n: unknown }));
-    // re-render tout
-    for (const el of document.querySelectorAll('.card')) {
-      const id = el.dataset.id;
-      el.classList.toggle('is-owned', isOwned(id));
-      el.classList.toggle('is-missing', !isOwned(id) && state.status !== 'owned');
-    }
     updateCollectionCount();
-    recompute();
+    renderView();
   });
 
   const sentinel = document.getElementById('load-more-sentinel');

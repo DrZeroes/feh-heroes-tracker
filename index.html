@@ -12,24 +12,38 @@
       <strong data-i18n="app.title">FEH Collection Tracker</strong>
       <span class="tagline" data-i18n="app.tagline">Catalogue Fire Emblem Heroes</span>
     </div>
-    <button id="export-btn" type="button" class="lang" data-i18n="action.export">Export</button>
-    <button id="import-btn" type="button" class="lang" data-i18n="action.import">Import</button>
-    <input id="import-file" type="file" accept="application/json,.json" hidden>
-    <button id="theme-toggle" type="button" class="lang" aria-label="theme">🌓</button>
-    <button id="lang-toggle" type="button" class="lang" aria-label="language">EN</button>
+    <div class="topbar-right">
+      <button id="export-btn" type="button" class="lang" data-i18n="action.export">Export</button>
+      <button id="import-btn" type="button" class="lang" data-i18n="action.import">Import</button>
+      <input id="import-file" type="file" accept="application/json,.json" hidden>
+      <button id="theme-toggle" type="button" class="lang" aria-label="theme">🌓</button>
+      <button id="lang-toggle" type="button" class="lang" aria-label="language">EN</button>
+    </div>
   </header>
 
   <nav id="tabs" class="tabs" aria-label="views">
     <button type="button" class="tab" data-view="catalogue" data-i18n="nav.catalogue">Catalogue</button>
-    <button type="button" class="tab" data-view="caserne" data-i18n="nav.caserne">Caserne</button>
+    <button type="button" class="tab" data-view="caserne" data-i18n="nav.caserne">Ma caserne</button>
+    <button type="button" class="tab" data-view="new" data-i18n="nav.new">Nouveaux héros</button>
     <button type="button" class="tab" data-view="stats" data-i18n="nav.stats">Stats</button>
     <button type="button" class="tab" data-view="wishlist" data-i18n="nav.wishlist">Wishlist</button>
     <button type="button" class="tab" data-view="manuels" data-i18n="nav.manuels">Manuels</button>
+    <button type="button" class="tab" data-view="add" data-i18n="nav.add">Ajouter un héros</button>
+    <button type="button" class="tab" data-view="about" data-i18n="nav.about">À propos</button>
   </nav>
 
   <section data-view="catalogue" class="view">
     <section class="controls">
     <input id="search" type="search" autocomplete="off" data-i18n-attr="placeholder:search.placeholder" placeholder="Rechercher…">
+    <label class="status">
+      <span data-i18n="filter.status">Statut</span>
+      <select id="status-filter">
+        <option value="all" data-i18n="status.all">Tous</option>
+        <option value="owned" data-i18n="status.owned">Possédés</option>
+        <option value="missing" data-i18n="status.missing">Manquants</option>
+        <option value="wanted" data-i18n="status.wanted">Voulus</option>
+      </select>
+    </label>
     <div id="filters" class="filters"></div>
     <button type="button" class="reset" id="filter-reset" data-i18n="filter.reset">Réinitialiser les filtres</button>
     <div class="sort" role="group" aria-label="sort">
@@ -41,14 +55,7 @@
       <input id="group-toggle" type="checkbox">
       <span data-i18n="group.byPerson">Grouper par personnage</span>
     </label>
-    <label class="status">
-      <span data-i18n="filter.status">Statut</span>
-      <select id="status-filter">
-        <option value="all" data-i18n="status.all">Tous</option>
-        <option value="owned" data-i18n="status.owned">Possédés</option>
-        <option value="missing" data-i18n="status.missing">Manquants</option>
-      </select>
-    </label>
+    <button type="button" class="sortbtn" id="quick-add" aria-pressed="false" data-i18n="action.quickAdd">Ajout rapide</button>
     <span id="collection-count" class="collection-count" aria-live="polite"></span>
   </section>
 
@@ -58,9 +65,12 @@
   </section>
 
   <section data-view="caserne" class="view" hidden><div id="view-caserne"></div></section>
+  <section data-view="new" class="view" hidden><div id="view-new"></div></section>
   <section data-view="stats" class="view" hidden><div id="view-stats"></div></section>
   <section data-view="wishlist" class="view" hidden><div id="view-wishlist"></div></section>
   <section data-view="manuels" class="view" hidden><div id="view-manuels"></div></section>
+  <section data-view="add" class="view" hidden><div id="view-add"></div></section>
+  <section data-view="about" class="view" hidden><div id="view-about"></div></section>
 
   <aside id="detail" class="detail" hidden>
     <button id="detail-close" type="button" class="detail-close" data-i18n="detail.close">Fermer</button>
