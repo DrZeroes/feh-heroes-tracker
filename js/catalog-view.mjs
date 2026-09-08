@@ -79,7 +79,7 @@ export function sortHeroes(heroes, key = 'release-desc') {
     case 'name-desc':
       out.sort((a, b) => {
         const n = -cmpName(a, b);
-        return n !== 0 ? n : cmpReleaseDateAsc(a, b);
+        return n !== 0 ? n : cmpReleaseDesc(a, b);
       });
       break;
     case 'release-desc':

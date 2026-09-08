@@ -66,7 +66,7 @@ test('sortHeroes : release-asc (plus anciens d\'abord)', () => {
 
 test('sortHeroes : name-desc', () => {
   const out = sortHeroes(DATA, 'name-desc');
-  assert.deepEqual(out.map((h) => `${h.name}${h.title}`), ['Charlie', 'CharlieAlt', 'Bravo', 'Alpha']);
+  assert.deepEqual(out.map((h) => `${h.name}${h.title}`), ['CharlieAlt', 'Charlie', 'Bravo', 'Alpha']);
 });
 
 test('sortHeroes : clé inconnue -> release-desc', () => {
@@ -77,7 +77,7 @@ test('sortHeroes : clé inconnue -> release-desc', () => {
 });
 ```
 
-(`DATA` de Task 8 de Plan B : Bravo=2024-06-01, Charlie=2024-06-01, Charlie/Alt=2025-03-03, Alpha=2026-01-01. Pour `release-asc` : dates asc puis nom asc → Bravo(2024-06), Charlie(2024-06), Charlie/Alt(2025-03), Alpha(2026-01). Pour `name-desc` : nom desc puis date desc → les deux "Charlie" (Alt 2025 avant '' 2024 par date desc), puis Bravo, Alpha.)
+(`DATA` de Task 8 de Plan B : Bravo=2024-06-01, Charlie=2024-06-01, Charlie/Alt=2025-03-03, Alpha=2026-01-01. Pour `release-asc` : dates asc puis nom asc → Bravo(2024-06), Charlie(2024-06), Charlie/Alt(2025-03), Alpha(2026-01). Pour `name-desc` : nom Z→A puis date desc → CharlieAlt(2025) avant Charlie(2024), puis Bravo, Alpha.)
 
 - [ ] **Step 2: Vérifier l'échec**
 

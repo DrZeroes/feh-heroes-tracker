@@ -59,9 +59,9 @@ test('sortHeroes : release-asc (plus anciens d\'abord)', () => {
   assert.deepEqual(out.map((h) => h.name), ['Bravo', 'Charlie', 'Charlie', 'Alpha']);
 });
 
-test('sortHeroes : name-desc', () => {
+test('sortHeroes : name-desc (nom Z->A, puis date desc)', () => {
   const out = sortHeroes(DATA, 'name-desc');
-  assert.deepEqual(out.map((h) => `${h.name}${h.title}`), ['Charlie', 'CharlieAlt', 'Bravo', 'Alpha']);
+  assert.deepEqual(out.map((h) => `${h.name}${h.title}`), ['CharlieAlt', 'Charlie', 'Bravo', 'Alpha']);
 });
 
 test('sortHeroes : clé inconnue -> release-desc', () => {
