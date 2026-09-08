@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   splitWeaponType, normalizeMoveType, parseListField, deriveCategory,
+  pageNameFor, normalizePageName, blessingFromEffect,
 } from './normalize.mjs';
 
 test('splitWeaponType sépare couleur et arme', () => {
@@ -42,4 +43,27 @@ test('deriveCategory applique la priorité mythic>legendary>...>standard', () =>
   assert.equal(deriveCategory(['tt', 'special']), 'tt');
   assert.equal(deriveCategory(['refresher']), 'standard');
   assert.equal(deriveCategory([]), 'standard');
+});
+
+test('pageNameFor assemble "Name: Title"', () => {
+  assert.equal(pageNameFor('Rhea', 'The Final Child'), 'Rhea: The Final Child');
+  assert.equal(pageNameFor('Askr', ''), 'Askr');
+  assert.equal(pageNameFor(' Alear ', ' Engaging Fire '), 'Alear: Engaging Fire');
+});
+
+test('normalizePageName rend une clé tolérante', () => {
+  assert.equal(
+    normalizePageName('Rhea: The Final Child'),
+    normalizePageName('Rhea  The Final Child'),
+  );
+  assert.equal(normalizePageName('Alear: Awoken Divinity'), 'alear awoken divinity');
+});
+
+test('blessingFromEffect mappe les 8 éléments, insensible à la casse', () => {
+  assert.equal(blessingFromEffect('Fire'), 'fire');
+  assert.equal(blessingFromEffect('water'), 'water');
+  assert.equal(blessingFromEffect('ASTRA'), 'astra');
+  assert.equal(blessingFromEffect('Anima'), 'anima');
+  assert.equal(blessingFromEffect(''), null);
+  assert.equal(blessingFromEffect('Thunder'), null);
 });

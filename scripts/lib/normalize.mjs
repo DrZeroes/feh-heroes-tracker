@@ -44,3 +44,26 @@ export function deriveCategory(properties) {
   }
   return 'standard';
 }
+
+const BLESSING = new Set([
+  'fire', 'water', 'wind', 'earth', 'light', 'dark', 'astra', 'anima',
+]);
+
+export function pageNameFor(name, title) {
+  const n = String(name ?? '').trim();
+  const t = String(title ?? '').trim();
+  return t ? `${n}: ${t}` : n;
+}
+
+export function normalizePageName(raw) {
+  return String(raw ?? '')
+    .toLowerCase()
+    .replace(/:/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function blessingFromEffect(raw) {
+  const key = String(raw ?? '').trim().toLowerCase();
+  return BLESSING.has(key) ? key : null;
+}
