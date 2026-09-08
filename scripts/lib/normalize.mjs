@@ -25,3 +25,22 @@ export function splitWeaponType(raw) {
 export function normalizeMoveType(raw) {
   return MOVE_CODE[String(raw ?? '').trim()] ?? null;
 }
+
+const CATEGORY_PRIORITY = [
+  'mythic', 'legendary', 'duo', 'harmonic', 'brave', 'ghb', 'tt', 'special',
+];
+
+export function parseListField(raw) {
+  return String(raw ?? '')
+    .split(',')
+    .map((x) => x.trim())
+    .filter((x) => x.length > 0);
+}
+
+export function deriveCategory(properties) {
+  const set = new Set((properties ?? []).map((p) => String(p).toLowerCase()));
+  for (const c of CATEGORY_PRIORITY) {
+    if (set.has(c)) return c;
+  }
+  return 'standard';
+}
