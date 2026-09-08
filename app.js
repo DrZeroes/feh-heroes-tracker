@@ -33,6 +33,7 @@ const GH_REPO = 'DrZeroes/feh-heroes-tracker';
 const APP_VERSION = '0.3.0';
 
 const $ = (sel) => document.querySelector(sel);
+const quickActive = () => state.quickAdd && state.view === 'catalogue';
 const state = {
   heroes: [], dicts: {}, lang: 'en', t: (k) => k,
   filters: Object.fromEntries(FACETS.map((f) => [f, null])),
@@ -256,7 +257,7 @@ function card(hero) {
 
   const mrg = document.createElement('div');
   mrg.className = 'card-merges';
-  mrg.hidden = !(state.quickAdd && isOwned(hero.id));
+  mrg.hidden = !(quickActive() && isOwned(hero.id));
   mrg.addEventListener('click', (e) => e.stopPropagation());
   const mInput = document.createElement('input');
   mInput.type = 'number'; mInput.min = '0'; mInput.max = '10';
@@ -276,7 +277,7 @@ function card(hero) {
 
   syncCardControls(el, hero.id);
 
-  const open = () => (state.quickAdd ? toggleOwned(hero.id) : openDetail(hero));
+  const open = () => (quickActive() ? toggleOwned(hero.id) : openDetail(hero));
   el.addEventListener('click', open);
   el.addEventListener('keydown', (e) => { if (e.key === 'Enter') open(); });
   return el;
@@ -310,7 +311,7 @@ function syncCardControls(el, id) {
   if (star) star.hidden = !wanted;
   const mrg = el.querySelector('.card-merges');
   if (mrg) {
-    mrg.hidden = !(state.quickAdd && owned);
+    mrg.hidden = !(quickActive() && owned);
     const input = mrg.querySelector('input');
     if (input) input.value = String(state.collection.owned[id]?.merges ?? 0);
   }
