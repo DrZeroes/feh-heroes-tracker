@@ -1,11 +1,24 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  splitWeaponType, normalizeMoveType, parseListField, deriveCategory,
+  splitWeaponType, normalizeMoveType, parseListField, deriveCategory, deriveBook,
   pageNameFor, normalizePageName, blessingFromEffect, pickPoolRarity,
   normalizeUnit, mergeJoins, applyOverrides, buildCatalog,
   heroImageUrls, normalizeGender, parseOrigins,
 } from './normalize.mjs';
+
+test('deriveBook : livre selon la date de sortie', () => {
+  assert.equal(deriveBook('2017-02-02'), '1');
+  assert.equal(deriveBook('2018-02-01'), '1');
+  assert.equal(deriveBook('2018-02-02'), '2');
+  assert.equal(deriveBook('2019-12-31'), '3');
+  assert.equal(deriveBook('2024-02-07'), '8');
+  assert.equal(deriveBook('2025-06-01'), '9');
+  assert.equal(deriveBook('2026-08-31'), '10');
+  assert.equal(deriveBook(''), null);
+  assert.equal(deriveBook(null), null);
+  assert.equal(deriveBook('2026-08-31 00:00:00'), '10');
+});
 
 test('splitWeaponType sépare couleur et arme', () => {
   assert.deepEqual(splitWeaponType('Blue Breath'), { color: 'b', weapon: 'breath' });
@@ -139,6 +152,7 @@ test('normalizeUnit produit un héros normalisé sans jointures', () => {
   assert.deepEqual(h.actorEn, ['Cherami Leigh']);
   assert.deepEqual(h.actorJp, ['Ai Kayano']);
   assert.equal(h.releaseDate, '2026-08-31');
+  assert.equal(h.book, '10');
   assert.equal(h.intId, 1234);
 });
 
@@ -152,6 +166,7 @@ test('normalizeUnit tolère les champs manquants', () => {
   assert.equal(h.image, 'https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/6/67/X_Face_FC.webp');
   assert.equal(h.intId, null);
   assert.equal(h.releaseDate, null);
+  assert.equal(h.book, null);
   assert.deepEqual(h.actorEn, []);
 });
 

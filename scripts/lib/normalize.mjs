@@ -47,6 +47,25 @@ export function parseListField(raw) {
     .filter((x) => x.length > 0);
 }
 
+// Date de début de chaque « Livre » FEH (maj majeure annuelle, début février).
+// Ajouter la ligne du Livre suivant quand il sort.
+const BOOK_STARTS = [
+  ['1', '2017-02-02'], ['2', '2018-02-02'], ['3', '2019-02-08'], ['4', '2020-02-05'],
+  ['5', '2021-02-04'], ['6', '2022-02-03'], ['7', '2023-02-02'], ['8', '2024-02-07'],
+  ['9', '2025-02-06'], ['10', '2026-02-05'],
+];
+
+// Livre (1-10) déduit de la date de sortie. `null` si pas de date valide.
+export function deriveBook(releaseDate) {
+  const d = String(releaseDate ?? '').slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return null;
+  let book = '1';
+  for (const [n, start] of BOOK_STARTS) {
+    if (d >= start) book = n;
+  }
+  return book;
+}
+
 export function deriveCategory(properties) {
   const set = new Set((properties ?? []).map((p) => String(p).toLowerCase()));
   for (const c of CATEGORY_PRIORITY) {
@@ -123,6 +142,7 @@ export function normalizeUnit(raw) {
     image,
     imageFull,
     releaseDate,
+    book: deriveBook(releaseDate),
     intId: Number.isFinite(intIdNum) ? intIdNum : null,
   };
 }
@@ -155,7 +175,11 @@ export function applyOverrides(heroes, overrides) {
 }
 
 export function buildCatalog(heroes, { generatedAt }) {
-  const sorted = [...heroes].sort((a, b) => {
+  // backfill `book` pour les ajouts d'overrides qui ne le précisent pas
+  const withBook = heroes.map((h) => (
+    'book' in h ? h : { ...h, book: deriveBook(h.releaseDate ?? null) }
+  ));
+  const sorted = [...withBook].sort((a, b) => {
     const da = a.releaseDate ?? '';
     const db = b.releaseDate ?? '';
     if (da !== db) return db < da ? -1 : 1;

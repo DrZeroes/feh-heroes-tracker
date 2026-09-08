@@ -13,6 +13,7 @@ export const CATEGORY_ORDER = [
 ];
 export const BLESSING_ORDER = ['fire', 'water', 'wind', 'earth', 'light', 'dark', 'astra', 'anima'];
 export const POOL_ORDER = ['low', '5', '4sr', 'na'];
+export const BOOK_ORDER = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
 // « Danse » : facette transverse (un héros peut être Danse + n'importe quelle catégorie).
 export function isDancer(hero) {
@@ -92,6 +93,7 @@ export function buildFacetOptions(heroes) {
     ),
     origin: [...new Set(heroes.flatMap((h) => h.origins ?? []))].sort(compareOrigin),
     gender: uniqSorted(heroes.map((h) => h.gender).filter(Boolean)),
+    book: orderedBy(present('book'), BOOK_ORDER),
     blessing: (() => {
       const blessed = orderedBy(present('blessing'), BLESSING_ORDER);
       const head = [];
@@ -103,7 +105,7 @@ export function buildFacetOptions(heroes) {
   };
 }
 
-const SCALAR_FACETS = ['color', 'weapon', 'move', 'gender'];
+const SCALAR_FACETS = ['color', 'weapon', 'move', 'gender', 'book'];
 
 export function applyFilters(heroes, filters = {}, query = '') {
   const terms = String(query).toLowerCase().split(/\s+/).filter(Boolean);

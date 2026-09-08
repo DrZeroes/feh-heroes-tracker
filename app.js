@@ -20,7 +20,7 @@ import {
 } from './js/stats.mjs';
 
 const SUPPORTED = ['en', 'fr'];
-const FACETS = ['color', 'weapon', 'move', 'category', 'origin', 'gender', 'blessing', 'poolRarity'];
+const FACETS = ['color', 'weapon', 'move', 'category', 'book', 'origin', 'gender', 'blessing', 'poolRarity'];
 const PAGE = 60;
 const LS_LANG = 'feh-lang';
 const LS_PREFS = 'feh-catalog-prefs';
@@ -90,7 +90,7 @@ function labelFor(facet, value) {
   const map = {
     color: `color.${value}`, weapon: `weapon.${value}`, move: `move.${value}`,
     category: `category.${value}`, gender: `gender.${value}`, blessing: `blessing.${value}`,
-    poolRarity: `poolRarity.${value}`,
+    poolRarity: `poolRarity.${value}`, book: `book.${value}`,
   };
   return map[facet] ? state.t(map[facet]) : value;
 }
@@ -965,6 +965,7 @@ function openDetail(hero, unitIndex = 0) {
   };
   row('detail.origin', (hero.origins || []).map(shortOrigin).join(' · '));
   row('detail.released', hero.releaseDate);
+  row('detail.book', hero.book ? state.t(`book.${hero.book}`) : '');
   row('detail.blessing', hero.blessing ? state.t(`blessing.${hero.blessing}`) : '');
   row('detail.poolRarity', state.t(`poolRarity.${poolTier(hero)}`));
   row('detail.artist', hero.artist);
