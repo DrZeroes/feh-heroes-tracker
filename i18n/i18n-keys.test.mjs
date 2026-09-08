@@ -9,6 +9,7 @@ const REQUIRED = [
   'app.title', 'app.tagline', 'lang.en', 'lang.fr',
   'search.placeholder', 'filter.any', 'filter.color', 'filter.weapon', 'filter.move',
   'filter.category', 'filter.origin', 'filter.gender', 'filter.blessing', 'filter.poolRarity', 'filter.reset',
+  'filter.status',
   'sort.label', 'sort.byDate', 'sort.byName', 'group.byPerson', 'group.alts',
   'theme.toLight', 'theme.toDark',
   'grid.count', 'grid.empty', 'detail.close', 'detail.artist', 'detail.actorEn', 'detail.actorJp',
@@ -25,6 +26,11 @@ const REQUIRED = [
   'blessing.none', 'blessing.any',
   'gender.female', 'gender.male', 'gender.multi', 'gender.other',
   'poolRarity.3', 'poolRarity.4', 'poolRarity.5', 'poolRarity.na',
+  'status.all', 'status.owned', 'status.missing',
+  'field.owned', 'field.merges', 'field.ivPlus', 'field.ivMinus', 'field.support',
+  'support.none', 'support.C', 'support.B', 'support.A', 'support.S',
+  'iv.none', 'iv.hp', 'iv.atk', 'iv.spd', 'iv.def', 'iv.res',
+  'collection.count', 'action.export', 'action.import', 'import.mode', 'import.replace', 'import.merge', 'import.unknown',
 ];
 
 test('en.json contient toutes les clés requises', () => {
