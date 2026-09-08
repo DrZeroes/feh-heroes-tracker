@@ -8,8 +8,8 @@ const fr = JSON.parse(await readFile(new URL('./fr.json', import.meta.url), 'utf
 const REQUIRED = [
   'app.title', 'app.tagline', 'lang.en', 'lang.fr',
   'search.placeholder', 'filter.any', 'filter.color', 'filter.weapon', 'filter.move',
-  'filter.category', 'filter.origin', 'filter.gender', 'filter.blessing', 'filter.poolRarity',
-  'sort.label', 'sort.releaseDesc', 'sort.nameAsc', 'group.byPerson', 'group.alts',
+  'filter.category', 'filter.origin', 'filter.gender', 'filter.blessing', 'filter.poolRarity', 'filter.reset',
+  'sort.label', 'sort.byDate', 'sort.byName', 'group.byPerson', 'group.alts',
   'grid.count', 'grid.empty', 'detail.close', 'detail.artist', 'detail.actorEn', 'detail.actorJp',
   'detail.origin', 'detail.blessing', 'detail.poolRarity', 'detail.properties', 'detail.released',
   'color.r', 'color.b', 'color.v', 'color.g',
