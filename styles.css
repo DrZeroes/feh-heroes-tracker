@@ -217,10 +217,10 @@ img { max-width: 100%; }
   .rfield:nth-of-type(even) { grid-column: 2 / 3; }
   .rfield > span { display: block; font-size: .64rem; text-transform: uppercase;
     letter-spacing: .03em; color: var(--muted); }
-  .manual-row { grid-template-columns: 2rem 1fr; }
-  .manual-row .manual-name { grid-column: 2; }
-  .manual-row .manual-icons { grid-column: 1; justify-self: center; }
-  .manual-steppers { grid-column: 1 / -1; }
+  .manual-row { grid-template-columns: 2.4rem 1fr; }
+  .manual-steppers { grid-column: 1 / -1; flex-direction: column; align-items: stretch; }
+  .mstep { justify-content: space-between; padding: .25rem .5rem;
+    border: 1px solid var(--border); border-radius: 8px; }
 }
 
 .editor .copies-bar { display: flex; gap: .3rem; flex-wrap: wrap; }
@@ -236,19 +236,22 @@ img { max-width: 100%; }
   background: var(--card); color: var(--fg); }
 .manual-add button { border: 1px solid var(--border); background: var(--card); color: var(--fg);
   border-radius: 6px; width: 2rem; height: 2rem; cursor: pointer; font-weight: 700; }
-.manual-row { display: grid; grid-template-columns: 2rem auto minmax(0, 1fr) auto;
-  gap: .5rem .6rem; align-items: center; padding: .5rem 1rem; border-bottom: 1px solid var(--border); }
-.manual-row .roster-portrait { width: 2rem; height: 2rem; border-radius: 5px; background: var(--bg); cursor: pointer; }
-.manual-icons { display: flex; gap: .25rem; }
-.manual-icons img { width: 16px; height: 16px; }
-.manual-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .85rem; }
-.manual-steppers { display: flex; gap: .5rem; flex-wrap: wrap; justify-self: end; }
-.mstep { display: inline-flex; align-items: center; gap: .2rem; font-size: .78rem; }
-.mstep b { color: var(--muted); font-weight: 700; min-width: 1.5rem; }
-.mstep.is-zero { opacity: .45; }
-.mstep .mcount { min-width: 1ch; text-align: center; font-variant-numeric: tabular-nums; }
-.manual-row button, .mstep button { border: 1px solid var(--border); background: var(--card); color: var(--fg);
-  border-radius: 6px; width: 1.7rem; height: 1.7rem; cursor: pointer; }
+.manual-row { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr) auto;
+  gap: .3rem .7rem; align-items: center; padding: .55rem 1rem; border-bottom: 1px solid var(--border); }
+.manual-row .roster-portrait { width: 2.6rem; height: 2.6rem; border-radius: 6px; background: var(--bg); cursor: pointer; }
+.manual-info { min-width: 0; display: flex; flex-direction: column; gap: .2rem; }
+.manual-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.manual-name b { font-size: .85rem; }
+.manual-name i { font-style: normal; color: var(--muted); font-size: .74rem; margin-left: .35rem; }
+.manual-icons { display: flex; gap: .3rem; }
+.manual-icons img { width: 15px; height: 15px; }
+.manual-steppers { display: flex; gap: .4rem; flex-wrap: wrap; justify-self: end; }
+.mstep { display: inline-flex; align-items: center; gap: .25rem; font-size: .78rem; }
+.mstep b { color: var(--muted); font-weight: 700; min-width: 1.6rem; }
+.mstep.is-zero { opacity: .5; }
+.mstep .mcount { min-width: 1.4ch; text-align: center; font-variant-numeric: tabular-nums; font-weight: 600; }
+.mstep button { border: 1px solid var(--border); background: var(--card); color: var(--fg);
+  border-radius: 6px; width: 1.7rem; height: 1.7rem; cursor: pointer; line-height: 1; }
 
 .card .card-add { position: absolute; bottom: .4rem; right: .4rem; width: 1.5rem; height: 1.5rem;
   border-radius: 50%; border: 1px solid var(--border); background: var(--card); color: var(--fg);

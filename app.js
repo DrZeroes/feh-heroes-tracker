@@ -887,6 +887,14 @@ function renderManuels() {
     if (heroesById.has(id)) img.addEventListener('click', () => openDetail(h));
     row.appendChild(img);
 
+    const info = document.createElement('div');
+    info.className = 'manual-info';
+    const label = document.createElement('span');
+    label.className = 'manual-name';
+    label.innerHTML = '<b></b><i></i>';
+    label.querySelector('b').textContent = h.name;
+    label.querySelector('i').textContent = h.title ? epithetFor(h) : '';
+    info.appendChild(label);
     const icons = document.createElement('div');
     icons.className = 'manual-icons';
     for (const p of [moveIconPath(h), classIconPath(h)]) {
@@ -895,12 +903,8 @@ function renderManuels() {
       i.src = p; i.alt = ''; i.loading = 'lazy';
       icons.appendChild(i);
     }
-    row.appendChild(icons);
-
-    const label = document.createElement('span');
-    label.className = 'manual-name';
-    label.textContent = `${h.name}${h.title ? ` · ${h.title}` : ''}`;
-    row.appendChild(label);
+    if (icons.childElementCount) info.appendChild(icons);
+    row.appendChild(info);
 
     const steppers = document.createElement('div');
     steppers.className = 'manual-steppers';
