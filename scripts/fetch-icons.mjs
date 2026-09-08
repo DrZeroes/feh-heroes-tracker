@@ -11,10 +11,13 @@ async function exists(p) {
   try { await access(p); return true; } catch { return false; }
 }
 
+const RETRYABLE = new Set([403, 429, 500, 502, 503, 504]);
+
 export async function run({
   fetchImpl = globalThis.fetch,
   sleepImpl = defaultSleep,
   pauseMs = 1500,
+  maxRetries = 4,
   catalogPath = new URL('../data/heroes.json', import.meta.url),
   outDir = new URL('../assets/icons/', import.meta.url),
 } = {}) {
@@ -28,8 +31,20 @@ export async function run({
     const dest = `${outDirPath.replace(/[/\\]$/, '')}/${assetFile}`;
     if (await exists(dest)) { skipped.push(assetFile); continue; }
     const url = `${FILEPATH}/${wikiFile}`;
-    const res = await fetchImpl(url, { headers: { 'User-Agent': UA } });
-    if (!res.ok) throw new Error(`icon fetch HTTP ${res.status} for ${wikiFile}`);
+    let res;
+    let attempt = 0;
+    for (;;) {
+      // Honest simple User-Agent only — Fandom's edge 403s spoofed-browser UAs,
+      // and its bot-fight mode also 403s intermittently, hence the retry.
+      res = await fetchImpl(url, { headers: { 'User-Agent': UA } });
+      if (res.ok) break;
+      if (RETRYABLE.has(res.status) && attempt < maxRetries) {
+        attempt += 1;
+        await sleepImpl(pauseMs * 2 ** attempt);
+        continue;
+      }
+      throw new Error(`icon fetch HTTP ${res.status} for ${wikiFile} (after ${attempt} retries)`);
+    }
     const buf = Buffer.from(await res.arrayBuffer());
     await writeFile(dest, buf);
     downloaded.push(assetFile);
