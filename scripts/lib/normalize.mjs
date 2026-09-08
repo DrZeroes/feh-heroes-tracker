@@ -149,3 +149,30 @@ export function buildCatalog(heroes, { generatedAt }) {
   });
   return { generatedAt, source: SOURCE, count: sorted.length, heroes: sorted };
 }
+
+const WIKI_FILEPATH = 'https://feheroes.fandom.com/wiki/Special:FilePath';
+
+export function heroImageUrls(wikiName) {
+  const name = String(wikiName ?? '').trim();
+  if (!name) return { image: null, imageFull: null };
+  const slug = name.replace(/ /g, '_');
+  return {
+    image: `${WIKI_FILEPATH}/${slug}_Face_FC.webp`,
+    imageFull: `${WIKI_FILEPATH}/${slug}_Face.webp`,
+  };
+}
+
+export function normalizeGender(raw) {
+  const s = String(raw ?? '').trim().toUpperCase();
+  if (s === 'FEMALE' || s === 'F') return 'female';
+  if (s === 'MALE' || s === 'M') return 'male';
+  if (/^[MF]{2,}$/.test(s)) return 'multi';
+  return 'other';
+}
+
+export function parseOrigins(raw) {
+  return String(raw ?? '')
+    .split(',')
+    .map((x) => x.trim())
+    .filter((x) => x.length > 0);
+}

@@ -4,6 +4,7 @@ import {
   splitWeaponType, normalizeMoveType, parseListField, deriveCategory,
   pageNameFor, normalizePageName, blessingFromEffect, pickPoolRarity,
   normalizeUnit, mergeJoins, applyOverrides, buildCatalog,
+  heroImageUrls, normalizeGender, parseOrigins,
 } from './normalize.mjs';
 
 test('splitWeaponType sépare couleur et arme', () => {
@@ -202,4 +203,39 @@ test('buildCatalog trie par date desc puis nom asc et compte', () => {
   assert.equal(cat.generatedAt, '2026-09-08T00:00:00.000Z');
   assert.equal(cat.source, 'feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)');
   assert.deepEqual(cat.heroes.map((h) => h.id), ['newA', 'newB', 'old']);
+});
+
+test('heroImageUrls dérive les deux URL du WikiName', () => {
+  assert.deepEqual(heroImageUrls('Rhea The Final Child'), {
+    image: 'https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face_FC.webp',
+    imageFull: 'https://feheroes.fandom.com/wiki/Special:FilePath/Rhea_The_Final_Child_Face.webp',
+  });
+  assert.deepEqual(heroImageUrls(''), { image: null, imageFull: null });
+  assert.deepEqual(heroImageUrls(null), { image: null, imageFull: null });
+});
+
+test('normalizeGender ramène à female/male/multi/other', () => {
+  assert.equal(normalizeGender('Female'), 'female');
+  assert.equal(normalizeGender('F'), 'female');
+  assert.equal(normalizeGender('Male'), 'male');
+  assert.equal(normalizeGender('M'), 'male');
+  assert.equal(normalizeGender('MF'), 'multi');
+  assert.equal(normalizeGender('FM'), 'multi');
+  assert.equal(normalizeGender('FF'), 'multi');
+  assert.equal(normalizeGender('MM'), 'multi');
+  assert.equal(normalizeGender('N'), 'other');
+  assert.equal(normalizeGender('NF'), 'other');
+  assert.equal(normalizeGender(''), 'other');
+  assert.equal(normalizeGender(null), 'other');
+});
+
+test('parseOrigins scinde sur la virgule', () => {
+  assert.deepEqual(parseOrigins('Fire Emblem Awakening'), ['Fire Emblem Awakening']);
+  assert.deepEqual(
+    parseOrigins('Fire Emblem Awakening,Fire Emblem Engage'),
+    ['Fire Emblem Awakening', 'Fire Emblem Engage'],
+  );
+  assert.deepEqual(parseOrigins(' A , , B '), ['A', 'B']);
+  assert.deepEqual(parseOrigins(''), []);
+  assert.deepEqual(parseOrigins(null), []);
 });
