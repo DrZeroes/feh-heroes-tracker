@@ -2,6 +2,7 @@
 
 const IVS = new Set(['hp', 'atk', 'spd', 'def', 'res']);
 const RANKS = new Set(['C', 'B', 'A', 'S']);
+const PRIORITIES = new Set(['high', 'normal']);
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -22,6 +23,15 @@ export function clampCount(n) {
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
+function normProject(p) {
+  if (!p || typeof p !== 'object') return null;
+  return {
+    targetMerges: clampMerges(p.targetMerges),
+    targetIvPlus: IVS.has(p.targetIvPlus) ? p.targetIvPlus : null,
+    notes: typeof p.notes === 'string' ? p.notes : '',
+  };
+}
+
 function normEntry(e) {
   const o = e && typeof e === 'object' ? e : {};
   return {
@@ -31,7 +41,23 @@ function normEntry(e) {
     support: RANKS.has(o.support) ? o.support : null,
     copies: clampCount(o.copies),
     date: typeof o.date === 'string' && DATE_RE.test(o.date) ? o.date : null,
+    project: normProject(o.project),
   };
+}
+
+function normWanted(v) {
+  if (v === true) return { priority: 'normal', note: '' };
+  if (v && typeof v === 'object') {
+    return {
+      priority: PRIORITIES.has(v.priority) ? v.priority : 'normal',
+      note: typeof v.note === 'string' ? v.note : '',
+    };
+  }
+  return null;
+}
+
+function freshEntry() {
+  return { merges: 0, ivPlus: null, ivMinus: null, support: null, copies: 0, date: null, project: null };
 }
 
 export function migrateCollection(raw) {
@@ -43,7 +69,10 @@ export function migrateCollection(raw) {
   }
   const wanted = {};
   if (src.wanted && typeof src.wanted === 'object') {
-    for (const [id, v] of Object.entries(src.wanted)) if (v === true) wanted[id] = true;
+    for (const [id, v] of Object.entries(src.wanted)) {
+      const w = normWanted(v);
+      if (w) wanted[id] = w;
+    }
   }
   const manuals = {};
   if (src.manuals && typeof src.manuals === 'object') {
@@ -64,9 +93,7 @@ export function migrateCollection(raw) {
 export function setOwned(col, id, owned) {
   const next = migrateCollection(col);
   if (owned) {
-    if (!next.owned[id]) {
-      next.owned[id] = { merges: 0, ivPlus: null, ivMinus: null, support: null, copies: 0, date: null };
-    }
+    if (!next.owned[id]) next.owned[id] = freshEntry();
   } else {
     delete next.owned[id];
   }
@@ -92,8 +119,37 @@ export function setDate(col, id, date) {
 
 export function setWanted(col, id, bool) {
   const next = migrateCollection(col);
-  if (bool) next.wanted[id] = true;
+  if (bool) { if (!next.wanted[id]) next.wanted[id] = { priority: 'normal', note: '' }; }
   else delete next.wanted[id];
+  next.updated = today();
+  return next;
+}
+
+export function setWantedPriority(col, id, priority) {
+  const next = migrateCollection(col);
+  if (!next.wanted[id]) return col;
+  next.wanted[id] = { ...next.wanted[id], priority: PRIORITIES.has(priority) ? priority : 'normal' };
+  next.updated = today();
+  return next;
+}
+
+export function setWantedNote(col, id, note) {
+  const next = migrateCollection(col);
+  if (!next.wanted[id]) return col;
+  next.wanted[id] = { ...next.wanted[id], note: typeof note === 'string' ? note : '' };
+  next.updated = today();
+  return next;
+}
+
+export function setProject(col, id, patch) {
+  const next = migrateCollection(col);
+  if (!next.owned[id]) return col;
+  if (patch === null) {
+    next.owned[id] = { ...next.owned[id], project: null };
+  } else {
+    const base = next.owned[id].project || { targetMerges: 10, targetIvPlus: null, notes: '' };
+    next.owned[id] = { ...next.owned[id], project: normProject({ ...base, ...patch }) };
+  }
   next.updated = today();
   return next;
 }

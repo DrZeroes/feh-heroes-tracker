@@ -43,3 +43,36 @@ export function wishlistSummary(collection, ownedSet) {
   const wanted = collection && collection.wanted ? Object.keys(collection.wanted) : [];
   return { total: wanted.length, missing: wanted.filter((id) => !ownedSet.has(id)).length };
 }
+
+export function wishlistByPriority(collection, ownedSet) {
+  const wanted = collection && collection.wanted ? collection.wanted : {};
+  const out = { high: { total: 0, missing: 0 }, normal: { total: 0, missing: 0 } };
+  for (const [id, v] of Object.entries(wanted)) {
+    const p = v && typeof v === 'object' && v.priority === 'high' ? 'high' : 'normal';
+    out[p].total += 1;
+    if (!ownedSet.has(id)) out[p].missing += 1;
+  }
+  return out;
+}
+
+export function projectProgress(collection, heroes) {
+  const owned = collection && collection.owned ? collection.owned : {};
+  const byId = new Map(heroes.map((h) => [h.id, h]));
+  return Object.entries(owned)
+    .filter(([, e]) => e && e.project)
+    .map(([id, e]) => {
+      const h = byId.get(id) || { name: id, title: '' };
+      const target = Math.max(1, e.project.targetMerges || 0);
+      return {
+        id,
+        name: h.name,
+        title: h.title,
+        merges: e.merges,
+        targetMerges: e.project.targetMerges,
+        targetIvPlus: e.project.targetIvPlus,
+        done: e.merges >= target,
+        pct: Math.min(100, Math.round((e.merges / target) * 100)),
+      };
+    })
+    .sort((a, b) => b.pct - a.pct || a.name.localeCompare(b.name));
+}

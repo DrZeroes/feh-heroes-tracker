@@ -1,6 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { distribution, acquisitionTimeline, topCopies, wishlistSummary } from './stats.mjs';
+import {
+  distribution, acquisitionTimeline, topCopies, wishlistSummary,
+  wishlistByPriority, projectProgress,
+} from './stats.mjs';
 
 const heroes = [
   { id: 'A', name: 'A', title: '', color: 'r', weapon: 'sword', move: 'infantry', category: 'legendary', blessing: 'fire' },
@@ -40,4 +43,32 @@ test('topCopies', () => {
 test('wishlistSummary', () => {
   const col = { wanted: { A: true, B: true, Z: true } };
   assert.deepEqual(wishlistSummary(col, new Set(['A'])), { total: 3, missing: 2 });
+});
+
+test('wishlistByPriority', () => {
+  const col = {
+    wanted: {
+      A: { priority: 'high' }, B: { priority: 'high' },
+      C: { priority: 'normal' }, D: true,
+    },
+  };
+  assert.deepEqual(wishlistByPriority(col, new Set(['A'])), {
+    high: { total: 2, missing: 1 },
+    normal: { total: 2, missing: 2 },
+  });
+});
+
+test('projectProgress trie par avancement décroissant', () => {
+  const col = {
+    owned: {
+      A: { merges: 5, project: { targetMerges: 10, targetIvPlus: 'atk', notes: '' } },
+      B: { merges: 10, project: { targetMerges: 10, targetIvPlus: null, notes: '' } },
+      C: { merges: 3, project: null },
+    },
+  };
+  const p = projectProgress(col, heroes);
+  assert.deepEqual(p.map((x) => [x.id, x.pct, x.done]), [
+    ['B', 100, true],
+    ['A', 50, false],
+  ]);
 });
