@@ -42,39 +42,39 @@ export function orderedBy(values, order) {
   });
 }
 
-// Ordre d'affichage des jeux d'origine (choix produit, pas chronologique).
-const GAME_ORDER = [
-  'Fire Emblem Heroes',
-  'Fire Emblem: Shadow Dragon and the Blade of Light',
-  'Fire Emblem: Mystery of the Emblem',
-  'Fire Emblem: Shadow Dragon',             // remake DS de FE1
-  'Fire Emblem: New Mystery of the Emblem', // remake DS de FE3
-  'Fire Emblem Gaiden',
-  'Fire Emblem Echoes: Shadows of Valentia', // remake de Gaiden
-  'Fire Emblem: Genealogy of the Holy War',
-  'Fire Emblem: Thracia 776',
-  'Fire Emblem: The Binding Blade',
-  'Fire Emblem: The Blazing Blade',
-  'Fire Emblem: The Sacred Stones',
-  'Fire Emblem: Path of Radiance',
-  'Fire Emblem: Radiant Dawn',
-  'Fire Emblem Awakening',
-  'Fire Emblem Fates',
-  'Fire Emblem Warriors',
-  'Fire Emblem: Three Houses',
-  'Fire Emblem Warriors: Three Hopes',
-  'Tokyo Mirage Sessions ♯FE Encore',
-  'Fire Emblem Engage',
-  'Fire Emblem Shadows',
-  "Fire Emblem: Fortune's Weave",
+// Regroupement des jeux d'origine pour la facette « Jeu » : liste FIXE, dans cet
+// ordre. Un remake est fondu dans le jeu d'origine ; les jeux non listés
+// (Warriors, etc.) n'apparaissent pas dans le filtre. label -> origines brutes.
+export const GAME_GROUPS = [
+  ['Heroes', ['Fire Emblem Heroes']],
+  ['Shadow Dragon / Mystery', [
+    'Fire Emblem: Shadow Dragon and the Blade of Light',
+    'Fire Emblem: Shadow Dragon',
+    'Fire Emblem: Mystery of the Emblem',
+    'Fire Emblem: New Mystery of the Emblem',
+  ]],
+  ['Echoes', ['Fire Emblem Gaiden', 'Fire Emblem Echoes: Shadows of Valentia']],
+  ['Genealogy of the Holy War', ['Fire Emblem: Genealogy of the Holy War']],
+  ['Thracia 776', ['Fire Emblem: Thracia 776']],
+  ['The Binding Blade', ['Fire Emblem: The Binding Blade']],
+  ['The Blazing Blade', ['Fire Emblem: The Blazing Blade']],
+  ['The Sacred Stones', ['Fire Emblem: The Sacred Stones']],
+  ['Path of Radiance', ['Fire Emblem: Path of Radiance']],
+  ['Radiant Dawn', ['Fire Emblem: Radiant Dawn']],
+  ['Awakening', ['Fire Emblem Awakening']],
+  ['Fates', ['Fire Emblem Fates']],
+  ['Three Houses', ['Fire Emblem: Three Houses', 'Fire Emblem Warriors: Three Hopes']],
+  ['Tokyo Mirage Sessions', ['Tokyo Mirage Sessions ♯FE Encore']],
+  ['Engage', ['Fire Emblem Engage']],
+  ['Shadows', ['Fire Emblem Shadows']],
+  ["Fortune's Weave", ["Fire Emblem: Fortune's Weave"]],
 ];
-const GAME_RANK = new Map(GAME_ORDER.map((g, i) => [g, i]));
+const GROUP_ORDER = GAME_GROUPS.map(([label]) => label);
+const RAW_TO_GROUP = new Map(GAME_GROUPS.flatMap(([label, raws]) => raws.map((r) => [r, label])));
+const GROUP_RAWS = new Map(GAME_GROUPS);
 
-function compareOrigin(a, b) {
-  const ra = GAME_RANK.has(a) ? GAME_RANK.get(a) : Number.MAX_SAFE_INTEGER;
-  const rb = GAME_RANK.has(b) ? GAME_RANK.get(b) : Number.MAX_SAFE_INTEGER;
-  if (ra !== rb) return ra - rb;
-  return String(a).localeCompare(String(b));
+export function originGroup(rawOrigin) {
+  return RAW_TO_GROUP.get(rawOrigin) ?? null;
 }
 
 function uniqSorted(values) {
@@ -91,7 +91,10 @@ export function buildFacetOptions(heroes) {
       [...new Set([...present('category'), ...(heroes.some(isDancer) ? ['refresher'] : [])])],
       CATEGORY_ORDER,
     ),
-    origin: [...new Set(heroes.flatMap((h) => h.origins ?? []))].sort(compareOrigin),
+    origin: orderedBy(
+      [...new Set(heroes.flatMap((h) => (h.origins ?? []).map(originGroup).filter(Boolean)))],
+      GROUP_ORDER,
+    ),
     gender: uniqSorted(heroes.map((h) => h.gender).filter(Boolean)),
     book: orderedBy(present('book'), BOOK_ORDER),
     blessing: (() => {
@@ -118,7 +121,11 @@ export function applyFilters(heroes, filters = {}, query = '') {
       if (filters.category === 'refresher') { if (!isDancer(h)) return false; }
       else if (h.category !== filters.category) return false;
     }
-    if (filters.origin && !(h.origins ?? []).includes(filters.origin)) return false;
+    if (filters.origin) {
+      const raws = GROUP_RAWS.get(filters.origin) ?? [filters.origin];
+      const ok = (h.origins ?? []).some((o) => o === filters.origin || raws.includes(o));
+      if (!ok) return false;
+    }
     if (filters.blessing) {
       if (filters.blessing === 'none') { if (h.blessing != null) return false; }
       else if (filters.blessing === 'any') { if (h.blessing == null) return false; }

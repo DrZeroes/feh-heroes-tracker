@@ -15,16 +15,16 @@ const H = (o) => ({
 });
 
 const DATA = [
-  H({ name: 'Alpha', color: 'r', weapon: 'sword', category: 'legendary', blessing: 'fire', poolRarity: null, releaseDate: '2026-01-01', origins: ['Awakening', 'Engage'], artist: 'Kita' }),
-  H({ name: 'Bravo', color: 'b', weapon: 'lance', category: 'standard', poolRarity: 5, releaseDate: '2024-06-01', origins: ['Fates'] }),
-  H({ name: 'Charlie', color: 'r', weapon: 'bow', category: 'standard', poolRarity: 3, releaseDate: '2024-06-01', origins: ['Awakening'], person: 'Charlie', actorEn: ['Jane Doe'] }),
-  H({ name: 'Charlie', title: 'Alt', color: 'g', weapon: 'staff', person: 'Charlie', releaseDate: '2025-03-03', origins: ['Awakening'] }),
+  H({ name: 'Alpha', color: 'r', weapon: 'sword', category: 'legendary', blessing: 'fire', poolRarity: null, releaseDate: '2026-01-01', origins: ['Fire Emblem Awakening', 'Fire Emblem Engage'], artist: 'Kita' }),
+  H({ name: 'Bravo', color: 'b', weapon: 'lance', category: 'standard', poolRarity: 5, releaseDate: '2024-06-01', origins: ['Fire Emblem Fates'] }),
+  H({ name: 'Charlie', color: 'r', weapon: 'bow', category: 'standard', poolRarity: 3, releaseDate: '2024-06-01', origins: ['Fire Emblem Awakening'], person: 'Charlie', actorEn: ['Jane Doe'] }),
+  H({ name: 'Charlie', title: 'Alt', color: 'g', weapon: 'staff', person: 'Charlie', releaseDate: '2025-03-03', origins: ['Fire Emblem Awakening'] }),
 ];
 
 test('buildFacetOptions liste les valeurs présentes, dans l\'ordre d\'affichage', () => {
   const f = buildFacetOptions(DATA);
   assert.deepEqual(f.color, ['r', 'b', 'g']); // r, b, v, g -> v absent
-  assert.deepEqual(f.origin, ['Awakening', 'Engage', 'Fates']);
+  assert.deepEqual(f.origin, ['Awakening', 'Fates', 'Engage']); // ordre GAME_GROUPS
   assert.deepEqual(f.category, ['standard', 'legendary']); // ordre CATEGORY_ORDER
   assert.deepEqual(f.poolRarity, ['low', '5', 'na']);
 });
@@ -137,21 +137,20 @@ test('groupByPerson : regroupe, trie groupes par date max desc, couleurs ordonn�
   assert.deepEqual(charlie.colors, ['r', 'g']);
 });
 
-test('buildFacetOptions.origin est en ordre de sortie des jeux', () => {
+test('buildFacetOptions.origin : groupes fixes, dans l\'ordre GAME_GROUPS, inconnus exclus', () => {
   const heroes = [
     { origins: ['Fire Emblem Engage'] },
-    { origins: ['Fire Emblem: Mystery of the Emblem'] },
+    { origins: ['Fire Emblem: Mystery of the Emblem'] }, // -> groupe « Shadow Dragon / Mystery »
     { origins: ['Fire Emblem Awakening'] },
-    { origins: ['Fire Emblem Heroes', 'Zzz Unknown Game'] },
+    { origins: ['Fire Emblem Heroes', 'Zzz Unknown Game'] }, // Zzz -> aucun groupe
   ].map((o) => ({ color: 'r', weapon: 'sword', move: 'infantry', category: 'standard',
     gender: 'male', blessing: null, poolRarity: null, ...o }));
   const { origin } = buildFacetOptions(heroes);
   assert.deepEqual(origin, [
-    'Fire Emblem Heroes',
-    'Fire Emblem: Mystery of the Emblem',
-    'Fire Emblem Awakening',
-    'Fire Emblem Engage',
-    'Zzz Unknown Game',
+    'Heroes',
+    'Shadow Dragon / Mystery',
+    'Awakening',
+    'Engage',
   ]);
 });
 
