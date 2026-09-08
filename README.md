@@ -11,4 +11,4 @@ Régénérer le catalogue localement :
 
 Lancer les tests :
 
-    node --test scripts/
+    node --test

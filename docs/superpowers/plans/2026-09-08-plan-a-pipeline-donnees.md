@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - **Node ≥ 20**, modules ESM `.mjs` uniquement.
-- **Zéro dépendance npm, aucun `package.json`, aucun build.** Tests via `node --test scripts/`.
+- **Zéro dépendance npm, aucun `package.json`, aucun build.** Tests via `node --test` **sans argument** (découverte récursive depuis la racine du dépôt). ⚠️ Sur Node 22 un argument répertoire (`node --test scripts/`) est interprété comme un module à exécuter → `MODULE_NOT_FOUND`. Un fichier précis reste ciblable : `node --test scripts/lib/normalize.test.mjs`.
 - Fichier généré `data/heroes.json` : `JSON.stringify(obj, null, 2)` **+ un `\n` final**.
 - Clé primaire d'un héros = `WikiName` de la table `Units`, exposée sous le champ `id`.
 - Codes couleur : `r` = Red, `b` = Blue, `v` = Green, `g` = Colorless.
@@ -85,7 +85,7 @@ Régénérer le catalogue localement :
 
 Lancer les tests :
 
-    node --test scripts/
+    node --test
 ```
 
 - [ ] **Step 4: Créer `data/heroes.overrides.json`**
@@ -1165,7 +1165,7 @@ Expected: PASS — 2 tests.
 
 - [ ] **Step 5: Lancer toute la suite**
 
-Run: `node --test scripts/`
+Run: `node --test`
 Expected: PASS — `normalize.test.mjs` + `cargo.test.mjs` + `fetch-heroes.test.mjs`, 0 échec.
 
 - [ ] **Step 6: Commit**
@@ -1227,7 +1227,7 @@ git commit -m "$(printf 'chore: add first generated heroes catalog\n\nCo-Authore
 - Create: `g:\GITHUB\feh-comp\.github\workflows\update-heroes.yml`
 
 **Interfaces:**
-- Consumes: `node --test scripts/` et `node scripts/fetch-heroes.mjs` (Tasks 2–10).
+- Consumes: `node --test` et `node scripts/fetch-heroes.mjs` (Tasks 2–10).
 - Produces: workflow `workflow_dispatch` + cron hebdo qui régénère et commit `data/heroes.json` en cas de diff.
 
 - [ ] **Step 1: Créer le workflow**
@@ -1256,7 +1256,7 @@ jobs:
           node-version: "20"
 
       - name: Run tests
-        run: node --test scripts/
+        run: node --test
 
       - name: Regenerate catalog
         run: node scripts/fetch-heroes.mjs
@@ -1284,7 +1284,7 @@ Vérifier à la lecture :
 
 - [ ] **Step 3: Rejouer localement la commande exacte du job**
 
-Run: `node --test scripts/ && node scripts/fetch-heroes.mjs`
+Run: `node --test && node scripts/fetch-heroes.mjs`
 Expected: tests verts puis `[fetch-heroes] <N> héros écrits...`. `git status` doit montrer `data/heroes.json` inchangé ou avec un diff mineur de `generatedAt` uniquement (normal — ne pas committer ce diff seul ici).
 
 - [ ] **Step 4: Restaurer `heroes.json` si seul `generatedAt` a bougé**
