@@ -53,7 +53,8 @@ test('deriveCategory applique la priorité mythic>legendary>...>standard', () =>
   assert.equal(deriveCategory(['aided']), 'aided');
   assert.equal(deriveCategory(['entwined']), 'entwined');
   assert.equal(deriveCategory(['vista']), 'vista');
-  assert.equal(deriveCategory(['refresher']), 'refresher');
+  assert.equal(deriveCategory(['refresher']), 'standard'); // danse = facette à part
+  assert.equal(deriveCategory(['refresher', 'vista']), 'vista'); // Leda : Danse + Horizon
   assert.equal(deriveCategory(['legendary', 'refresher']), 'legendary');
   assert.equal(deriveCategory([]), 'standard');
 });

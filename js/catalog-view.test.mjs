@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  buildFacetOptions, applyFilters, sortHeroes, groupByPerson, orderedBy, poolTier, CATEGORY_ORDER,
+  buildFacetOptions, applyFilters, sortHeroes, groupByPerson, orderedBy, poolTier, isDancer,
+  CATEGORY_ORDER,
 } from './catalog-view.mjs';
 
 const H = (o) => ({
@@ -47,6 +48,24 @@ test('buildFacetOptions : armes et catégories dans l\'ordre voulu', () => {
 
 test('applyFilters : couleur', () => {
   assert.deepEqual(applyFilters(DATA, { color: 'r' }, '').map((h) => h.name).sort(), ['Alpha', 'Charlie']);
+});
+
+test('Danse : facette transverse (refresher) + option catégorie', () => {
+  const mk = (name, category, props) => ({ id: name, name, title: '', color: 'r', weapon: 'sword',
+    move: 'infantry', gender: 'male', origins: [], blessing: null, poolRarity: null,
+    category, properties: props });
+  const heroes = [
+    mk('Leda', 'vista', ['refresher', 'vista']), // Danse + Horizon
+    mk('Azura', 'standard', ['refresher']),
+    mk('Marth', 'legendary', ['legendary']),
+  ];
+  assert.equal(isDancer(heroes[0]), true);
+  assert.equal(isDancer(heroes[2]), false);
+  assert.ok(buildFacetOptions(heroes).category.includes('refresher'));
+  // filtre "refresher" = tous les danseurs, quelle que soit leur catégorie
+  assert.deepEqual(applyFilters(heroes, { category: 'refresher' }, '').map((h) => h.name), ['Leda', 'Azura']);
+  // filtre "vista" attrape quand même Leda
+  assert.deepEqual(applyFilters(heroes, { category: 'vista' }, '').map((h) => h.name), ['Leda']);
 });
 test('applyFilters : origin matche via origins[]', () => {
   assert.deepEqual(applyFilters(DATA, { origin: 'Engage' }, '').map((h) => h.name), ['Alpha']);

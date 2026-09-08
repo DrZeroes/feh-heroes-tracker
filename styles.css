@@ -105,8 +105,11 @@ body { margin: 0; background: var(--bg); color: var(--fg);
 .card .icons img { width: 18px; height: 18px; }
 .card .pip { position: absolute; top: .5rem; left: .5rem; width: .7rem; height: .7rem;
   border-radius: 50%; border: 2px solid var(--card); }
-.card .badge { position: absolute; top: .4rem; right: .4rem; font-size: .62rem;
-  background: var(--accent); color: #fff; border-radius: 6px; padding: .05rem .3rem; }
+.card .badges { position: absolute; top: .4rem; right: .4rem; z-index: 2;
+  display: flex; flex-direction: column; align-items: flex-end; gap: .15rem; }
+.card .badge { font-size: .62rem; background: var(--accent); color: #fff;
+  border-radius: 6px; padding: .05rem .3rem; }
+.card .badge-dance { background: #9b59b6; }
 
 .grid.grouped { grid-template-columns: 1fr; }
 .group-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: .6rem .8rem; }

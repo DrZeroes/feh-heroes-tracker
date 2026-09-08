@@ -4,7 +4,7 @@ import {
   colorHex, classIconPath, moveIconPath, imageCandidates, shortOrigin, displayRarity,
 } from './js/hero-media.mjs';
 import {
-  buildFacetOptions, applyFilters, sortHeroes, groupByPerson, orderedBy, poolTier,
+  buildFacetOptions, applyFilters, sortHeroes, groupByPerson, orderedBy, poolTier, isDancer,
   CATEGORY_ORDER, BLESSING_ORDER, COLOR_ORDER, WEAPON_ORDER, MOVE_ORDER,
 } from './js/catalog-view.mjs';
 import {
@@ -218,12 +218,21 @@ function card(hero) {
   star.hidden = !wantedIdSet(state.collection).has(hero.id);
   el.appendChild(star);
 
+  const badges = document.createElement('span');
+  badges.className = 'badges';
   if (hero.category && hero.category !== 'standard') {
     const b = document.createElement('span');
     b.className = 'badge';
     b.textContent = state.t(`category.${hero.category}`);
-    el.appendChild(b);
+    badges.appendChild(b);
   }
+  if (isDancer(hero)) {
+    const b = document.createElement('span');
+    b.className = 'badge badge-dance';
+    b.textContent = state.t('category.refresher');
+    badges.appendChild(b);
+  }
+  if (badges.childElementCount) el.appendChild(badges);
 
   el.appendChild(portrait(hero, 'portrait', imageCandidates(hero)));
 
@@ -615,6 +624,16 @@ function renderStats() {
       const d = byValue.get(v);
       return { label: state.t(`${key}.${v}`), total: d.total, owned: d.owned };
     });
+    if (key === 'category') {
+      const dancers = state.heroes.filter(isDancer);
+      if (dancers.length) {
+        rows.push({
+          label: state.t('category.refresher'),
+          total: dancers.length,
+          owned: dancers.filter((h) => ownedSet.has(h.id)).length,
+        });
+      }
+    }
     if (rows.length) box.appendChild(barBlock(titleKey, rows));
   }
 

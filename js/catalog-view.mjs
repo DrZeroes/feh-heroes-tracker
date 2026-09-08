@@ -14,6 +14,11 @@ export const CATEGORY_ORDER = [
 export const BLESSING_ORDER = ['fire', 'water', 'wind', 'earth', 'light', 'dark', 'astra', 'anima'];
 export const POOL_ORDER = ['low', '5', '4sr', 'na'];
 
+// « Danse » : facette transverse (un héros peut être Danse + n'importe quelle catégorie).
+export function isDancer(hero) {
+  return !!hero && (hero.properties ?? []).includes('refresher');
+}
+
 // Palier de pool d'invocation, dérivé de poolRarity + poolFlags.
 //  low   : pool général 1-4★ (démote possible)
 //  5     : 5★ du pool général (sans taux spécial)
@@ -81,7 +86,10 @@ export function buildFacetOptions(heroes) {
     color: orderedBy(present('color'), COLOR_ORDER),
     weapon: orderedBy(present('weapon'), WEAPON_ORDER),
     move: orderedBy(present('move'), MOVE_ORDER),
-    category: orderedBy(present('category'), CATEGORY_ORDER),
+    category: orderedBy(
+      [...new Set([...present('category'), ...(heroes.some(isDancer) ? ['refresher'] : [])])],
+      CATEGORY_ORDER,
+    ),
     origin: [...new Set(heroes.flatMap((h) => h.origins ?? []))].sort(compareOrigin),
     gender: uniqSorted(heroes.map((h) => h.gender).filter(Boolean)),
     blessing: (() => {
@@ -95,13 +103,18 @@ export function buildFacetOptions(heroes) {
   };
 }
 
-const SCALAR_FACETS = ['color', 'weapon', 'move', 'category', 'gender'];
+const SCALAR_FACETS = ['color', 'weapon', 'move', 'gender'];
 
 export function applyFilters(heroes, filters = {}, query = '') {
   const terms = String(query).toLowerCase().split(/\s+/).filter(Boolean);
   return heroes.filter((h) => {
     for (const f of SCALAR_FACETS) {
       if (filters[f] && h[f] !== filters[f]) return false;
+    }
+    if (filters.category) {
+      // « refresher » (Danse) est transverse : match sur la propriété, pas la catégorie.
+      if (filters.category === 'refresher') { if (!isDancer(h)) return false; }
+      else if (h.category !== filters.category) return false;
     }
     if (filters.origin && !(h.origins ?? []).includes(filters.origin)) return false;
     if (filters.blessing) {
