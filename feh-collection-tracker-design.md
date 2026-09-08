@@ -251,12 +251,21 @@ Le script : part du Cargo, applique `patch` par `id`, ajoute `add` (en écrasant
 ### 5.3 Fichier collection utilisateur — `ma-collection.json`
 Clé `localStorage` : `feh-collection-v1` (inchangée ; le versionnage se fait par le champ `version`).
 
-> **Plan C v1 (implémenté 2026-09-09)** — forme réduite `version:1` :
+> **Plan C v2 (implémenté 2026-09-09)** — `version:2` :
 > ```json
-> { "version": 1, "updated": "YYYY-MM-DD",
->   "owned": { "<WikiName>": { "merges": 0, "ivPlus": null, "ivMinus": null, "support": null } } }
+> { "version": 2, "updated": "YYYY-MM-DD",
+>   "owned": { "<WikiName>": { "merges": 0, "ivPlus": null, "ivMinus": null, "support": null, "copies": 0, "date": null } },
+>   "wanted": { "<WikiName>": true },
+>   "manuals": { "<WikiName>": 2 } }
 > ```
-> `support` ∈ `null | "C" | "B" | "A" | "S"` (Soutien de l'Invocateur), **un seul `S`** possible. Module pur `js/collection.mjs`. Éditeur dans le panneau détail, filtre statut (tous/possédés/manquants), compteur X/total, export/import (remplacer ou fusionner). `copies`, `project`, `wanted` (ci-dessous, forme v2) restent prévus pour **Plan C.2**.
+> - `support` ∈ `null|C|B|A|S` (Soutien de l'Invocateur), **un seul `S`**. `copies` : doubles en rab (entier ≥ 0). `date` : date d'obtention `YYYY-MM-DD` ou `null`.
+> - `wanted[id]===true` = héros voulu (wishlist). `manuals[id]` = nombre de manuels de combat (entier ≥ 1).
+> - Module pur `js/collection.mjs` (migration v1→v2 sans perte). `js/stats.mjs` pour les agrégats.
+> - **Appli à onglets** : Catalogue (+ bouton **[+]** sur les cartes) · **Caserne** (possédés, édition inline fusions/IV/Soutien) · **Stats** (total %, répartitions possédés/total, timeline par mois, top doubles, ligne wishlist) · **Wishlist** · **Manuels**. Routeur par hash, onglet mémorisé.
+> - Toujours : filtre statut, compteur X/total, export/import `ma-collection.json` (remplacer/fusionner).
+> - Restant → **Plan C.3** : priorité wishlist, `project` (+10), onglets Nouveaux héros / Ajouter un héros, mode ajout rapide.
+
+<details><summary>Forme v2 « longue » initialement prévue (référence, non implémentée telle quelle)</summary>
 ```json
 {
   "version": 2,
@@ -286,6 +295,7 @@ Clé `localStorage` : `feh-collection-v1` (inchangée ; le versionnage se fait p
 - Boutons **Exporter** (download `ma-collection.json`) / **Importer** (remplace ou fusionne, demander).
 - **Migration v1→v2** (à l'import ET au chargement `localStorage`) : si `version` absent ou `1` → ajouter `copies: 0` à chaque `owned`, créer `wanted: {}`, passer `version: 2`, réécrire. Sans perte.
 - Validation à l'import : ignorer les `id` inconnus du catalogue mais les garder en mémoire (héros pas encore synchro) + avertir. Idem pour les `id` de `wanted`.
+</details>
 
 ### 5.4 `i18n/*.json`
 ```json
