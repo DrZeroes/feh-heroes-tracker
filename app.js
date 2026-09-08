@@ -152,6 +152,14 @@ function syncFilterControls() {
   for (const sel of document.querySelectorAll('#filters select')) {
     sel.classList.toggle('is-active', sel.value !== '');
   }
+  const n = FACETS.filter((f) => state.filters[f]).length;
+  const panel = $('#filter-panel');
+  const badge = $('#filter-count');
+  if (panel) panel.classList.toggle('is-active', n > 0);
+  if (badge) {
+    badge.hidden = n === 0;
+    badge.textContent = n ? String(n) : '';
+  }
 }
 
 function hasActiveControls() {
@@ -615,7 +623,7 @@ function renderStats() {
     const wl2 = document.createElement('p');
     wl2.className = 'stat-block';
     wl2.style.color = 'var(--muted)';
-    wl2.textContent = `${state.t('stats.wishlistByPriority')} — `
+    wl2.textContent = `${state.t('stats.wishlistByPriority')} : `
       + `${state.t('priority.high')}: ${wbp.high.total} (${wbp.high.missing} ${missWord}) · `
       + `${state.t('priority.normal')}: ${wbp.normal.total} (${wbp.normal.missing} ${missWord})`;
     box.appendChild(wl2);
@@ -766,7 +774,7 @@ function renderManuels() {
   dl.id = 'manual-hero-list';
   for (const h of state.heroes) {
     const o = document.createElement('option');
-    o.value = `${h.name} — ${h.title}`;
+    o.value = `${h.name} · ${h.title}`;
     o.dataset.id = h.id;
     dl.appendChild(o);
   }
@@ -800,7 +808,7 @@ function renderManuels() {
     const row = document.createElement('div');
     row.className = 'manual-row';
     const label = document.createElement('span');
-    label.textContent = `${h.name}${h.title ? ` — ${h.title}` : ''}`;
+    label.textContent = `${h.name}${h.title ? ` · ${h.title}` : ''}`;
     const minus = document.createElement('button');
     minus.type = 'button'; minus.textContent = '−';
     minus.addEventListener('click', () => {

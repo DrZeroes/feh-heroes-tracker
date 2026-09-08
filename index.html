@@ -44,8 +44,16 @@
         <option value="wanted" data-i18n="status.wanted">Voulus</option>
       </select>
     </label>
-    <div id="filters" class="filters"></div>
-    <button type="button" class="reset" id="filter-reset" data-i18n="filter.reset">Réinitialiser les filtres</button>
+    <details id="filter-panel" class="filter-panel">
+      <summary>
+        <span data-i18n="filter.title">Filtres</span>
+        <span id="filter-count" class="filter-count" hidden></span>
+      </summary>
+      <div class="filter-panel-body">
+        <div id="filters" class="filters"></div>
+        <button type="button" class="reset" id="filter-reset" data-i18n="filter.reset">Réinitialiser les filtres</button>
+      </div>
+    </details>
     <div class="sort" role="group" aria-label="sort">
       <span data-i18n="sort.label">Tri</span>
       <button type="button" class="sortbtn" id="sort-date" data-sortkey="release" data-i18n="sort.byDate">Date</button>
