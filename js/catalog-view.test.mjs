@@ -25,7 +25,7 @@ test('buildFacetOptions liste les valeurs présentes, dans l\'ordre d\'affichage
   assert.deepEqual(f.color, ['r', 'b', 'g']); // r, b, v, g -> v absent
   assert.deepEqual(f.origin, ['Awakening', 'Engage', 'Fates']);
   assert.deepEqual(f.category, ['legendary', 'standard']); // ordre CATEGORY_ORDER
-  assert.deepEqual(f.poolRarity, ['3', '5', 'na']);
+  assert.deepEqual(f.poolRarity, ['low', '5', 'na']);
 });
 
 test('orderedBy : suit l\'ordre fourni, inconnus à la fin en alpha', () => {
@@ -59,13 +59,13 @@ test('applyFilters : poolRarity "na" = poolRarity null', () => {
 
 test('poolTier : rareté + drapeaux -> paliers', () => {
   assert.equal(poolTier({ poolRarity: null }), 'na');
-  assert.equal(poolTier({ poolRarity: 3 }), '3');
-  assert.equal(poolTier({ poolRarity: 4 }), '4');
-  assert.equal(poolTier({ poolRarity: 4, poolFlags: ['specialRate'] }), '4sr');
+  assert.equal(poolTier({ poolRarity: 3 }), 'low');
+  assert.equal(poolTier({ poolRarity: 4 }), 'low');
   assert.equal(poolTier({ poolRarity: 5 }), '5');
-  assert.equal(poolTier({ poolRarity: 5, poolFlags: ['specialRate'] }), 'special');
-  assert.equal(poolTier({ poolRarity: 5, poolFlags: ['SHSpecialRate'] }), 'special');
   assert.equal(poolTier({ poolRarity: 5, poolFlags: ['revivalOnly'] }), '5');
+  assert.equal(poolTier({ poolRarity: 5, poolFlags: ['specialRate'] }), '4sr');
+  assert.equal(poolTier({ poolRarity: 5, poolFlags: ['SHSpecialRate'] }), '4sr');
+  assert.equal(poolTier({ poolRarity: 4, poolFlags: ['specialRate'] }), '4sr');
 });
 
 test('buildFacetOptions.poolRarity : paliers dans l\'ordre', () => {
@@ -74,7 +74,7 @@ test('buildFacetOptions.poolRarity : paliers dans l\'ordre', () => {
   const { poolRarity } = buildFacetOptions([
     mk(null), mk(5, ['SHSpecialRate']), mk(3), mk(5), mk(5, ['specialRate']),
   ]);
-  assert.deepEqual(poolRarity, ['3', '5', 'special', 'na']);
+  assert.deepEqual(poolRarity, ['low', '5', '4sr', 'na']);
 });
 test('applyFilters : recherche multi-termes sur name/title/artist/actor', () => {
   assert.deepEqual(applyFilters(DATA, {}, 'char alt').map((h) => h.title), ['Alt']);
