@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { cargoQuery } from './lib/cargo.mjs';
 import {
   normalizeUnit, mergeJoins, applyOverrides, buildCatalog,
-  normalizePageName, blessingFromEffect, pickPoolRarity,
+  normalizePageName, pageNameFor, blessingFromEffect, pickPoolRarity,
 } from './lib/normalize.mjs';
 
 const UNIT_FIELDS = [
@@ -19,6 +19,8 @@ export async function run({
   sleepImpl,
   pauseMs,
   now = () => new Date(),
+  minHeroes = 900,
+  maxDropRatio = 0.9,
   outPath = new URL('../data/heroes.json', import.meta.url),
   overridesPath = new URL('../data/heroes.overrides.json', import.meta.url),
 } = {}) {
@@ -29,6 +31,7 @@ export async function run({
   const units = await cargoQuery({
     ...common, table: 'Units', fields: UNIT_FIELDS,
     orderBy: 'ReleaseDate DESC,CharSort ASC',
+    where: "Units.Properties HOLDS NOT 'enemy'",
   });
   const legendary = await cargoQuery({
     ...common, table: 'LegendaryHero', fields: '_pageName=Page,LegendaryEffect',
@@ -68,6 +71,22 @@ export async function run({
     (u) => mergeJoins(normalizeUnit(u), { blessingByPage, poolByPage }),
   );
 
+  // Le `where` Cargo ci-dessus est le filtre principal ; ceci est le filet de
+  // sécurité si un `enemy` passe malgré tout (ex. réponse partielle / cache).
+  heroes = heroes.filter((h) => !h.properties.includes('enemy'));
+
+  const consumed = new Set(heroes.map((h) => normalizePageName(pageNameFor(h.name, h.title))));
+  const orphanBlessings = [...blessingByPage.keys()].filter((k) => !consumed.has(k));
+  if (orphanBlessings.length) {
+    console.warn(`[fetch-heroes] ${orphanBlessings.length} blessing row(s) matched no hero (page-name drift?):`);
+    for (const k of orphanBlessings) console.warn(`  - ${k}`);
+  }
+  const orphanPools = [...poolByPage.keys()].filter((k) => !consumed.has(k));
+  if (orphanPools.length) {
+    console.warn(`[fetch-heroes] ${orphanPools.length} summon-availability key(s) matched no hero (first 10):`);
+    for (const k of orphanPools.slice(0, 10)) console.warn(`  - ${k}`);
+  }
+
   let overrides = { add: [], patch: {} };
   try {
     overrides = JSON.parse(await readFile(overridesPath, 'utf8'));
@@ -85,6 +104,19 @@ export async function run({
   }
 
   const catalog = buildCatalog(heroes, { generatedAt: now().toISOString() });
+
+  if (catalog.count < minHeroes) {
+    throw new Error(`[fetch-heroes] refusing to write: only ${catalog.count} heroes (floor ${minHeroes}) — likely a partial fetch`);
+  }
+  let prevCount = null;
+  try {
+    const prev = JSON.parse(await readFile(outPath, 'utf8'));
+    if (typeof prev.count === 'number') prevCount = prev.count;
+  } catch { /* no readable previous catalog — skip drop check */ }
+  if (prevCount !== null && catalog.count < prevCount * maxDropRatio) {
+    throw new Error(`[fetch-heroes] refusing to write: ${catalog.count} heroes vs previous ${prevCount} (> ${Math.round((1 - maxDropRatio) * 100)}% drop)`);
+  }
+
   await writeFile(outPath, `${JSON.stringify(catalog, null, 2)}\n`, 'utf8');
   return catalog;
 }

@@ -2,7 +2,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { cargoQuery } from './cargo.mjs';
 
-const resp = (payload) => ({ json: async () => payload });
+const resp = (payload, status = 200) => ({
+  ok: status >= 200 && status < 300, status, json: async () => payload,
+});
 const noSleep = async () => {};
 
 test('cargoQuery pagine jusqu\'à une page courte', async () => {
@@ -56,6 +58,46 @@ test('cargoQuery retire les clés __precision', async () => {
     table: 'X', fields: 'StartTime', limit: 500, fetchImpl, sleepImpl: noSleep, pauseMs: 0,
   });
   assert.deepEqual(rows, [{ StartTime: '2026-01-01 00:00:00' }]);
+});
+
+test('cargoQuery retente sur HTTP 500 puis jette', async () => {
+  const fetchImpl = async () => resp({ garbage: true }, 500);
+  await assert.rejects(
+    cargoQuery({
+      table: 'Units', fields: 'Name', fetchImpl, sleepImpl: noSleep, pauseMs: 0, maxRetries: 2,
+    }),
+    /HTTP 500/,
+  );
+});
+
+test('cargoQuery retente sur HTTP 429 sans corps exploitable puis jette', async () => {
+  const fetchImpl = async () => resp({ servedBy: 'node-1' }, 429);
+  await assert.rejects(
+    cargoQuery({
+      table: 'Units', fields: 'Name', fetchImpl, sleepImpl: noSleep, pauseMs: 0, maxRetries: 2,
+    }),
+    /HTTP 429/,
+  );
+});
+
+test('cargoQuery jette immédiatement sur HTTP 404 (un seul appel)', async () => {
+  let calls = 0;
+  const fetchImpl = async () => { calls += 1; return resp({ nope: true }, 404); };
+  await assert.rejects(
+    cargoQuery({
+      table: 'Units', fields: 'Name', fetchImpl, sleepImpl: noSleep, pauseMs: 0, maxRetries: 5,
+    }),
+    /HTTP 404/,
+  );
+  assert.equal(calls, 1);
+});
+
+test('cargoQuery jette sur HTTP 200 malformé (ni error ni cargoquery)', async () => {
+  const fetchImpl = async () => resp({ servedBy: 'x' }, 200);
+  await assert.rejects(
+    cargoQuery({ table: 'Units', fields: 'Name', fetchImpl, sleepImpl: noSleep, pauseMs: 0 }),
+    /malformed/,
+  );
 });
 
 test('cargoQuery construit une URL Cargo correcte', async () => {

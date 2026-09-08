@@ -38,6 +38,7 @@ export async function cargoQuery({
   sleepImpl = defaultSleep,
   pauseMs = 2500,
   maxRetries = 5,
+  timeoutMs = 30000,
   userAgent = DEFAULT_UA,
 }) {
   const all = [];
@@ -47,7 +48,23 @@ export async function cargoQuery({
     let page = null;
     let attempt = 0;
     for (;;) {
-      const res = await fetchImpl(url, { headers: { 'User-Agent': userAgent } });
+      const res = await fetchImpl(url, {
+        headers: { 'User-Agent': userAgent },
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+      if (!res.ok) {
+        if (res.status === 429 || res.status === 503 || res.status >= 500) {
+          attempt += 1;
+          if (attempt > maxRetries) {
+            throw new Error(
+              `Cargo HTTP ${res.status} on ${table} (offset ${offset}) after ${maxRetries} retries`,
+            );
+          }
+          await sleepImpl(pauseMs * 2 ** attempt);
+          continue;
+        }
+        throw new Error(`Cargo HTTP ${res.status} on ${table} (offset ${offset})`);
+      }
       const json = await res.json();
       if (json.error && json.error.code === 'ratelimited') {
         attempt += 1;
@@ -62,7 +79,12 @@ export async function cargoQuery({
       if (json.error) {
         throw new Error(`Cargo error on ${table}: ${JSON.stringify(json.error)}`);
       }
-      page = (json.cargoquery ?? []).map((e) => stripPrecision(e.title ?? {}));
+      if (!Array.isArray(json.cargoquery)) {
+        throw new Error(
+          `Cargo malformed response on ${table} (offset ${offset}): no cargoquery array`,
+        );
+      }
+      page = json.cargoquery.map((e) => stripPrecision(e.title ?? {}));
       break;
     }
     all.push(...page);

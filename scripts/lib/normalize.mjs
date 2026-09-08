@@ -27,7 +27,8 @@ export function normalizeMoveType(raw) {
 }
 
 const CATEGORY_PRIORITY = [
-  'mythic', 'legendary', 'duo', 'harmonic', 'brave', 'ghb', 'tt', 'special',
+  'mythic', 'legendary', 'emblem', 'rearmed', 'attuned', 'ascended',
+  'duo', 'harmonized', 'brave', 'ghb', 'tempest', 'special',
 ];
 
 export function parseListField(raw) {

@@ -41,7 +41,11 @@ test('deriveCategory applique la priorité mythic>legendary>...>standard', () =>
   assert.equal(deriveCategory(['mythic', 'legendary']), 'mythic');
   assert.equal(deriveCategory(['brave']), 'brave');
   assert.equal(deriveCategory(['ghb']), 'ghb');
-  assert.equal(deriveCategory(['tt', 'special']), 'tt');
+  assert.equal(deriveCategory(['tempest', 'special']), 'tempest');
+  assert.equal(deriveCategory(['harmonized']), 'harmonized');
+  assert.equal(deriveCategory(['emblem', 'special']), 'emblem');
+  assert.equal(deriveCategory(['rearmed']), 'rearmed');
+  assert.equal(deriveCategory(['ascended', 'legendary']), 'legendary');
   assert.equal(deriveCategory(['refresher']), 'standard');
   assert.equal(deriveCategory([]), 'standard');
 });

@@ -11,7 +11,11 @@ function routeFetch(tables) {
     const table = u.searchParams.get('tables');
     const offset = Number(u.searchParams.get('offset') || '0');
     const rows = offset === 0 ? (tables[table] ?? []) : [];
-    return { json: async () => ({ cargoquery: rows.map((title) => ({ title })) }) };
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({ cargoquery: rows.map((title) => ({ title })) }),
+    };
   };
 }
 
@@ -30,9 +34,15 @@ const TABLES = {
       WeaponType: 'Green Axe', MoveType: 'Armored', Artist: 'Z',
       ActorEN: '', ActorJP: '', ReleaseDate: '2020-01-01', Properties: '',
     },
+    {
+      WikiName: 'Axe Fighter ENEMY', Name: 'Axe Fighter', Title: 'ENEMY',
+      WeaponType: 'Green Axe', MoveType: 'Infantry', Origin: 'X', Properties: 'enemy',
+      ReleaseDate: '', IntID: '', Gender: 'M', Artist: '', ActorEN: '', ActorJP: '',
+      Person: 'Axe Fighter',
+    },
   ],
   LegendaryHero: [{ Page: 'Rhea: The Final Child', LegendaryEffect: 'Fire' }],
-  MythicHero: [],
+  MythicHero: [{ Page: 'Nobody: Ghost', MythicEffect: 'Light' }],
   SummoningAvailability: [
     { Page: 'Greeny: The Older', Rarity: '3', Property: '', StartTime: '2020-01-01 07:00:00' },
     { Page: 'Greeny: The Older', Rarity: '4', Property: 'specialRate', StartTime: '2021-06-01 07:00:00' },
@@ -45,12 +55,18 @@ test('run normalise, joint, trie et écrit le catalogue', async () => {
     fetchImpl: routeFetch(TABLES),
     sleepImpl: async () => {},
     pauseMs: 0,
+    minHeroes: 0,
     now: () => new Date('2026-09-08T00:00:00.000Z'),
     outPath,
     overridesPath: path.join(os.tmpdir(), 'feh-no-such-overrides.json'),
   });
 
   assert.equal(catalog.count, 2);
+  assert.deepEqual(
+    catalog.heroes.filter((h) => h.properties.includes('enemy')).map((h) => h.id),
+    [],
+  );
+  assert.ok(!catalog.heroes.some((h) => h.id === 'Axe Fighter ENEMY'));
   assert.equal(catalog.generatedAt, '2026-09-08T00:00:00.000Z');
   assert.equal(catalog.source, 'feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)');
 
@@ -83,10 +99,62 @@ test('run applique les overrides quand le fichier existe', async () => {
     fetchImpl: routeFetch(TABLES),
     sleepImpl: async () => {},
     pauseMs: 0,
+    minHeroes: 0,
     now: () => new Date('2026-09-08T00:00:00.000Z'),
     outPath,
     overridesPath,
   });
   const rhea = catalog.heroes.find((h) => h.id === 'Rhea The Final Child');
   assert.equal(rhea.titleFr, "L'Enfant Ultime");
+});
+
+test('run refuse d\'écrire sous le plancher minHeroes', async () => {
+  const outPath = path.join(os.tmpdir(), `feh-heroes-floor-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
+  await assert.rejects(
+    run({
+      fetchImpl: routeFetch(TABLES),
+      sleepImpl: async () => {},
+      pauseMs: 0,
+      minHeroes: 10,
+      now: () => new Date('2026-09-08T00:00:00.000Z'),
+      outPath,
+      overridesPath: path.join(os.tmpdir(), 'feh-no-such-overrides.json'),
+    }),
+    /floor 10/,
+  );
+});
+
+test('run refuse d\'écrire sur une chute massive vs catalogue précédent', async () => {
+  const outPath = path.join(os.tmpdir(), `feh-heroes-drop-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
+  await (await import('node:fs/promises')).writeFile(
+    outPath, JSON.stringify({ count: 100, heroes: [] }), 'utf8',
+  );
+  await assert.rejects(
+    run({
+      fetchImpl: routeFetch(TABLES),
+      sleepImpl: async () => {},
+      pauseMs: 0,
+      minHeroes: 0,
+      now: () => new Date('2026-09-08T00:00:00.000Z'),
+      outPath,
+      overridesPath: path.join(os.tmpdir(), 'feh-no-such-overrides.json'),
+    }),
+    /drop/,
+  );
+});
+
+test('run prévient sur des clés de jointure orphelines (dérive de nom de page)', async (t) => {
+  const outPath = path.join(os.tmpdir(), `feh-heroes-orphan-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
+  const warn = t.mock.method(console, 'warn');
+  await run({
+    fetchImpl: routeFetch(TABLES),
+    sleepImpl: async () => {},
+    pauseMs: 0,
+    minHeroes: 0,
+    now: () => new Date('2026-09-08T00:00:00.000Z'),
+    outPath,
+    overridesPath: path.join(os.tmpdir(), 'feh-no-such-overrides.json'),
+  });
+  const messages = warn.mock.calls.map((c) => String(c.arguments[0]));
+  assert.ok(messages.some((m) => /matched no hero/.test(m)), messages.join('\n'));
 });
