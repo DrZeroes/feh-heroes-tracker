@@ -23,3 +23,14 @@ export function imageCandidates(hero) {
 export function shortOrigin(name) {
   return String(name ?? '').replace(/^Fire Emblem:?\s+/, '');
 }
+
+// Étoile à afficher : la rareté du pool si connue, sinon déduite.
+// GHB / Tempest Trials = unités à Orbes héroïques, base 4★. Tout le reste hors
+// pool (légendaires, mythiques, duo, harmonisés, réarmés, emblèmes, aidés,
+// saisonniers…) = 5★.
+export function displayRarity(hero) {
+  if (!hero) return null;
+  if (hero.poolRarity != null) return hero.poolRarity;
+  if (hero.category === 'ghb' || hero.category === 'tempest') return 4;
+  return 5;
+}

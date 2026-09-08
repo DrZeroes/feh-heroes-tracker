@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { colorHex, classIconPath, moveIconPath, imageCandidates, shortOrigin } from './hero-media.mjs';
+import { colorHex, classIconPath, moveIconPath, imageCandidates, shortOrigin, displayRarity } from './hero-media.mjs';
 
 test('colorHex : 4 couleurs + repli', () => {
   assert.match(colorHex('r'), /^#[0-9a-f]{6}$/i);
@@ -27,4 +27,14 @@ test('shortOrigin retire le préfixe Fire Emblem', () => {
   assert.equal(shortOrigin('Fire Emblem Warriors: Three Hopes'), 'Warriors: Three Hopes');
   assert.equal(shortOrigin('Tokyo Mirage Sessions ♯FE Encore'), 'Tokyo Mirage Sessions ♯FE Encore');
   assert.equal(shortOrigin(''), '');
+});
+
+test('displayRarity : pool connu, sinon déduit', () => {
+  assert.equal(displayRarity({ poolRarity: 3, category: 'standard' }), 3);
+  assert.equal(displayRarity({ poolRarity: 5, category: 'legendary' }), 5);
+  assert.equal(displayRarity({ poolRarity: null, category: 'ghb' }), 4);
+  assert.equal(displayRarity({ poolRarity: null, category: 'tempest' }), 4);
+  assert.equal(displayRarity({ poolRarity: null, category: 'legendary' }), 5);
+  assert.equal(displayRarity({ poolRarity: null, category: 'standard' }), 5);
+  assert.equal(displayRarity(null), null);
 });

@@ -1,6 +1,8 @@
 // app.js — câblage DOM du catalogue (lecture seule). Module ES, chemins relatifs.
 import { resolveLang, makeTranslator } from './js/i18n.mjs';
-import { colorHex, classIconPath, moveIconPath, imageCandidates, shortOrigin } from './js/hero-media.mjs';
+import {
+  colorHex, classIconPath, moveIconPath, imageCandidates, shortOrigin, displayRarity,
+} from './js/hero-media.mjs';
 import { buildFacetOptions, applyFilters, sortHeroes, groupByPerson } from './js/catalog-view.mjs';
 import {
   migrateCollection, emptyCollection, setOwned, setSupport, clampMerges,
@@ -135,6 +137,17 @@ function syncFilterControls() {
   }
 }
 
+function hasActiveControls() {
+  return FACETS.some((f) => state.filters[f])
+    || state.query !== ''
+    || state.sort !== 'release-desc'
+    || state.group
+    || state.status !== 'all';
+}
+function syncResetButton() {
+  $('#filter-reset').hidden = !hasActiveControls();
+}
+
 function fallbackTile(hero) {
   const d = document.createElement('div');
   d.className = 'fallback';
@@ -200,10 +213,11 @@ function card(hero) {
   }
   el.appendChild(icons);
 
-  if (hero.poolRarity != null) {
+  const rarity = displayRarity(hero);
+  if (rarity != null) {
     const r = document.createElement('span');
     r.className = 'rarity';
-    r.textContent = `${hero.poolRarity}★`;
+    r.textContent = `${rarity}★`;
     el.appendChild(r);
   }
 
@@ -252,6 +266,7 @@ function renderGroups() {
 }
 
 function recompute() {
+  syncResetButton();
   const filtered = applyFilters(state.heroes, state.filters, state.query);
   state.view = sortHeroes(filtered, state.sort);
   state.view = filterByStatus(state.view, ownedIdSet(state.collection), state.status);
