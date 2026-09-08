@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { originGroup } from '../js/catalog-view.mjs';
 
 const HERO_KEYS = ['id', 'name', 'title', 'titleFr', 'person', 'color', 'weapon', 'move', 'gender', 'origin',
   'origins', 'category', 'properties', 'blessing', 'poolRarity', 'poolFlags', 'artist', 'actorEn', 'actorJp',
@@ -39,6 +40,12 @@ test('catalog: every category is known', () => {
 test('catalog: unreachable harmonic/tt never appear', () => {
   const cats = new Set(catalog.heroes.map((h) => h.category));
   assert.ok(!cats.has('harmonic') && !cats.has('tt'));
+});
+test('catalog: every origin maps to a GAME_GROUPS entry', () => {
+  // garde-fou : un nouveau jeu non listé -> ajouter dans js/catalog-view.mjs GAME_GROUPS
+  const ungrouped = [...new Set(catalog.heroes.flatMap((h) => h.origins))]
+    .filter((o) => originGroup(o) === null);
+  assert.deepEqual(ungrouped, [], `origines sans groupe: ${ungrouped.join(', ')}`);
 });
 test('catalog: join keys unique per "Name: Title"', () => {
   const seen = new Map();
