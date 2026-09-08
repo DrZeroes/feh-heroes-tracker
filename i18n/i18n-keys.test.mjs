@@ -10,6 +10,7 @@ const REQUIRED = [
   'search.placeholder', 'filter.any', 'filter.color', 'filter.weapon', 'filter.move',
   'filter.category', 'filter.origin', 'filter.gender', 'filter.blessing', 'filter.poolRarity', 'filter.reset',
   'sort.label', 'sort.byDate', 'sort.byName', 'group.byPerson', 'group.alts',
+  'theme.toLight', 'theme.toDark',
   'grid.count', 'grid.empty', 'detail.close', 'detail.artist', 'detail.actorEn', 'detail.actorJp',
   'detail.origin', 'detail.blessing', 'detail.poolRarity', 'detail.properties', 'detail.released',
   'color.r', 'color.b', 'color.v', 'color.g',

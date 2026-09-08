@@ -8,6 +8,7 @@ const FACETS = ['color', 'weapon', 'move', 'category', 'origin', 'gender', 'bles
 const PAGE = 60;
 const LS_LANG = 'feh-lang';
 const LS_PREFS = 'feh-catalog-prefs';
+const LS_THEME = 'feh-theme';
 
 const $ = (sel) => document.querySelector(sel);
 const state = {
@@ -57,6 +58,20 @@ function applyStaticI18n() {
     el.setAttribute(attr, state.t(key));
   }
   $('#lang-toggle').textContent = state.t(state.lang === 'en' ? 'lang.fr' : 'lang.en');
+}
+
+function effectiveDark() {
+  const t = document.documentElement.dataset.theme;
+  if (t === 'dark') return true;
+  if (t === 'light') return false;
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+function applyThemeButton() {
+  const dark = effectiveDark();
+  const btn = $('#theme-toggle');
+  btn.textContent = dark ? '☀️' : '🌙';
+  btn.setAttribute('aria-label', state.t(dark ? 'theme.toLight' : 'theme.toDark'));
+  btn.title = btn.getAttribute('aria-label');
 }
 
 function buildFilterControls() {
@@ -268,6 +283,7 @@ function setLang(lang) {
   state.t = makeTranslator(state.dicts, lang);
   try { localStorage.setItem(LS_LANG, lang); } catch { /* ignore */ }
   applyStaticI18n();
+  applyThemeButton();
   syncSortButtons();
   buildFilterControls();
   recompute();
@@ -287,15 +303,26 @@ async function main() {
   state.lang = resolveLang(stored, navigator.languages || [navigator.language], SUPPORTED);
   state.t = makeTranslator(state.dicts, state.lang);
 
+  let storedTheme = null;
+  try { storedTheme = localStorage.getItem(LS_THEME); } catch { /* ignore */ }
+  if (storedTheme === 'dark' || storedTheme === 'light') document.documentElement.dataset.theme = storedTheme;
+
   $('#search').value = state.query;
   $('#group-toggle').checked = state.group;
 
   applyStaticI18n();
+  applyThemeButton();
   syncSortButtons();
   buildFilterControls();
   recompute();
 
   $('#lang-toggle').addEventListener('click', () => setLang(state.lang === 'en' ? 'fr' : 'en'));
+  $('#theme-toggle').addEventListener('click', () => {
+    const next = effectiveDark() ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem(LS_THEME, next); } catch { /* ignore */ }
+    applyThemeButton();
+  });
   $('#search').addEventListener('input', (e) => { state.query = e.target.value; writePrefs(); recompute(); });
   $('#sort-date').addEventListener('click', () => onSortClick('release'));
   $('#sort-name').addEventListener('click', () => onSortClick('name'));

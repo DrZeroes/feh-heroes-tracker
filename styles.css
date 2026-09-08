@@ -5,10 +5,14 @@
   --owned: #3fae52;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #151519; --fg: #ececf0; --muted: #9a9aa6; --card: #1f1f26;
     --border: #32323c; --accent: #6f9bff; --shadow: 0 1px 3px rgba(0,0,0,.4);
   }
+}
+:root[data-theme="dark"] {
+  --bg: #151519; --fg: #ececf0; --muted: #9a9aa6; --card: #1f1f26;
+  --border: #32323c; --accent: #6f9bff; --shadow: 0 1px 3px rgba(0,0,0,.4);
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--fg);

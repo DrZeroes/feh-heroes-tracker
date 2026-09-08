@@ -19,6 +19,8 @@
   "sort.byName": "Nom",
   "group.byPerson": "Grouper par personnage",
   "group.alts": "{n} alts",
+  "theme.toLight": "Mode clair",
+  "theme.toDark": "Mode sombre",
   "grid.count": "{n} héros",
   "grid.empty": "Aucun héros ne correspond à ces filtres.",
   "detail.close": "Fermer",
