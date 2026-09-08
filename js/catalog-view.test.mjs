@@ -78,3 +78,21 @@ test('groupByPerson : regroupe, trie groupes par date max desc, couleurs ordonnÃ
   assert.equal(charlie.heroes.length, 2);
   assert.deepEqual(charlie.colors, ['r', 'g']);
 });
+
+test('buildFacetOptions.origin est en ordre de sortie des jeux', () => {
+  const heroes = [
+    { origins: ['Fire Emblem Engage'] },
+    { origins: ['Fire Emblem: Mystery of the Emblem'] },
+    { origins: ['Fire Emblem Awakening'] },
+    { origins: ['Fire Emblem Heroes', 'Zzz Unknown Game'] },
+  ].map((o) => ({ color: 'r', weapon: 'sword', move: 'infantry', category: 'standard',
+    gender: 'male', blessing: null, poolRarity: null, ...o }));
+  const { origin } = buildFacetOptions(heroes);
+  assert.deepEqual(origin, [
+    'Fire Emblem: Mystery of the Emblem',
+    'Fire Emblem Awakening',
+    'Fire Emblem Heroes',
+    'Fire Emblem Engage',
+    'Zzz Unknown Game',
+  ]);
+});

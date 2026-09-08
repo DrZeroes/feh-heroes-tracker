@@ -19,3 +19,7 @@ export function moveIconPath(hero) {
 export function imageCandidates(hero) {
   return [hero?.image, hero?.imageFull].filter(Boolean);
 }
+
+export function shortOrigin(name) {
+  return String(name ?? '').replace(/^Fire Emblem:?\s+/, '');
+}

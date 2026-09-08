@@ -1,6 +1,6 @@
 // app.js — câblage DOM du catalogue (lecture seule). Module ES, chemins relatifs.
 import { resolveLang, makeTranslator } from './js/i18n.mjs';
-import { colorHex, classIconPath, moveIconPath, imageCandidates } from './js/hero-media.mjs';
+import { colorHex, classIconPath, moveIconPath, imageCandidates, shortOrigin } from './js/hero-media.mjs';
 import { buildFacetOptions, applyFilters, sortHeroes, groupByPerson } from './js/catalog-view.mjs';
 
 const SUPPORTED = ['en', 'fr'];
@@ -73,7 +73,7 @@ function buildFilterControls() {
     for (const v of facets[f]) {
       const opt = document.createElement('option');
       opt.value = v;
-      opt.textContent = labelFor(f, v);
+      opt.textContent = f === 'origin' ? shortOrigin(v) : labelFor(f, v);
       if (state.filters[f] === v) opt.selected = true;
       sel.appendChild(opt);
     }
@@ -228,7 +228,7 @@ function openDetail(hero) {
     dd.textContent = val;
     dl.append(dt, dd);
   };
-  row('detail.origin', (hero.origins || []).join(' · '));
+  row('detail.origin', (hero.origins || []).map(shortOrigin).join(' · '));
   row('detail.released', hero.releaseDate);
   row('detail.blessing', hero.blessing ? state.t(`blessing.${hero.blessing}`) : '');
   row('detail.poolRarity', state.t(hero.poolRarity == null ? 'poolRarity.na' : `poolRarity.${hero.poolRarity}`));
