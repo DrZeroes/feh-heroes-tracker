@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   splitWeaponType, normalizeMoveType, parseListField, deriveCategory,
-  pageNameFor, normalizePageName, blessingFromEffect,
+  pageNameFor, normalizePageName, blessingFromEffect, pickPoolRarity,
 } from './normalize.mjs';
 
 test('splitWeaponType sépare couleur et arme', () => {
@@ -66,4 +66,29 @@ test('blessingFromEffect mappe les 8 éléments, insensible à la casse', () => 
   assert.equal(blessingFromEffect('Anima'), 'anima');
   assert.equal(blessingFromEffect(''), null);
   assert.equal(blessingFromEffect('Thunder'), null);
+});
+
+test('pickPoolRarity prend la ligne la plus récente hors revivalOnly', () => {
+  const rows = [
+    { rarity: '3', property: '', startTime: '2020-01-01 07:00:00' },
+    { rarity: '4', property: 'specialRate', startTime: '2021-06-01 07:00:00' },
+    { rarity: '5', property: '', startTime: '2019-01-01 07:00:00' },
+  ];
+  assert.deepEqual(pickPoolRarity(rows), { poolRarity: 4, poolFlags: ['specialRate'] });
+});
+
+test('pickPoolRarity ignore revivalOnly pour la rareté mais le garde en flag', () => {
+  const rows = [
+    { rarity: '3', property: '', startTime: '2020-01-01 07:00:00' },
+    { rarity: '5', property: 'revivalOnly', startTime: '2025-01-01 07:00:00' },
+  ];
+  assert.deepEqual(pickPoolRarity(rows), { poolRarity: 3, poolFlags: ['revivalOnly'] });
+});
+
+test('pickPoolRarity renvoie null si aucune ligne utilisable', () => {
+  assert.deepEqual(pickPoolRarity([]), { poolRarity: null, poolFlags: [] });
+  assert.deepEqual(
+    pickPoolRarity([{ rarity: '5', property: 'revivalOnly', startTime: '2025-01-01 07:00:00' }]),
+    { poolRarity: null, poolFlags: ['revivalOnly'] },
+  );
 });

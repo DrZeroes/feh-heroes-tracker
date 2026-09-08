@@ -67,3 +67,18 @@ export function blessingFromEffect(raw) {
   const key = String(raw ?? '').trim().toLowerCase();
   return BLESSING.has(key) ? key : null;
 }
+
+export function pickPoolRarity(rows) {
+  const list = rows ?? [];
+  const poolFlags = [...new Set(
+    list.map((r) => r.property).filter((p) => p && p.length > 0),
+  )];
+  const usable = list.filter((r) => r.property !== 'revivalOnly');
+  if (usable.length === 0) return { poolRarity: null, poolFlags };
+  let best = usable[0];
+  for (const r of usable) {
+    if (String(r.startTime) > String(best.startTime)) best = r;
+  }
+  const n = Number.parseInt(best.rarity, 10);
+  return { poolRarity: Number.isFinite(n) ? n : null, poolFlags };
+}
