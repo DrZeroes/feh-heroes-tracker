@@ -1,0 +1,63 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { buildFacetOptions, applyFilters, sortHeroes, groupByPerson } from './catalog-view.mjs';
+
+const H = (o) => ({
+  id: o.id ?? o.name, name: o.name, title: o.title ?? '', person: o.person ?? o.name,
+  color: o.color ?? 'r', weapon: o.weapon ?? 'sword', move: o.move ?? 'infantry',
+  gender: o.gender ?? 'male', origin: (o.origins ?? ['G1']).join(','), origins: o.origins ?? ['G1'],
+  category: o.category ?? 'standard', blessing: o.blessing ?? null,
+  poolRarity: o.poolRarity ?? null, artist: o.artist ?? '', actorEn: o.actorEn ?? [], actorJp: o.actorJp ?? [],
+  releaseDate: o.releaseDate ?? '2020-01-01',
+});
+
+const DATA = [
+  H({ name: 'Alpha', color: 'r', weapon: 'sword', category: 'legendary', blessing: 'fire', poolRarity: null, releaseDate: '2026-01-01', origins: ['Awakening', 'Engage'], artist: 'Kita' }),
+  H({ name: 'Bravo', color: 'b', weapon: 'lance', category: 'standard', poolRarity: 5, releaseDate: '2024-06-01', origins: ['Fates'] }),
+  H({ name: 'Charlie', color: 'r', weapon: 'bow', category: 'standard', poolRarity: 3, releaseDate: '2024-06-01', origins: ['Awakening'], person: 'Charlie', actorEn: ['Jane Doe'] }),
+  H({ name: 'Charlie', title: 'Alt', color: 'g', weapon: 'staff', person: 'Charlie', releaseDate: '2025-03-03', origins: ['Awakening'] }),
+];
+
+test('buildFacetOptions liste les valeurs présentes triées', () => {
+  const f = buildFacetOptions(DATA);
+  assert.deepEqual(f.color, ['b', 'g', 'r']);
+  assert.deepEqual(f.origin, ['Awakening', 'Engage', 'Fates']);
+  assert.deepEqual(f.category.sort(), ['legendary', 'standard']);
+  assert.deepEqual(f.poolRarity, ['3', '5', 'na']);
+});
+
+test('applyFilters : couleur', () => {
+  assert.deepEqual(applyFilters(DATA, { color: 'r' }, '').map((h) => h.name).sort(), ['Alpha', 'Charlie']);
+});
+test('applyFilters : origin matche via origins[]', () => {
+  assert.deepEqual(applyFilters(DATA, { origin: 'Engage' }, '').map((h) => h.name), ['Alpha']);
+});
+test('applyFilters : poolRarity "na" = poolRarity null', () => {
+  // Alpha (null) + Charlie/"Alt" (null) ; Bravo=5, Charlie=3 exclus
+  const r = applyFilters(DATA, { poolRarity: 'na' }, '').map((h) => h.name).sort();
+  assert.deepEqual(r, ['Alpha', 'Charlie']);
+});
+test('applyFilters : recherche multi-termes sur name/title/artist/actor', () => {
+  assert.deepEqual(applyFilters(DATA, {}, 'char alt').map((h) => h.title), ['Alt']);
+  assert.deepEqual(applyFilters(DATA, {}, 'kita').map((h) => h.name), ['Alpha']);
+  assert.deepEqual(applyFilters(DATA, {}, 'jane').map((h) => h.name), ['Charlie']);
+});
+
+test('sortHeroes : release-desc par défaut, ne mute pas', () => {
+  const input = [...DATA];
+  const out = sortHeroes(input, 'release-desc');
+  assert.deepEqual(out.map((h) => h.name), ['Alpha', 'Charlie', 'Bravo', 'Charlie']);
+  assert.deepEqual(input.map((h) => h.name), DATA.map((h) => h.name));
+});
+test('sortHeroes : name-asc', () => {
+  const out = sortHeroes(DATA, 'name-asc');
+  assert.deepEqual(out.map((h) => `${h.name}${h.title}`), ['Alpha', 'Bravo', 'CharlieAlt', 'Charlie']);
+});
+
+test('groupByPerson : regroupe, trie groupes par date max desc, couleurs ordonnées', () => {
+  const groups = groupByPerson(DATA);
+  assert.deepEqual(groups.map((g) => g.person), ['Alpha', 'Charlie', 'Bravo']);
+  const charlie = groups.find((g) => g.person === 'Charlie');
+  assert.equal(charlie.heroes.length, 2);
+  assert.deepEqual(charlie.colors, ['r', 'g']);
+});
