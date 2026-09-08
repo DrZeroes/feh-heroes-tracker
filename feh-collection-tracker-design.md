@@ -263,7 +263,26 @@ Clé `localStorage` : `feh-collection-v1` (inchangée ; le versionnage se fait p
 > - Module pur `js/collection.mjs` (migration v1→v2 sans perte). `js/stats.mjs` pour les agrégats.
 > - **Appli à onglets** : Catalogue (+ bouton **[+]** sur les cartes) · **Caserne** (possédés, édition inline fusions/IV/Soutien) · **Stats** (total %, répartitions possédés/total, timeline par mois, top doubles, ligne wishlist) · **Wishlist** · **Manuels**. Routeur par hash, onglet mémorisé.
 > - Toujours : filtre statut, compteur X/total, export/import `ma-collection.json` (remplacer/fusionner).
-> - Restant → **Plan C.3** : priorité wishlist, `project` (+10), onglets Nouveaux héros / Ajouter un héros, mode ajout rapide.
+
+> **Plan C.3 (implémenté 2026-09-08)** — mêmes clés `localStorage`, `version:2` :
+> ```json
+> { "version": 2, "updated": "YYYY-MM-DD",
+>   "owned": { "<WikiName>": { "merges": 0, "ivPlus": null, "ivMinus": null, "support": null,
+>                              "copies": 0, "date": null,
+>                              "project": { "targetMerges": 10, "targetIvPlus": null, "notes": "" } } },
+>   "wanted": { "<WikiName>": { "priority": "high|normal", "note": "" } },
+>   "manuals": { "<WikiName>": 2 } }
+> ```
+> - `owned[id].project` : `null` par défaut ; `{ targetMerges 0–10, targetIvPlus hp|atk|spd|def|res|null, notes }`. Pilote les jauges « Projets +10 » de l'onglet Stats.
+> - `wanted[id]` : passe de `true` à `{ priority, note }`. Migration : `true` → `{ priority:'normal', note:'' }` (sans perte, `js/collection.mjs`).
+> - `js/collection.mjs` : `setWantedPriority`, `setWantedNote`, `setProject`. `js/stats.mjs` : `wishlistByPriority`, `projectProgress`.
+> - `js/overrides.mjs` (pur) : `buildOverrideEntry` / `overridesSnippet` pour l'onglet Ajouter un héros.
+> - **Onglets ajoutés** : **Nouveaux héros** (`#/new`, 30 derniers par `releaseDate`), **Ajouter un héros** (`#/add`, formulaire → bloc JSON `data/heroes.overrides.json` + copier + lien éditeur GitHub), **À propos** (`#/about` : source des données, MAJ, vie privée, mentions légales).
+> - **Catalogue** : filtre statut « Voulus » ; **mode ajout rapide** (grille dense, tap = possédé/non, stepper fusions inline) ; ★ wishlist sur les cartes.
+> - **Ma caserne** (renommé) : intitulés de colonnes, bouton retirer par ligne (confirm), clic sur la miniature/le nom → fiche détail.
+> - **Fiche détail** : bouton +1 manuel, priorité + note wishlist, bloc **Projet +10**.
+> - **Stats** : les barres sont des jauges de complétion (pleines à `owned === total`) ; bloc « Projets +10 » + ligne wishlist par priorité.
+> - Import (fusion) fusionne aussi `wanted` + `manuals`. Boutons langue / thème regroupés en haut à droite.
 
 <details><summary>Forme v2 « longue » initialement prévue (référence, non implémentée telle quelle)</summary>
 ```json
