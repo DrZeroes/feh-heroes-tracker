@@ -348,8 +348,7 @@ function renderCaserne() {
   box.innerHTML = '';
   const ids = Object.keys(state.collection.owned);
   const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
-  const list = ids.map((id) => heroesById.get(id)).filter(Boolean);
-  list.sort((a, b) => sortHeroes([a, b], 'release-desc')[0] === a ? -1 : 1);
+  const list = sortHeroes(ids.map((id) => heroesById.get(id)).filter(Boolean), 'release-desc');
   if (!list.length) {
     box.innerHTML = `<p class="empty-note">${state.t('caserne.empty')}</p>`;
     return;
@@ -490,12 +489,11 @@ function renderWishlist() {
   box.innerHTML = '';
   const ids = [...wantedIdSet(state.collection)];
   const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
-  const list = ids.map((id) => heroesById.get(id)).filter(Boolean);
+  const list = sortHeroes(ids.map((id) => heroesById.get(id)).filter(Boolean), 'release-desc');
   if (!list.length) {
     box.innerHTML = `<p class="empty-note">${state.t('wishlist.empty')}</p>`;
     return;
   }
-  list.sort((a, b) => (sortHeroes([a, b], 'release-desc')[0] === a ? -1 : 1));
   const grid = document.createElement('main');
   grid.className = 'grid';
   for (const hero of list) grid.appendChild(card(hero));
