@@ -18,13 +18,12 @@
   <section class="controls">
     <input id="search" type="search" autocomplete="off" data-i18n-attr="placeholder:search.placeholder" placeholder="Rechercher…">
     <div id="filters" class="filters"></div>
-    <label class="sort">
+    <button type="button" class="reset" id="filter-reset" data-i18n="filter.reset">Réinitialiser les filtres</button>
+    <div class="sort" role="group" aria-label="sort">
       <span data-i18n="sort.label">Tri</span>
-      <select id="sort">
-        <option value="release-desc" data-i18n="sort.releaseDesc">Plus récents</option>
-        <option value="name-asc" data-i18n="sort.nameAsc">Nom A–Z</option>
-      </select>
-    </label>
+      <button type="button" class="sortbtn" id="sort-date" data-sortkey="release" data-i18n="sort.byDate">Date</button>
+      <button type="button" class="sortbtn" id="sort-name" data-sortkey="name" data-i18n="sort.byName">Nom</button>
+    </div>
     <label class="group">
       <input id="group-toggle" type="checkbox">
       <span data-i18n="group.byPerson">Grouper par personnage</span>
