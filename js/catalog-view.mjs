@@ -1,6 +1,45 @@
 // js/catalog-view.mjs — filtrage / tri / groupement du catalogue. Pur, sans DOM.
 
-const COLOR_ORDER = ['r', 'b', 'v', 'g'];
+// Ordres d'affichage des facettes (menus déroulants + barres de stats).
+export const COLOR_ORDER = ['r', 'b', 'v', 'g'];
+export const WEAPON_ORDER = ['sword', 'lance', 'axe', 'tome', 'bow', 'dagger', 'staff', 'breath', 'beast'];
+export const MOVE_ORDER = ['infantry', 'cavalry', 'flying', 'armored'];
+export const CATEGORY_ORDER = [
+  'legendary', 'mythic', 'duo', 'harmonized', 'brave', 'rearmed', 'attuned', 'emblem',
+  'aided', 'entwined', 'ascended', 'vista',
+  'standard', 'special',
+  'refresher', // « Danse »
+  'ghb', 'tempest', // unités Orbes héroïques : après la danse
+];
+export const BLESSING_ORDER = ['fire', 'water', 'wind', 'earth', 'light', 'dark', 'astra', 'anima'];
+export const POOL_ORDER = ['3', '4', '4sr', '5', '5sr', 'special', 'na'];
+
+// Palier de pool d'invocation, dérivé de poolRarity + poolFlags.
+//  3 / 4         : pool de base (démote possible)
+//  4sr / 5sr     : « Special Rate » (taux boosté sur bannière focus, hors pool général)
+//  special       : Héros Spéciaux (saisonniers) à taux spécial (SHSpecialRate)
+//  na            : hors pool (GHB / TT / exclusifs légendaire-mythique…)
+export function poolTier(hero) {
+  if (!hero || hero.poolRarity == null) return 'na';
+  const flags = new Set(hero.poolFlags ?? []);
+  const sr = flags.has('specialRate');
+  const shsr = flags.has('SHSpecialRate');
+  if (hero.poolRarity === 3) return '3';
+  if (hero.poolRarity === 4) return sr ? '4sr' : '4';
+  if (shsr) return 'special';
+  if (sr) return '5sr';
+  return '5';
+}
+
+// Trie `values` selon `order` ; les valeurs hors liste vont à la fin, en ordre alpha.
+export function orderedBy(values, order) {
+  const rank = new Map(order.map((v, i) => [v, i]));
+  return [...values].sort((a, b) => {
+    const ra = rank.has(a) ? rank.get(a) : Number.MAX_SAFE_INTEGER;
+    const rb = rank.has(b) ? rank.get(b) : Number.MAX_SAFE_INTEGER;
+    return ra !== rb ? ra - rb : String(a).localeCompare(String(b));
+  });
+}
 
 // Ordre de sortie (JP) des jeux Fire Emblem + spin-offs présents/à venir dans FEH.
 const GAME_ORDER = [
@@ -42,24 +81,22 @@ function uniqSorted(values) {
 }
 
 export function buildFacetOptions(heroes) {
-  const pool = uniqSorted(
-    heroes.map((h) => (h.poolRarity == null ? 'na' : String(h.poolRarity))),
-  );
+  const present = (key) => [...new Set(heroes.map((h) => h[key]).filter(Boolean))];
   return {
-    color: uniqSorted(heroes.map((h) => h.color).filter(Boolean)),
-    weapon: uniqSorted(heroes.map((h) => h.weapon).filter(Boolean)),
-    move: uniqSorted(heroes.map((h) => h.move).filter(Boolean)),
-    category: uniqSorted(heroes.map((h) => h.category).filter(Boolean)),
+    color: orderedBy(present('color'), COLOR_ORDER),
+    weapon: orderedBy(present('weapon'), WEAPON_ORDER),
+    move: orderedBy(present('move'), MOVE_ORDER),
+    category: orderedBy(present('category'), CATEGORY_ORDER),
     origin: [...new Set(heroes.flatMap((h) => h.origins ?? []))].sort(compareOrigin),
     gender: uniqSorted(heroes.map((h) => h.gender).filter(Boolean)),
     blessing: (() => {
-      const present = uniqSorted(heroes.map((h) => h.blessing).filter(Boolean));
+      const blessed = orderedBy(present('blessing'), BLESSING_ORDER);
       const head = [];
       if (heroes.some((h) => h.blessing == null)) head.push('none');
-      if (present.length) head.push('any');
-      return [...head, ...present];
+      if (blessed.length) head.push('any');
+      return [...head, ...blessed];
     })(),
-    poolRarity: pool,
+    poolRarity: orderedBy([...new Set(heroes.map(poolTier))], POOL_ORDER),
   };
 }
 
@@ -77,11 +114,7 @@ export function applyFilters(heroes, filters = {}, query = '') {
       else if (filters.blessing === 'any') { if (h.blessing == null) return false; }
       else if (h.blessing !== filters.blessing) return false;
     }
-    if (filters.poolRarity) {
-      const want = filters.poolRarity;
-      const have = h.poolRarity == null ? 'na' : String(h.poolRarity);
-      if (have !== want) return false;
-    }
+    if (filters.poolRarity && poolTier(h) !== filters.poolRarity) return false;
     if (terms.length) {
       const hay = [
         h.name, h.title, h.artist,

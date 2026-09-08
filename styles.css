@@ -196,8 +196,17 @@ img { max-width: 100%; }
   color: var(--muted); border-radius: 6px; width: 1.7rem; height: 1.7rem; cursor: pointer; padding: 0; }
 .roster-remove:hover { border-color: #c0392b; color: #c0392b; }
 
-.manual-row { display: grid; grid-template-columns: 1fr auto auto auto; gap: .5rem; align-items: center;
-  padding: .4rem .6rem; border-bottom: 1px solid var(--border); }
+.manual-add { display: flex; gap: .5rem; align-items: center; padding: .4rem 1rem 1rem; }
+.manual-add input { flex: 1 1 12rem; padding: .4rem .5rem; border: 1px solid var(--border);
+  border-radius: 8px; background: var(--card); color: var(--fg); }
+.manual-add button { border: 1px solid var(--border); background: var(--card); color: var(--fg);
+  border-radius: 6px; width: 2rem; height: 2rem; cursor: pointer; font-weight: 700; }
+.manual-row { display: grid; grid-template-columns: 2rem auto minmax(0, 1fr) auto auto auto;
+  gap: .5rem; align-items: center; padding: .4rem 1rem; border-bottom: 1px solid var(--border); }
+.manual-row .roster-portrait { width: 2rem; height: 2rem; border-radius: 5px; background: var(--bg); cursor: pointer; }
+.manual-icons { display: flex; gap: .25rem; }
+.manual-icons img { width: 16px; height: 16px; }
+.manual-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .85rem; }
 .manual-row button { border: 1px solid var(--border); background: var(--card); color: var(--fg);
   border-radius: 6px; width: 1.8rem; height: 1.8rem; cursor: pointer; }
 

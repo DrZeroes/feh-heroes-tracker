@@ -6,7 +6,8 @@ const HERO_KEYS = ['id', 'name', 'title', 'titleFr', 'person', 'color', 'weapon'
   'origins', 'category', 'properties', 'blessing', 'poolRarity', 'poolFlags', 'artist', 'actorEn', 'actorJp',
   'image', 'imageFull', 'releaseDate', 'intId'];
 const CATEGORIES = new Set(['mythic', 'legendary', 'emblem', 'rearmed', 'attuned', 'ascended',
-  'duo', 'harmonized', 'brave', 'ghb', 'tempest', 'special', 'standard']);
+  'duo', 'harmonized', 'brave', 'aided', 'entwined', 'vista', 'refresher',
+  'ghb', 'tempest', 'special', 'standard']);
 
 const catalog = JSON.parse(await readFile(new URL('../data/heroes.json', import.meta.url), 'utf8'));
 

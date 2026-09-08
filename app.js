@@ -3,7 +3,10 @@ import { resolveLang, makeTranslator } from './js/i18n.mjs';
 import {
   colorHex, classIconPath, moveIconPath, imageCandidates, shortOrigin, displayRarity,
 } from './js/hero-media.mjs';
-import { buildFacetOptions, applyFilters, sortHeroes, groupByPerson } from './js/catalog-view.mjs';
+import {
+  buildFacetOptions, applyFilters, sortHeroes, groupByPerson, orderedBy, poolTier,
+  CATEGORY_ORDER, BLESSING_ORDER, COLOR_ORDER, WEAPON_ORDER, MOVE_ORDER,
+} from './js/catalog-view.mjs';
 import {
   migrateCollection, emptyCollection, setOwned, setSupport, clampMerges,
   ownedIdSet, collectionStats, filterByStatus,
@@ -15,9 +18,6 @@ import {
   distribution, acquisitionTimeline, topCopies, wishlistSummary,
   wishlistByPriority, projectProgress,
 } from './js/stats.mjs';
-import {
-  buildOverrideEntry, overridesSnippet, COLORS, WEAPONS, MOVES, CATEGORIES,
-} from './js/overrides.mjs';
 
 const SUPPORTED = ['en', 'fr'];
 const FACETS = ['color', 'weapon', 'move', 'category', 'origin', 'gender', 'blessing', 'poolRarity'];
@@ -27,7 +27,7 @@ const LS_PREFS = 'feh-catalog-prefs';
 const LS_THEME = 'feh-theme';
 const LS_COLLECTION = 'feh-collection-v1';
 const LS_VIEW = 'feh-view';
-const VIEWS = ['catalogue', 'caserne', 'new', 'stats', 'wishlist', 'manuels', 'add', 'about'];
+const VIEWS = ['catalogue', 'caserne', 'new', 'stats', 'wishlist', 'manuels', 'about'];
 const STATUSES = ['all', 'owned', 'missing', 'wanted'];
 const GH_REPO = 'DrZeroes/feh-heroes-tracker';
 const APP_VERSION = '0.3.0';
@@ -90,7 +90,7 @@ function labelFor(facet, value) {
   const map = {
     color: `color.${value}`, weapon: `weapon.${value}`, move: `move.${value}`,
     category: `category.${value}`, gender: `gender.${value}`, blessing: `blessing.${value}`,
-    poolRarity: value === 'na' ? 'poolRarity.na' : `poolRarity.${value}`,
+    poolRarity: `poolRarity.${value}`,
   };
   return map[facet] ? state.t(map[facet]) : value;
 }
@@ -403,7 +403,6 @@ function renderView() {
   else if (v === 'stats') renderStats();
   else if (v === 'wishlist') renderWishlist();
   else if (v === 'manuels') renderManuels();
-  else if (v === 'add') renderAdd();
   else if (v === 'about') renderAbout();
 }
 
@@ -579,16 +578,22 @@ function renderStats() {
   head.textContent = state.t('stats.total', s);
   box.appendChild(head);
 
-  const facetLabel = (key, v) => (key === 'blessing'
-    ? state.t(`blessing.${v}`)
-    : state.t(`${key === 'move' ? 'move' : key === 'weapon' ? 'weapon' : key === 'color' ? 'color' : 'category'}.${v}`));
+  const FACET_ORDER = {
+    color: COLOR_ORDER, weapon: WEAPON_ORDER, move: MOVE_ORDER,
+    category: CATEGORY_ORDER, blessing: BLESSING_ORDER,
+  };
 
   for (const [key, titleKey] of [
     ['color', 'stats.byColor'], ['weapon', 'stats.byWeapon'], ['move', 'stats.byMove'],
     ['category', 'stats.byCategory'], ['blessing', 'stats.byBlessing'],
   ]) {
-    const rows = distribution(state.heroes, ownedSet, key)
-      .map((d) => ({ label: facetLabel(key, d.value), total: d.total, owned: d.owned }));
+    const dist = distribution(state.heroes, ownedSet, key);
+    const ordered = orderedBy(dist.map((d) => d.value), FACET_ORDER[key]);
+    const byValue = new Map(dist.map((d) => [d.value, d]));
+    const rows = ordered.map((v) => {
+      const d = byValue.get(v);
+      return { label: state.t(`${key}.${v}`), total: d.total, owned: d.owned };
+    });
     if (rows.length) box.appendChild(barBlock(titleKey, rows));
   }
 
@@ -766,7 +771,7 @@ function renderManuels() {
 
   // ajout : datalist sur le catalogue
   const addWrap = document.createElement('div');
-  addWrap.className = 'manual-row';
+  addWrap.className = 'manual-add';
   const input = document.createElement('input');
   input.setAttribute('list', 'manual-hero-list');
   input.placeholder = state.t('manuels.add');
@@ -807,8 +812,28 @@ function renderManuels() {
     const h = heroesById.get(id) || { name: id, title: '' };
     const row = document.createElement('div');
     row.className = 'manual-row';
+
+    const img = document.createElement('img');
+    img.className = 'roster-portrait';
+    img.loading = 'lazy'; img.alt = h.name; img.src = h.image || '';
+    if (heroesById.has(id)) img.addEventListener('click', () => openDetail(h));
+    row.appendChild(img);
+
+    const icons = document.createElement('div');
+    icons.className = 'manual-icons';
+    for (const p of [moveIconPath(h), classIconPath(h)]) {
+      if (!p) continue;
+      const i = document.createElement('img');
+      i.src = p; i.alt = ''; i.loading = 'lazy';
+      icons.appendChild(i);
+    }
+    row.appendChild(icons);
+
     const label = document.createElement('span');
+    label.className = 'manual-name';
     label.textContent = `${h.name}${h.title ? ` · ${h.title}` : ''}`;
+    row.appendChild(label);
+
     const minus = document.createElement('button');
     minus.type = 'button'; minus.textContent = '−';
     minus.addEventListener('click', () => {
@@ -825,130 +850,9 @@ function renderManuels() {
       saveCollection();
       renderManuels();
     });
-    row.append(label, minus, count, plus);
+    row.append(minus, count, plus);
     box.appendChild(row);
   }
-}
-
-function selectFrom(values, i18nPrefix, cur) {
-  const sel = document.createElement('select');
-  for (const v of values) {
-    const o = document.createElement('option');
-    o.value = v;
-    o.textContent = i18nPrefix ? state.t(`${i18nPrefix}.${v}`) : v;
-    if (v === cur) o.selected = true;
-    sel.appendChild(o);
-  }
-  return sel;
-}
-
-function renderAdd() {
-  const box = $('#view-add');
-  box.innerHTML = '';
-
-  const intro = document.createElement('p');
-  intro.className = 'about-block';
-  intro.textContent = state.t('add.intro');
-  box.appendChild(intro);
-
-  const form = document.createElement('div');
-  form.className = 'add-form';
-  const fields = {};
-  const addField = (key, node) => {
-    const l = document.createElement('label');
-    l.textContent = state.t(key);
-    form.append(l, node);
-  };
-
-  fields.name = document.createElement('input');
-  fields.name.type = 'text';
-  addField('add.name', fields.name);
-  fields.title = document.createElement('input');
-  fields.title.type = 'text';
-  addField('add.title', fields.title);
-  fields.color = selectFrom(COLORS, 'color', 'r');
-  addField('filter.color', fields.color);
-  fields.weapon = selectFrom(WEAPONS, 'weapon', 'sword');
-  addField('filter.weapon', fields.weapon);
-  fields.move = selectFrom(MOVES, 'move', 'infantry');
-  addField('filter.move', fields.move);
-  fields.category = selectFrom(CATEGORIES, 'category', 'standard');
-  addField('filter.category', fields.category);
-  fields.origin = document.createElement('input');
-  fields.origin.type = 'text';
-  fields.origin.placeholder = 'Fire Emblem Awakening';
-  addField('add.origin', fields.origin);
-  fields.releaseDate = document.createElement('input');
-  fields.releaseDate.type = 'date';
-  addField('add.releaseDate', fields.releaseDate);
-
-  box.appendChild(form);
-
-  const genBtn = document.createElement('button');
-  genBtn.type = 'button';
-  genBtn.className = 'reset';
-  genBtn.textContent = state.t('add.generate');
-  box.appendChild(genBtn);
-
-  const out = document.createElement('div');
-  out.className = 'add-output';
-  out.hidden = true;
-  const pre = document.createElement('pre');
-  pre.className = 'snippet';
-  const actions = document.createElement('div');
-  actions.className = 'add-actions';
-  const copyBtn = document.createElement('button');
-  copyBtn.type = 'button';
-  copyBtn.className = 'lang';
-  copyBtn.textContent = state.t('add.copy');
-  const editLink = document.createElement('a');
-  editLink.className = 'lang';
-  editLink.href = `https://github.com/${GH_REPO}/edit/main/data/heroes.overrides.json`;
-  editLink.target = '_blank';
-  editLink.rel = 'noopener';
-  editLink.textContent = state.t('add.openEditor');
-  const hint = document.createElement('p');
-  hint.className = 'about-block';
-  hint.textContent = state.t('add.hint');
-  actions.append(copyBtn, editLink);
-  out.append(pre, actions, hint);
-  box.appendChild(out);
-
-  const err = document.createElement('p');
-  err.className = 'about-block';
-  err.style.color = '#c0392b';
-  err.hidden = true;
-  box.appendChild(err);
-
-  genBtn.addEventListener('click', () => {
-    const entry = buildOverrideEntry({
-      name: fields.name.value,
-      title: fields.title.value,
-      color: fields.color.value,
-      weapon: fields.weapon.value,
-      move: fields.move.value,
-      category: fields.category.value,
-      origin: fields.origin.value,
-      releaseDate: fields.releaseDate.value,
-    });
-    if (!entry) {
-      err.hidden = false;
-      err.textContent = state.t('add.needName');
-      out.hidden = true;
-      return;
-    }
-    err.hidden = true;
-    pre.textContent = overridesSnippet(entry);
-    out.hidden = false;
-  });
-
-  copyBtn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(pre.textContent);
-      copyBtn.textContent = state.t('add.copied');
-      setTimeout(() => { copyBtn.textContent = state.t('add.copy'); }, 1500);
-    } catch { /* clipboard indisponible : l'utilisateur copie à la main */ }
-  });
 }
 
 function aboutSection(titleKey, bodyKey) {
@@ -1022,7 +926,7 @@ function openDetail(hero) {
   row('detail.origin', (hero.origins || []).map(shortOrigin).join(' · '));
   row('detail.released', hero.releaseDate);
   row('detail.blessing', hero.blessing ? state.t(`blessing.${hero.blessing}`) : '');
-  row('detail.poolRarity', state.t(hero.poolRarity == null ? 'poolRarity.na' : `poolRarity.${hero.poolRarity}`));
+  row('detail.poolRarity', state.t(`poolRarity.${poolTier(hero)}`));
   row('detail.artist', hero.artist);
   row('detail.actorEn', (hero.actorEn || []).join(', '));
   row('detail.actorJp', (hero.actorJp || []).join(', '));

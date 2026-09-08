@@ -28,9 +28,12 @@ export function normalizeMoveType(raw) {
   return MOVE_CODE[String(raw ?? '').trim()] ?? null;
 }
 
+// Priorité de dérivation : quand un héros porte plusieurs propriétés,
+// la première trouvée ici gagne. (Ordre d'affichage : cf. CATEGORY_ORDER dans js/catalog-view.mjs.)
 const CATEGORY_PRIORITY = [
   'mythic', 'legendary', 'emblem', 'rearmed', 'attuned', 'ascended',
-  'duo', 'harmonized', 'brave', 'ghb', 'tempest', 'special',
+  'duo', 'harmonized', 'brave', 'aided', 'entwined', 'vista',
+  'ghb', 'tempest', 'refresher', 'special',
 ];
 
 export function parseListField(raw) {

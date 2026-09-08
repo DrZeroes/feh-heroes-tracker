@@ -17,7 +17,7 @@
       "origins": [
         "Fire Emblem: Fortune's Weave"
       ],
-      "category": "standard",
+      "category": "entwined",
       "properties": [
         "entwined"
       ],
@@ -50,7 +50,7 @@
       "origins": [
         "Fire Emblem: Fortune's Weave"
       ],
-      "category": "standard",
+      "category": "vista",
       "properties": [
         "vista"
       ],
@@ -83,7 +83,7 @@
       "origins": [
         "Fire Emblem: Fortune's Weave"
       ],
-      "category": "standard",
+      "category": "vista",
       "properties": [
         "refresher",
         "vista"
@@ -558,7 +558,7 @@
       "origins": [
         "Fire Emblem Engage"
       ],
-      "category": "standard",
+      "category": "aided",
       "properties": [
         "aided",
         "aide"
@@ -1207,7 +1207,7 @@
       "origins": [
         "Fire Emblem Heroes"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher"
@@ -1977,7 +1977,7 @@
       "origins": [
         "Fire Emblem: The Blazing Blade"
       ],
-      "category": "standard",
+      "category": "entwined",
       "properties": [
         "entwined",
         "refresher"
@@ -2497,7 +2497,7 @@
       "origins": [
         "Fire Emblem Fates"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher"
@@ -2734,7 +2734,7 @@
       "origins": [
         "Fire Emblem: The Sacred Stones"
       ],
-      "category": "standard",
+      "category": "aided",
       "properties": [
         "aided",
         "aide"
@@ -3787,7 +3787,7 @@
       "origins": [
         "Fire Emblem Heroes"
       ],
-      "category": "standard",
+      "category": "entwined",
       "properties": [
         "entwined"
       ],
@@ -3954,7 +3954,7 @@
       "origins": [
         "Fire Emblem Heroes"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher"
@@ -4160,7 +4160,7 @@
       "origins": [
         "Fire Emblem Heroes"
       ],
-      "category": "standard",
+      "category": "entwined",
       "properties": [
         "entwined"
       ],
@@ -6942,7 +6942,7 @@
       "origins": [
         "Fire Emblem Engage"
       ],
-      "category": "standard",
+      "category": "aided",
       "properties": [
         "aided",
         "aide"
@@ -7385,7 +7385,7 @@
       "origins": [
         "Fire Emblem: The Sacred Stones"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher"
@@ -8269,7 +8269,7 @@
       "origins": [
         "Fire Emblem: The Binding Blade"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher"
       ],
@@ -8699,7 +8699,7 @@
       "origins": [
         "Fire Emblem Heroes"
       ],
-      "category": "standard",
+      "category": "aided",
       "properties": [
         "aided",
         "aide"
@@ -8733,7 +8733,7 @@
       "origins": [
         "Fire Emblem: Three Houses"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher"
       ],
@@ -9133,7 +9133,7 @@
       "origins": [
         "Fire Emblem Heroes"
       ],
-      "category": "standard",
+      "category": "aided",
       "properties": [
         "aided",
         "aide",
@@ -10344,7 +10344,7 @@
       "origins": [
         "Fire Emblem Awakening"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher",
@@ -11663,7 +11663,7 @@
       "origins": [
         "Fire Emblem Heroes"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher",
@@ -12388,7 +12388,7 @@
       "origins": [
         "Fire Emblem: Thracia 776"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "tiara"
@@ -13896,7 +13896,7 @@
       "origins": [
         "Fire Emblem Engage"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher",
@@ -16727,7 +16727,7 @@
       "origins": [
         "Fire Emblem Heroes"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher",
@@ -17962,7 +17962,7 @@
       "origins": [
         "Fire Emblem Warriors: Three Hopes"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher",
@@ -21052,7 +21052,7 @@
       "origins": [
         "Fire Emblem: The Blazing Blade"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "fallen",
         "refresher",
@@ -23046,7 +23046,7 @@
       "origins": [
         "Fire Emblem Heroes"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher",
@@ -27846,7 +27846,7 @@
       "origins": [
         "Fire Emblem Heroes"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher",
@@ -29395,7 +29395,7 @@
       "origins": [
         "Fire Emblem: Genealogy of the Holy War"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -29432,7 +29432,7 @@
       "origins": [
         "Fire Emblem: Genealogy of the Holy War"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special"
@@ -29466,7 +29466,7 @@
       "origins": [
         "Fire Emblem: Genealogy of the Holy War"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -30190,7 +30190,7 @@
       "origins": [
         "Fire Emblem: Three Houses"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher",
@@ -30934,7 +30934,7 @@
       "origins": [
         "Fire Emblem: Radiant Dawn"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "special",
         "refresher"
@@ -32068,7 +32068,7 @@
       "origins": [
         "Fire Emblem: The Blazing Blade"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "specRate_202208"
@@ -33479,7 +33479,7 @@
       "origins": [
         "Fire Emblem: The Binding Blade"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "specRate_202208"
@@ -33718,7 +33718,7 @@
       "origins": [
         "Fire Emblem: The Sacred Stones"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "tiara",
@@ -34337,7 +34337,7 @@
       "origins": [
         "Fire Emblem: Mystery of the Emblem"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "specRate_202208"
@@ -34440,7 +34440,7 @@
       "origins": [
         "Fire Emblem Echoes: Shadows of Valentia"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -34477,7 +34477,7 @@
       "origins": [
         "Fire Emblem: Thracia 776"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -34514,7 +34514,7 @@
       "origins": [
         "Fire Emblem: Path of Radiance"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -34551,7 +34551,7 @@
       "origins": [
         "Fire Emblem: Thracia 776"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -37589,7 +37589,7 @@
       "origins": [
         "Fire Emblem: Radiant Dawn"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "specRate_202108"
@@ -37694,7 +37694,7 @@
       "origins": [
         "Fire Emblem: Radiant Dawn"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "demoted_202004"
@@ -39275,7 +39275,7 @@
       "origins": [
         "Fire Emblem: Genealogy of the Holy War"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "demoted_201904"
@@ -39535,7 +39535,7 @@
       "origins": [
         "Fire Emblem: Radiant Dawn"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -39573,7 +39573,7 @@
       "origins": [
         "Fire Emblem: Radiant Dawn"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -39610,7 +39610,7 @@
       "origins": [
         "Fire Emblem Fates"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -39648,7 +39648,7 @@
       "origins": [
         "Fire Emblem Fates"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -39824,7 +39824,7 @@
       "origins": [
         "Fire Emblem Awakening"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "tiara",
@@ -40474,7 +40474,7 @@
       "origins": [
         "Fire Emblem: The Blazing Blade"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -40688,7 +40688,7 @@
       "origins": [
         "Fire Emblem: Genealogy of the Holy War"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "tiara",
@@ -42237,7 +42237,7 @@
       "origins": [
         "Fire Emblem Fates"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -43221,7 +43221,7 @@
       "origins": [
         "Fire Emblem Fates"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -43258,7 +43258,7 @@
       "origins": [
         "Fire Emblem Awakening"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -43295,7 +43295,7 @@
       "origins": [
         "Fire Emblem Awakening"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -43333,7 +43333,7 @@
       "origins": [
         "Fire Emblem Fates"
       ],
-      "category": "special",
+      "category": "refresher",
       "properties": [
         "refresher",
         "special",
@@ -45746,7 +45746,7 @@
       "origins": [
         "Fire Emblem: The Blazing Blade"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "specRate_201904",
@@ -46492,7 +46492,7 @@
       "origins": [
         "Fire Emblem Fates"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "specRate_201904",
@@ -48515,7 +48515,7 @@
       "origins": [
         "Fire Emblem Awakening"
       ],
-      "category": "standard",
+      "category": "refresher",
       "properties": [
         "refresher",
         "tiara"

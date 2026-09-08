@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildFacetOptions, applyFilters, sortHeroes, groupByPerson } from './catalog-view.mjs';
+import {
+  buildFacetOptions, applyFilters, sortHeroes, groupByPerson, orderedBy, poolTier, CATEGORY_ORDER,
+} from './catalog-view.mjs';
 
 const H = (o) => ({
   id: o.id ?? o.name, name: o.name, title: o.title ?? '', person: o.person ?? o.name,
@@ -18,12 +20,29 @@ const DATA = [
   H({ name: 'Charlie', title: 'Alt', color: 'g', weapon: 'staff', person: 'Charlie', releaseDate: '2025-03-03', origins: ['Awakening'] }),
 ];
 
-test('buildFacetOptions liste les valeurs présentes triées', () => {
+test('buildFacetOptions liste les valeurs présentes, dans l\'ordre d\'affichage', () => {
   const f = buildFacetOptions(DATA);
-  assert.deepEqual(f.color, ['b', 'g', 'r']);
+  assert.deepEqual(f.color, ['r', 'b', 'g']); // r, b, v, g -> v absent
   assert.deepEqual(f.origin, ['Awakening', 'Engage', 'Fates']);
-  assert.deepEqual(f.category.sort(), ['legendary', 'standard']);
+  assert.deepEqual(f.category, ['legendary', 'standard']); // ordre CATEGORY_ORDER
   assert.deepEqual(f.poolRarity, ['3', '5', 'na']);
+});
+
+test('orderedBy : suit l\'ordre fourni, inconnus à la fin en alpha', () => {
+  assert.deepEqual(
+    orderedBy(['refresher', 'mythic', 'zzz', 'legendary'], CATEGORY_ORDER),
+    ['legendary', 'mythic', 'refresher', 'zzz'],
+  );
+});
+
+test('buildFacetOptions : armes et catégories dans l\'ordre voulu', () => {
+  const mk = (weapon, category) => ({ color: 'r', weapon, move: 'infantry', category,
+    gender: 'male', origins: [], blessing: null, poolRarity: null });
+  const f = buildFacetOptions([
+    mk('bow', 'standard'), mk('sword', 'refresher'), mk('tome', 'legendary'), mk('staff', 'vista'),
+  ]);
+  assert.deepEqual(f.weapon, ['sword', 'tome', 'bow', 'staff']);
+  assert.deepEqual(f.category, ['legendary', 'vista', 'standard', 'refresher']);
 });
 
 test('applyFilters : couleur', () => {
@@ -36,6 +55,26 @@ test('applyFilters : poolRarity "na" = poolRarity null', () => {
   // Alpha (null) + Charlie/"Alt" (null) ; Bravo=5, Charlie=3 exclus
   const r = applyFilters(DATA, { poolRarity: 'na' }, '').map((h) => h.name).sort();
   assert.deepEqual(r, ['Alpha', 'Charlie']);
+});
+
+test('poolTier : rareté + drapeaux -> paliers', () => {
+  assert.equal(poolTier({ poolRarity: null }), 'na');
+  assert.equal(poolTier({ poolRarity: 3 }), '3');
+  assert.equal(poolTier({ poolRarity: 4 }), '4');
+  assert.equal(poolTier({ poolRarity: 4, poolFlags: ['specialRate'] }), '4sr');
+  assert.equal(poolTier({ poolRarity: 5 }), '5');
+  assert.equal(poolTier({ poolRarity: 5, poolFlags: ['specialRate'] }), '5sr');
+  assert.equal(poolTier({ poolRarity: 5, poolFlags: ['SHSpecialRate'] }), 'special');
+  assert.equal(poolTier({ poolRarity: 5, poolFlags: ['revivalOnly'] }), '5');
+});
+
+test('buildFacetOptions.poolRarity : paliers dans l\'ordre', () => {
+  const mk = (poolRarity, poolFlags = []) => ({ color: 'r', weapon: 'sword', move: 'infantry',
+    category: 'standard', gender: 'male', origins: [], blessing: null, poolRarity, poolFlags });
+  const { poolRarity } = buildFacetOptions([
+    mk(null), mk(5, ['SHSpecialRate']), mk(3), mk(5), mk(5, ['specialRate']),
+  ]);
+  assert.deepEqual(poolRarity, ['3', '5', '5sr', 'special', 'na']);
 });
 test('applyFilters : recherche multi-termes sur name/title/artist/actor', () => {
   assert.deepEqual(applyFilters(DATA, {}, 'char alt').map((h) => h.title), ['Alt']);
