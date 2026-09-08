@@ -16,13 +16,15 @@ const LS_LANG = 'feh-lang';
 const LS_PREFS = 'feh-catalog-prefs';
 const LS_THEME = 'feh-theme';
 const LS_COLLECTION = 'feh-collection-v1';
+const LS_VIEW = 'feh-view';
+const VIEWS = ['catalogue', 'caserne', 'stats', 'wishlist', 'manuels'];
 
 const $ = (sel) => document.querySelector(sel);
 const state = {
   heroes: [], dicts: {}, lang: 'en', t: (k) => k,
   filters: Object.fromEntries(FACETS.map((f) => [f, null])),
   query: '', sort: 'release-desc', group: false,
-  view: [], shown: 0,
+  list: [], shown: 0, view: 'catalogue',
   collection: emptyCollection(), status: 'all',
 };
 
@@ -236,7 +238,7 @@ function refreshCard(id) {
 
 function renderGridPage() {
   const grid = $('#grid');
-  const slice = state.view.slice(state.shown, state.shown + PAGE);
+  const slice = state.list.slice(state.shown, state.shown + PAGE);
   for (const hero of slice) grid.appendChild(card(hero));
   state.shown += slice.length;
 }
@@ -244,7 +246,7 @@ function renderGridPage() {
 function renderGroups() {
   const grid = $('#grid');
   grid.classList.add('grouped');
-  for (const g of groupByPerson(state.view)) {
+  for (const g of groupByPerson(state.list)) {
     const det = document.createElement('details');
     det.className = 'group-card';
     const sum = document.createElement('summary');
@@ -268,20 +270,50 @@ function renderGroups() {
 function recompute() {
   syncResetButton();
   const filtered = applyFilters(state.heroes, state.filters, state.query);
-  state.view = sortHeroes(filtered, state.sort);
-  state.view = filterByStatus(state.view, ownedIdSet(state.collection), state.status);
+  state.list = sortHeroes(filtered, state.sort);
+  state.list = filterByStatus(state.list, ownedIdSet(state.collection), state.status);
   state.shown = 0;
   const grid = $('#grid');
   grid.innerHTML = '';
   grid.classList.toggle('grouped', state.group);
-  $('#grid-count').textContent = state.t('grid.count', { n: state.view.length });
-  if (!state.view.length) {
+  $('#grid-count').textContent = state.t('grid.count', { n: state.list.length });
+  if (!state.list.length) {
     grid.innerHTML = `<p class="grid-count">${state.t('grid.empty')}</p>`;
     return;
   }
   if (state.group) renderGroups();
   else renderGridPage();
 }
+
+function currentHashView() {
+  const m = /^#\/([a-z]+)/.exec(location.hash);
+  return m && VIEWS.includes(m[1]) ? m[1] : null;
+}
+
+function renderView() {
+  const v = state.view;
+  for (const sec of document.querySelectorAll('.view')) sec.hidden = sec.dataset.view !== v;
+  for (const tab of document.querySelectorAll('.tab')) {
+    tab.setAttribute('aria-selected', tab.dataset.view === v ? 'true' : 'false');
+  }
+  if (v === 'catalogue') recompute();
+  else if (v === 'caserne') renderCaserne();
+  else if (v === 'stats') renderStats();
+  else if (v === 'wishlist') renderWishlist();
+  else if (v === 'manuels') renderManuels();
+}
+
+function setView(v, { push = true } = {}) {
+  state.view = VIEWS.includes(v) ? v : 'catalogue';
+  try { localStorage.setItem(LS_VIEW, state.view); } catch { /* ignore */ }
+  if (push && location.hash !== `#/${state.view}`) location.hash = `#/${state.view}`;
+  renderView();
+}
+
+function renderCaserne() { $('#view-caserne').innerHTML = ''; }
+function renderStats() { $('#view-stats').innerHTML = ''; }
+function renderWishlist() { $('#view-wishlist').innerHTML = ''; }
+function renderManuels() { $('#view-manuels').innerHTML = ''; }
 
 function openDetail(hero) {
   const body = $('#detail-body');
@@ -425,6 +457,7 @@ function setLang(lang) {
   syncSortButtons();
   buildFilterControls();
   recompute();
+  renderView();
 }
 
 async function main() {
@@ -454,7 +487,14 @@ async function main() {
   applyThemeButton();
   syncSortButtons();
   buildFilterControls();
-  recompute();
+
+  let startView = currentHashView();
+  if (!startView) { try { startView = localStorage.getItem(LS_VIEW); } catch { /* ignore */ } }
+  setView(VIEWS.includes(startView) ? startView : 'catalogue', { push: false });
+  window.addEventListener('hashchange', () => setView(currentHashView() || 'catalogue', { push: false }));
+  for (const tab of document.querySelectorAll('.tab')) {
+    tab.addEventListener('click', () => setView(tab.dataset.view));
+  }
 
   $('#lang-toggle').addEventListener('click', () => setLang(state.lang === 'en' ? 'fr' : 'en'));
   $('#theme-toggle').addEventListener('click', () => {
@@ -537,7 +577,7 @@ async function main() {
 
   const sentinel = document.getElementById('load-more-sentinel');
   new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting && !state.group && state.shown < state.view.length) renderGridPage();
+    if (entries[0].isIntersecting && !state.group && state.shown < state.list.length) renderGridPage();
   }, { rootMargin: '600px' }).observe(sentinel);
 }
 
