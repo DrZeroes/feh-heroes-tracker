@@ -248,8 +248,15 @@ Champs ajoutés en rév. 2026-09-08b : `person`, `gender`, `blessing`, `poolRari
 ```
 Le script : part du Cargo, applique `patch` par `id`, ajoute `add` (en écrasant si `id` déjà présent).
 
-### 5.3 Fichier collection utilisateur — `ma-collection.json` (v2)
+### 5.3 Fichier collection utilisateur — `ma-collection.json`
 Clé `localStorage` : `feh-collection-v1` (inchangée ; le versionnage se fait par le champ `version`).
+
+> **Plan C v1 (implémenté 2026-09-09)** — forme réduite `version:1` :
+> ```json
+> { "version": 1, "updated": "YYYY-MM-DD",
+>   "owned": { "<WikiName>": { "merges": 0, "ivPlus": null, "ivMinus": null, "support": null } } }
+> ```
+> `support` ∈ `null | "C" | "B" | "A" | "S"` (Soutien de l'Invocateur), **un seul `S`** possible. Module pur `js/collection.mjs`. Éditeur dans le panneau détail, filtre statut (tous/possédés/manquants), compteur X/total, export/import (remplacer ou fusionner). `copies`, `project`, `wanted` (ci-dessous, forme v2) restent prévus pour **Plan C.2**.
 ```json
 {
   "version": 2,
