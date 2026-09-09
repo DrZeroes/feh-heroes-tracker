@@ -140,6 +140,8 @@
   "nav.about": "À propos",
   "status.wanted": "Voulus",
   "field.date": "Obtenu le",
+  "field.dateToday": "Aujourd'hui",
+  "field.dateRelease": "Date de sortie",
   "field.wanted": "Voulu",
   "stats.total": "{owned} / {total} héros ({pct}%)",
   "stats.byColor": "Par couleur",

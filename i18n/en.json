@@ -140,6 +140,8 @@
   "nav.about": "About",
   "status.wanted": "Wanted",
   "field.date": "Obtained on",
+  "field.dateToday": "Today",
+  "field.dateRelease": "Release date",
   "field.wanted": "Wanted",
   "stats.total": "{owned} / {total} heroes ({pct}%)",
   "stats.byColor": "By colour",

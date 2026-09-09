@@ -187,6 +187,12 @@ img { max-width: 100%; }
   border-radius: 6px; background: var(--card); color: var(--fg);
 }
 .editor .owned-row { grid-column: 1 / -1; display: flex; align-items: center; gap: .5rem; font-weight: 600; }
+.editor .date-field { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; }
+.editor .date-field input[type="date"] { padding: .3rem .4rem; border: 1px solid var(--border);
+  border-radius: 6px; background: var(--card); color: var(--fg); }
+.date-preset { border: 1px solid var(--border); background: var(--bg); color: var(--fg);
+  border-radius: 6px; padding: .25rem .5rem; font-size: .78rem; cursor: pointer; }
+.date-preset:disabled { opacity: .4; cursor: default; }
 
 .tabs { display: flex; gap: .25rem; padding: .4rem 1rem 0; border-bottom: 1px solid var(--border);
   overflow-x: auto; }

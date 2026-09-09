@@ -1567,13 +1567,29 @@ function openDetail(hero, unitIndex = 0) {
     });
     addRow('field.support', sup);
 
+    const dateWrap = document.createElement('div');
+    dateWrap.className = 'date-field';
     const date = document.createElement('input');
     date.type = 'date'; date.value = unit.date ?? '';
-    date.addEventListener('change', () => {
-      state.collection = setUnit(state.collection, hero.id, idx, { date: date.value || null });
+    const applyDate = (v) => {
+      date.value = v || '';
+      state.collection = setUnit(state.collection, hero.id, idx, { date: v || null });
       saveCollection();
-    });
-    addRow('field.date', date);
+    };
+    date.addEventListener('change', () => applyDate(date.value));
+    const todayBtn = document.createElement('button');
+    todayBtn.type = 'button';
+    todayBtn.className = 'date-preset';
+    todayBtn.textContent = state.t('field.dateToday');
+    todayBtn.addEventListener('click', () => applyDate(new Date().toISOString().slice(0, 10)));
+    const relBtn = document.createElement('button');
+    relBtn.type = 'button';
+    relBtn.className = 'date-preset';
+    relBtn.textContent = state.t('field.dateRelease');
+    relBtn.disabled = !hero.releaseDate;
+    relBtn.addEventListener('click', () => applyDate(hero.releaseDate));
+    dateWrap.append(date, todayBtn, relBtn);
+    addRow('field.date', dateWrap);
 
     const projRow = document.createElement('label');
     projRow.className = 'owned-row';
