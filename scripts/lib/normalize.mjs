@@ -144,8 +144,14 @@ export function normalizeUnit(raw) {
     releaseDate,
     book: deriveBook(releaseDate),
     partner: null, // rempli par fetch-heroes depuis data/partners.json (Duo/Harmonique)
+    aliases: [], // rempli par fetch-heroes depuis data/name-aliases.json (recherche)
     intId: Number.isFinite(intIdNum) ? intIdNum : null,
   };
+}
+
+// Personnage de base sans le suffixe de genre (« Robin M » -> « Robin »).
+export function basePerson(person) {
+  return String(person ?? '').replace(/\s+(?:M|F|MF|FM|F2|M2)$/, '').trim();
 }
 
 export function mergeJoins(hero, { blessingByPage, poolByPage }) {
@@ -181,6 +187,7 @@ export function buildCatalog(heroes, { generatedAt }) {
     ...h,
     book: 'book' in h ? h.book : deriveBook(h.releaseDate ?? null),
     partner: 'partner' in h ? h.partner : null,
+    aliases: Array.isArray(h.aliases) ? h.aliases : [],
   }));
   const sorted = [...filled].sort((a, b) => {
     const da = a.releaseDate ?? '';

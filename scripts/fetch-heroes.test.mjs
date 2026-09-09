@@ -55,6 +55,8 @@ test('run normalise, joint, trie et écrit le catalogue', async () => {
   await writeFile(localePath, JSON.stringify({ titles: { 'Rhea\u001fThe Final Child': "L'Enfant ultime" } }), 'utf8');
   const partnersPath = path.join(os.tmpdir(), `feh-partners-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
   await writeFile(partnersPath, JSON.stringify({ 'Rhea The Final Child': 'Seiros' }), 'utf8');
+  const aliasesPath = path.join(os.tmpdir(), `feh-aliases-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
+  await writeFile(aliasesPath, JSON.stringify({ Rhea: ['Rhéa'] }), 'utf8');
   const catalog = await run({
     fetchImpl: routeFetch(TABLES),
     sleepImpl: async () => {},
@@ -65,6 +67,7 @@ test('run normalise, joint, trie et écrit le catalogue', async () => {
     overridesPath: path.join(os.tmpdir(), 'feh-no-such-overrides.json'),
     localePath,
     partnersPath,
+    aliasesPath,
   });
 
   assert.equal(catalog.count, 2);
@@ -81,6 +84,8 @@ test('run normalise, joint, trie et écrit le catalogue', async () => {
   assert.equal(first.titleFr, "L'Enfant ultime");      // jointure data/locale-fr.json
   assert.equal(first.partner, 'Seiros');               // jointure data/partners.json
   assert.equal(second.partner, null);
+  assert.deepEqual(first.aliases, ['Rhéa']);           // jointure data/name-aliases.json (par Person)
+  assert.deepEqual(second.aliases, []);
   assert.equal(first.blessing, 'fire');                // jointure LegendaryHero
   assert.equal(first.color, 'b');
   assert.equal(first.weapon, 'breath');

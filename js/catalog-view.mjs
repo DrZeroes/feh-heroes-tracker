@@ -148,6 +148,7 @@ export function applyFilters(heroes, filters = {}, query = '') {
     if (terms.length) {
       const hay = foldText([
         h.name, h.title, h.titleFr, h.artist,
+        (h.aliases ?? []).join(' '),
         (h.actorEn ?? []).join(' '), (h.actorJp ?? []).join(' '),
       ].join(' '));
       if (!terms.every((t) => hay.includes(t))) return false;

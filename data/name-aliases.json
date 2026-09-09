@@ -1,0 +1,5 @@
+{
+  "_comment": "Alias de recherche par personnage (nom VF ou surnom). Clé = Person (suffixe M/F retiré) ou Name du héros ; valeur = liste d'alias. Absent du wiki : liste curée à la main, à compléter. Fusionné dans data/heroes.json par scripts/fetch-heroes.mjs (champ hero.aliases). Sert uniquement à la recherche du catalogue.",
+  "Caeda": ["Shiida"],
+  "Robin": ["Daraen"]
+}

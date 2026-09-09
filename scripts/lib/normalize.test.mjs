@@ -1,11 +1,19 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  splitWeaponType, normalizeMoveType, parseListField, deriveCategory, deriveBook,
+  splitWeaponType, normalizeMoveType, parseListField, deriveCategory, deriveBook, basePerson,
   pageNameFor, normalizePageName, blessingFromEffect, pickPoolRarity,
   normalizeUnit, mergeJoins, applyOverrides, buildCatalog,
   heroImageUrls, normalizeGender, parseOrigins,
 } from './normalize.mjs';
+
+test('basePerson : retire le suffixe de genre', () => {
+  assert.equal(basePerson('Robin M'), 'Robin');
+  assert.equal(basePerson('Corrin F'), 'Corrin');
+  assert.equal(basePerson('Caeda'), 'Caeda');
+  assert.equal(basePerson('Kris MF'), 'Kris');
+  assert.equal(basePerson(''), '');
+});
 
 test('deriveBook : livre selon la date de sortie', () => {
   assert.equal(deriveBook('2017-02-02'), '1');
@@ -154,6 +162,7 @@ test('normalizeUnit produit un héros normalisé sans jointures', () => {
   assert.equal(h.releaseDate, '2026-08-31');
   assert.equal(h.book, '10');
   assert.equal(h.partner, null);
+  assert.deepEqual(h.aliases, []);
   assert.equal(h.intId, 1234);
 });
 

@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { cargoQuery } from './lib/cargo.mjs';
 import {
   normalizeUnit, mergeJoins, applyOverrides, buildCatalog,
-  normalizePageName, pageNameFor, blessingFromEffect, pickPoolRarity,
+  normalizePageName, pageNameFor, blessingFromEffect, pickPoolRarity, basePerson,
 } from './lib/normalize.mjs';
 
 const UNIT_FIELDS = [
@@ -25,6 +25,7 @@ export async function run({
   overridesPath = new URL('../data/heroes.overrides.json', import.meta.url),
   localePath = new URL('../data/locale-fr.json', import.meta.url),
   partnersPath = new URL('../data/partners.json', import.meta.url),
+  aliasesPath = new URL('../data/name-aliases.json', import.meta.url),
 } = {}) {
   const common = { fetchImpl };
   if (sleepImpl) common.sleepImpl = sleepImpl;
@@ -96,6 +97,17 @@ export async function run({
   for (const h of heroes) {
     const p = partners[h.id];
     h.partner = typeof p === 'string' && p.trim() ? p.trim() : null;
+  }
+
+  let nameAliases = {};
+  try {
+    nameAliases = JSON.parse(await readFile(aliasesPath, 'utf8'));
+  } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+  }
+  for (const h of heroes) {
+    const raw = nameAliases[basePerson(h.person)] ?? nameAliases[h.name] ?? [];
+    h.aliases = (Array.isArray(raw) ? raw : []).map((a) => String(a).trim()).filter(Boolean);
   }
 
   const consumed = new Set(heroes.map((h) => normalizePageName(pageNameFor(h.name, h.title))));
