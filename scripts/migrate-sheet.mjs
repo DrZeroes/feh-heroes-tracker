@@ -77,7 +77,7 @@ const TAG_TITLE = {
 // Clé = 1er token FR (folded) ; valeur = 1er token EN visé. (Ne mettre que de vraies différences.)
 const FR_NAME_FIX = {
   daraen: 'robin', athenais: 'athena', edgar: 'draug',
-  priscillia: 'priscilla', camus: 'sirius', nabarl: 'navarre', sagaro: 'sedgar',
+  priscillia: 'priscilla', nabarl: 'navarre', sagaro: 'sedgar',
   reinahrdt: 'reinhardt', linfan: 'morgan', linfanh: 'morgan', palne: 'panne',
   'gunthrà': 'gunnthra', gunthra: 'gunnthra', nerpuz: 'nerthuz', setheh: 'seteth',
   gonzales: 'gonzalez', sophia: 'sophia', luci: 'marth', lucimask: 'marth',
@@ -293,24 +293,30 @@ async function run() {
     const best = cands[0];
     const tie = cands[1] && Math.abs(score(cands[1]) - score(best)) < 0.5 && cands[1].id !== best.id;
 
-    // date aberrante (> 90 j avant la sortie du héros = faute de saisie) -> on n'écrit pas la date
-    const wayOff = date && best.releaseDate
-      && (new Date(best.releaseDate) - new Date(date)) > 90 * 864e5;
-    applyUnit(owned, best.id, { merges, ivPlus, ivMinus, date: wayOff ? null : date });
+    // on ne peut pas invoquer un héros avant sa sortie : on cale la date sur la sortie
+    const clamped = date && best.releaseDate && date < best.releaseDate ? best.releaseDate : date;
+    applyUnit(owned, best.id, {
+      merges, ivPlus, ivMinus, date: clamped,
+    });
     mapping.push({
       sheet: heroRaw, date: dateRaw, id: best.id, nameFr: best.nameFr, titleFr: best.titleFr,
     });
     report.matched += 1;
-    if (date && best.releaseDate && best.releaseDate > toIso(dateRaw)) {
-      report.impossible.push(`${heroRaw} (${dateRaw}) -> ${best.id} sorti ${best.releaseDate}`);
+    if (clamped !== date) {
+      report.impossible.push(`${heroRaw} (${dateRaw}) -> ${best.id} : date calée sur la sortie ${best.releaseDate}`);
     } else if (tie) {
       report.ambiguous.push(`${heroRaw} -> ${best.id} (ou ${cands[1].id})`);
     }
   }
 
-  // « tout est en 5★ » : force la rareté sur chaque exemplaire possédé
+  // « tout est en 5★ » + « soutien S partout » : force sur chaque exemplaire possédé.
+  // NB : le jeu n'a qu'UN seul Soutien de l'Invocateur ; toucher un menu Soutien
+  // dans l'appli remettra tous les autres à vide (règle un-seul-S).
   for (const units of Object.values(owned)) {
-    for (const u of units) if (!u.rarity) u.rarity = 5;
+    for (const u of units) {
+      if (!u.rarity) u.rarity = 5;
+      if (!u.support) u.support = 'S';
+    }
   }
 
   const result = {
