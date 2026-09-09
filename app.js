@@ -39,7 +39,7 @@ const state = {
   filters: Object.fromEntries(FACETS.map((f) => [f, null])),
   query: '', sort: 'release-desc', group: false, quickAdd: false,
   list: [], shown: 0, view: 'catalogue',
-  collection: emptyCollection(), status: 'all', wishMissingOnly: false,
+  collection: emptyCollection(), status: 'all', wishMissingOnly: false, detailCtx: null,
   caserne: {
     filters: Object.fromEntries(FACETS.map((f) => [f, null])), query: '', sort: 'release-desc', edit: false,
   },
@@ -458,6 +458,8 @@ function renderView() {
 }
 
 function setView(v, { push = true } = {}) {
+  const detail = $('#detail');
+  if (detail && !detail.hidden) { detail.hidden = true; state.detailCtx = null; }
   state.view = VIEWS.includes(v) ? v : 'catalogue';
   try { localStorage.setItem(LS_VIEW, state.view); } catch { /* ignore */ }
   if (push && location.hash !== `#/${state.view}`) location.hash = `#/${state.view}`;
@@ -981,6 +983,21 @@ function renderStats() {
 }
 const PRIO_RANK = { high: 0, normal: 1 };
 
+// Héros de la wishlist dans l'ordre d'affichage (priorité puis date), filtre « manquants » compris.
+function wishlistHeroList() {
+  const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
+  const ownedSet = ownedIdSet(state.collection);
+  let list = [...wantedIdSet(state.collection)]
+    .map((id) => heroesById.get(id))
+    .filter(Boolean);
+  if (state.wishMissingOnly) list = list.filter((h) => !ownedSet.has(h.id));
+  return list.sort((a, b) => (
+    (PRIO_RANK[state.collection.wanted[a.id].priority] ?? 1)
+    - (PRIO_RANK[state.collection.wanted[b.id].priority] ?? 1)
+    || String(b.releaseDate || '').localeCompare(String(a.releaseDate || ''))
+  ));
+}
+
 function renderWishlist() {
   const box = $('#view-wishlist');
   box.innerHTML = '';
@@ -990,7 +1007,6 @@ function renderWishlist() {
     return;
   }
   const ownedSet = ownedIdSet(state.collection);
-  const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
 
   const bar = document.createElement('label');
   bar.className = 'status wishlist-bar';
@@ -1001,14 +1017,9 @@ function renderWishlist() {
   bar.append(only, document.createTextNode(` ${state.t('wishlist.missingOnly')}`));
   box.appendChild(bar);
 
-  let list = ids
-    .map((id) => ({ id, hero: heroesById.get(id), w: state.collection.wanted[id] }))
-    .filter((x) => x.hero);
-  if (state.wishMissingOnly) list = list.filter((x) => !ownedSet.has(x.id));
-  list.sort((a, b) => (
-    (PRIO_RANK[a.w.priority] ?? 1) - (PRIO_RANK[b.w.priority] ?? 1)
-    || String(b.hero.releaseDate || '').localeCompare(String(a.hero.releaseDate || ''))
-  ));
+  const list = wishlistHeroList().map((hero) => ({
+    id: hero.id, hero, w: state.collection.wanted[hero.id],
+  }));
 
   if (!list.length) {
     const p = document.createElement('p');
@@ -1328,9 +1339,51 @@ function renderAbout() {
   box.appendChild(src);
 }
 
+// Liste des héros « frères » de la fiche = liste filtrée/triée de l'onglet courant.
+function detailSiblings() {
+  if (state.view === 'catalogue') return state.list;
+  if (state.view === 'caserne') return caserneHeroList();
+  if (state.view === 'manuels') return manuelsHeroList();
+  if (state.view === 'wishlist') return wishlistHeroList();
+  return [];
+}
+
+// Ouvre la fiche du héros à `delta` positions dans la liste de l'onglet.
+function detailStep(delta) {
+  const c = state.detailCtx;
+  if (!c) return;
+  const j = c.pos + delta;
+  if (j < 0 || j >= c.list.length) return;
+  openDetail(c.list[j]);
+}
+
 function openDetail(hero, unitIndex = 0) {
   const body = $('#detail-body');
   body.innerHTML = '';
+
+  const sibs = detailSiblings();
+  const pos = sibs.findIndex((x) => x && x.id === hero.id);
+  state.detailCtx = pos >= 0 ? { list: sibs, pos } : null;
+  if (pos >= 0 && sibs.length > 1) {
+    const nav = document.createElement('div');
+    nav.className = 'detail-nav';
+    const mk = (label, d, disabled) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'detail-nav-btn';
+      b.textContent = label;
+      b.disabled = disabled;
+      b.setAttribute('aria-label', state.t(d < 0 ? 'detail.prev' : 'detail.next'));
+      b.addEventListener('click', () => detailStep(d));
+      return b;
+    };
+    const posTxt = document.createElement('span');
+    posTxt.className = 'detail-nav-pos';
+    posTxt.textContent = `${pos + 1} / ${sibs.length}`;
+    nav.append(mk('‹', -1, pos <= 0), posTxt, mk('›', 1, pos >= sibs.length - 1));
+    body.appendChild(nav);
+  }
+
   body.appendChild(portrait(hero, 'big', [hero.imageFull, hero.image].filter(Boolean)));
   const h = document.createElement('h2');
   h.textContent = nameFor(hero);
@@ -1625,6 +1678,7 @@ function openDetail(hero, unitIndex = 0) {
 }
 function closeDetail() {
   $('#detail').hidden = true;
+  state.detailCtx = null;
   if (state.view === 'caserne') renderCaserneList();
   else if (state.view === 'manuels') renderManuels();
 }
@@ -1741,7 +1795,12 @@ async function main() {
     recompute();
   });
   $('#detail-close').addEventListener('click', closeDetail);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDetail(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { closeDetail(); return; }
+    if ($('#detail').hidden || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) return;
+    detailStep(e.key === 'ArrowLeft' ? -1 : 1);
+  });
 
   $('#export-btn').addEventListener('click', () => {
     const out = { ...state.collection, updated: new Date().toISOString().slice(0, 10) };

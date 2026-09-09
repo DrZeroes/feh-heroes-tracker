@@ -26,6 +26,8 @@
   "grid.count": "{n} heroes",
   "grid.empty": "No hero matches these filters.",
   "detail.close": "Close",
+  "detail.prev": "Previous hero",
+  "detail.next": "Next hero",
   "detail.artist": "Artist",
   "detail.actorEn": "Voice (EN)",
   "detail.actorJp": "Voice (JP)",

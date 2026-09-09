@@ -26,6 +26,8 @@
   "grid.count": "{n} héros",
   "grid.empty": "Aucun héros ne correspond à ces filtres.",
   "detail.close": "Fermer",
+  "detail.prev": "Héros précédent",
+  "detail.next": "Héros suivant",
   "detail.artist": "Illustrateur",
   "detail.actorEn": "Voix (EN)",
   "detail.actorJp": "Voix (JP)",
