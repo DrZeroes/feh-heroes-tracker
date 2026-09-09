@@ -266,6 +266,13 @@ function card(hero) {
   pip.style.background = colorHex(hero.color);
   el.appendChild(pip);
 
+  if (Number.isFinite(hero.dex)) {
+    const no = document.createElement('span');
+    no.className = 'card-dex';
+    no.textContent = `#${hero.dex}`;
+    el.appendChild(no);
+  }
+
   const star = document.createElement('span');
   star.className = 'card-star';
   star.textContent = '★';
@@ -1463,6 +1470,7 @@ function openDetail(hero, unitIndex = 0) {
     dd.textContent = val;
     dl.append(dt, dd);
   };
+  row('detail.dex', Number.isFinite(hero.dex) ? `#${hero.dex}` : '');
   row('detail.category', state.t(`category.${hero.category || 'standard'}`)
     + (isDancer(hero) ? ` · ${state.t('category.refresher')}` : ''));
   row('detail.partner', hero.partner ? `& ${partnerFor(hero)}` : '');

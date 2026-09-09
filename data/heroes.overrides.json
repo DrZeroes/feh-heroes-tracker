@@ -1,4 +1,9 @@
 {
   "add": [],
-  "patch": {}
+  "patch": {
+    "Gustav Sovereign Slain": {
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/5/5d/Gustav_Exsanguinator_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/5/57/Gustav_Exsanguinator_Face.webp"
+    }
+  }
 }
