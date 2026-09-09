@@ -818,7 +818,6 @@ function caserneCard(hero, unit, idx, total) {
   sup.addEventListener('change', () => {
     state.collection = setSupport(state.collection, hero.id, idx, sup.value || null);
     saveCollection();
-    renderCaserneList(); // règle un-seul-S : d'autres vignettes peuvent changer
   });
   edit.appendChild(sup);
 

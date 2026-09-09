@@ -165,7 +165,7 @@ export function removeUnit(col, id, index) {
   return next;
 }
 
-// Modifie des champs simples (rarity/merges/ivPlus/ivMinus/date) d'un exemplaire.
+// Modifie des champs simples (rarity/merges/dragonflowers/ivPlus/ivMinus/support/date) d'un exemplaire.
 export function setUnit(col, id, index, patch) {
   const next = migrateCollection(col);
   const units = next.owned[id];
@@ -178,6 +178,7 @@ export function setUnit(col, id, index, patch) {
     ...('dragonflowers' in patch ? { dragonflowers: clampCount(patch.dragonflowers) } : {}),
     ...('ivPlus' in patch ? { ivPlus: IVS.has(patch.ivPlus) ? patch.ivPlus : null } : {}),
     ...('ivMinus' in patch ? { ivMinus: IVS.has(patch.ivMinus) ? patch.ivMinus : null } : {}),
+    ...('support' in patch ? { support: RANKS.has(patch.support) ? patch.support : null } : {}),
     ...('date' in patch
       ? { date: typeof patch.date === 'string' && DATE_RE.test(patch.date) ? patch.date : null }
       : {}),
@@ -261,22 +262,10 @@ export function manualsTotal(col) {
   return t;
 }
 
-// Soutien de l'Invocateur : un seul `S` sur TOUTE la collection (tous héros, tous exemplaires).
+// Rang de soutien C/B/A/S sur un exemplaire (libre, sans contrainte d'unicité :
+// le Livre des héros FEH affiche un S sur quasi tous les héros travaillés).
 export function setSupport(col, id, index, rank) {
-  const next = migrateCollection(col);
-  const units = next.owned[id];
-  if (!units || index < 0 || index >= units.length) return col;
-  const r = RANKS.has(rank) ? rank : null;
-  if (r === 'S') {
-    for (const [k, list] of Object.entries(next.owned)) {
-      next.owned[k] = list.map((u, i) => (
-        (k === id && i === index) || u.support !== 'S' ? u : { ...u, support: null }
-      ));
-    }
-  }
-  next.owned[id] = next.owned[id].map((u, i) => (i === index ? { ...u, support: r } : u));
-  next.updated = today();
-  return next;
+  return setUnit(col, id, index, { support: rank });
 }
 
 export function ownedIdSet(col) {

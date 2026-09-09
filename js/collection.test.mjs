@@ -109,14 +109,17 @@ test('setUnit : modifie l\'exemplaire ciblé seulement', () => {
   assert.equal(setUnit(c, 'A', 9, { merges: 1 }), c);
 });
 
-test('setSupport : un seul S sur toute la collection', () => {
+test('setSupport : rang libre par exemplaire (S multiple autorisé)', () => {
   let c = migrateCollection({ owned: { A: [{ support: 'S' }], B: [{}, {}] } });
   c = setSupport(c, 'B', 1, 'S');
-  assert.equal(c.owned.A[0].support, null);
+  assert.equal(c.owned.A[0].support, 'S'); // pas d'unicité : A garde son S
   assert.equal(c.owned.B[0].support, null);
   assert.equal(c.owned.B[1].support, 'S');
   c = setSupport(c, 'B', 1, 'A');
   assert.equal(c.owned.B[1].support, 'A');
+  c = setSupport(c, 'B', 1, 'bogus');
+  assert.equal(c.owned.B[1].support, null);
+  assert.equal(setSupport(c, 'Ghost', 0, 'S'), c);
 });
 
 test('setProject : par exemplaire, null pour retirer', () => {
