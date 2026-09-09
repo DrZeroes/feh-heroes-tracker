@@ -721,17 +721,20 @@ function caserneCard(hero, unit, idx, total) {
   dfWrap.append(dfIcon, df);
   edit.appendChild(dfWrap);
 
-  const ivP = document.createElement('select');
-  ivP.title = state.t('field.ivPlus');
-  ivOptions(ivP, unit.ivPlus);
-  ivP.addEventListener('change', () => patch({ ivPlus: ivP.value || null }));
-  edit.appendChild(ivP);
-
-  const ivM = document.createElement('select');
-  ivM.title = state.t('field.ivMinus');
-  ivOptions(ivM, unit.ivMinus);
-  ivM.addEventListener('change', () => patch({ ivMinus: ivM.value || null }));
-  edit.appendChild(ivM);
+  const ivField = (sign, cls, cur, onChange, titleKey) => {
+    const l = document.createElement('label');
+    l.className = `cc-ivf ${cls}`;
+    l.title = state.t(titleKey);
+    const b = document.createElement('b');
+    b.textContent = sign;
+    const s = document.createElement('select');
+    ivOptions(s, cur);
+    s.addEventListener('change', () => onChange(s.value || null));
+    l.append(b, s);
+    return l;
+  };
+  edit.appendChild(ivField('+', 'cc-ivp', unit.ivPlus, (v) => patch({ ivPlus: v }), 'field.ivPlus'));
+  edit.appendChild(ivField('−', 'cc-ivm', unit.ivMinus, (v) => patch({ ivMinus: v }), 'field.ivMinus'));
 
   const sup = document.createElement('select');
   sup.title = state.t('field.support');
