@@ -25,17 +25,26 @@ export function normalizeTitleKey(name, title) {
 export function buildFrTitleIndex(enMsg, frMsg) {
   const exact = new Map();
   const norm = new Map();
+  const nameByEn = new Map(); // nom EN -> nom FR (quand il diffère)
   for (const key of Object.keys(enMsg)) {
     if (!key.startsWith('MPID_') || key.startsWith('MPID_HONOR_')) continue;
     const jp = key.slice('MPID_'.length);
     const enName = enMsg[key];
+    const frName = frMsg[key];
+    if (enName && frName && frName !== enName && !nameByEn.has(enName)) {
+      nameByEn.set(enName, frName);
+    }
     const enHonor = enMsg[`MPID_HONOR_${jp}`];
     const frHonor = frMsg[`MPID_HONOR_${jp}`];
     if (!enName || !enHonor || !frHonor) continue;
     exact.set(`${enName}${SEP}${enHonor}`, frHonor);
     norm.set(normalizeTitleKey(enName, enHonor), frHonor);
   }
-  return { exact, norm };
+  return { exact, norm, nameByEn };
+}
+
+export function frNameFor(name, index) {
+  return index.nameByEn.get(name) ?? null;
 }
 
 export function frTitleFor(name, title, index) {

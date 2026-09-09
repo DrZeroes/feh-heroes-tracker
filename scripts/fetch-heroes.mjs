@@ -79,13 +79,18 @@ export async function run({
   heroes = heroes.filter((h) => !h.properties.includes('enemy'));
 
   let localeTitles = {};
+  let localeNames = {};
   try {
-    localeTitles = JSON.parse(await readFile(localePath, 'utf8')).titles ?? {};
+    const loc = JSON.parse(await readFile(localePath, 'utf8'));
+    localeTitles = loc.titles ?? {};
+    localeNames = loc.names ?? {};
   } catch (err) {
     if (err.code !== 'ENOENT') throw err;
   }
   for (const h of heroes) {
     h.titleFr = localeTitles[`${h.name}\u001f${h.title}`] ?? null;
+    const nf = localeNames[h.name];
+    h.nameFr = typeof nf === 'string' && nf.trim() && nf !== h.name ? nf.trim() : null;
   }
 
   let partners = {};

@@ -60,6 +60,9 @@ function updateCollectionCount() {
 function epithetFor(hero) {
   return state.lang === 'fr' && hero.titleFr ? hero.titleFr : hero.title;
 }
+function nameFor(hero) {
+  return state.lang === 'fr' && hero.nameFr ? hero.nameFr : hero.name;
+}
 
 function readPrefs() {
   try {
@@ -238,7 +241,7 @@ function card(hero) {
 
   const name = document.createElement('span');
   name.className = 'name';
-  name.textContent = hero.name;
+  name.textContent = nameFor(hero);
   el.appendChild(name);
   if (hero.partner) {
     const pn = document.createElement('span');
@@ -529,7 +532,7 @@ function renderCaserne() {
       who.type = 'button';
       who.className = 'who';
       who.innerHTML = '<b></b><span></span>';
-      who.querySelector('b').textContent = units.length > 1 ? `${hero.name} #${idx + 1}` : hero.name;
+      who.querySelector('b').textContent = units.length > 1 ? `${nameFor(hero)} #${idx + 1}` : nameFor(hero);
       who.querySelector('span').textContent = epithetFor(hero);
       who.addEventListener('click', () => openDetail(hero, idx));
       row.appendChild(who);
@@ -589,7 +592,7 @@ function renderCaserne() {
       rm.setAttribute('aria-label', state.t('caserne.remove'));
       rm.addEventListener('click', () => {
         const last = units.length === 1;
-        if (last && !window.confirm(state.t('caserne.removeConfirm', { name: hero.name }))) return;
+        if (last && !window.confirm(state.t('caserne.removeConfirm', { name: nameFor(hero) }))) return;
         state.collection = removeUnit(state.collection, hero.id, idx);
         if (last) refreshCard(hero.id);
         updateCollectionCount();
@@ -698,19 +701,28 @@ function renderStats() {
   const tl = acquisitionTimeline(state.collection).map((m) => ({ label: m.month, count: m.count }));
   if (tl.length) box.appendChild(barBlock('stats.timeline', tl));
 
+  const heroById = new Map(state.heroes.map((h) => [h.id, h]));
+  const dispName = (id, fallback) => {
+    const h = heroById.get(id);
+    return h ? nameFor(h) : fallback;
+  };
+
   const tc = topCopies(state.collection, state.heroes, 10)
-    .map((h) => ({ label: `${h.name}${h.title ? ` (${h.title})` : ''}`, count: h.copies }));
+    .map((h) => ({ label: `${dispName(h.id, h.name)}${h.title ? ` (${h.title})` : ''}`, count: h.copies }));
   if (tc.length) box.appendChild(barBlock('stats.topCopies', tc));
 
   const pp = projectProgress(state.collection, state.heroes);
   if (pp.length) {
-    const rows = pp.map((p) => ({
-      label: p.targetIvPlus
-        ? `${p.name} · ${state.t('project.ivReminder', { iv: state.t(`iv.${p.targetIvPlus}`) })}`
-        : p.name,
-      owned: p.merges,
-      total: p.targetMerges,
-    }));
+    const rows = pp.map((p) => {
+      const nm = `${dispName(p.id, p.name)}${p.unit ? ` #${p.unit + 1}` : ''}`;
+      return {
+        label: p.targetIvPlus
+          ? `${nm} · ${state.t('project.ivReminder', { iv: state.t(`iv.${p.targetIvPlus}`) })}`
+          : nm,
+        owned: p.merges,
+        total: p.targetMerges,
+      };
+    });
     box.appendChild(barBlock('stats.projects', rows));
   }
 
@@ -789,7 +801,7 @@ function renderWishlist() {
     who.type = 'button';
     who.className = 'who';
     who.innerHTML = '<b></b><span></span>';
-    who.querySelector('b').textContent = hero.name;
+    who.querySelector('b').textContent = nameFor(hero);
     who.querySelector('span').textContent = epithetFor(hero);
     who.addEventListener('click', () => openDetail(hero));
     row.appendChild(who);
@@ -863,7 +875,7 @@ function renderManuels() {
   dl.id = 'manual-hero-list';
   for (const h of state.heroes) {
     const o = document.createElement('option');
-    o.value = `${h.name} · ${h.title}`;
+    o.value = `${nameFor(h)} · ${epithetFor(h)}`;
     o.dataset.id = h.id;
     dl.appendChild(o);
   }
@@ -919,7 +931,7 @@ function renderManuels() {
     const label = document.createElement('span');
     label.className = 'manual-name';
     label.innerHTML = '<b></b><i></i>';
-    label.querySelector('b').textContent = h.name;
+    label.querySelector('b').textContent = nameFor(h);
     label.querySelector('i').textContent = h.title ? epithetFor(h) : '';
     info.appendChild(label);
     const icons = document.createElement('div');
@@ -1019,7 +1031,7 @@ function openDetail(hero, unitIndex = 0) {
   body.innerHTML = '';
   body.appendChild(portrait(hero, 'big', [hero.imageFull, hero.image].filter(Boolean)));
   const h = document.createElement('h2');
-  h.textContent = hero.name;
+  h.textContent = nameFor(hero);
   const ep = document.createElement('p');
   ep.className = 'epithet';
   ep.textContent = epithetFor(hero);

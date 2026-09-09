@@ -147,7 +147,7 @@ export function applyFilters(heroes, filters = {}, query = '') {
     if (filters.poolRarity && poolTier(h) !== filters.poolRarity) return false;
     if (terms.length) {
       const hay = foldText([
-        h.name, h.title, h.titleFr, h.artist,
+        h.name, h.nameFr, h.title, h.titleFr, h.artist,
         (h.aliases ?? []).join(' '),
         (h.actorEn ?? []).join(' '), (h.actorJp ?? []).join(' '),
       ].join(' '));

@@ -4,9 +4,9 @@ import { readFile } from 'node:fs/promises';
 import { originGroup } from '../js/catalog-view.mjs';
 import { BOOK_STARTS } from './lib/normalize.mjs';
 
-const HERO_KEYS = ['id', 'name', 'title', 'titleFr', 'person', 'color', 'weapon', 'move', 'gender', 'origin',
-  'origins', 'category', 'properties', 'blessing', 'poolRarity', 'poolFlags', 'artist', 'actorEn', 'actorJp',
-  'image', 'imageFull', 'releaseDate', 'book', 'partner', 'aliases', 'intId'];
+const HERO_KEYS = ['id', 'name', 'nameFr', 'title', 'titleFr', 'person', 'color', 'weapon', 'move', 'gender',
+  'origin', 'origins', 'category', 'properties', 'blessing', 'poolRarity', 'poolFlags', 'artist', 'actorEn',
+  'actorJp', 'image', 'imageFull', 'releaseDate', 'book', 'partner', 'aliases', 'intId'];
 const CATEGORIES = new Set(['mythic', 'legendary', 'emblem', 'rearmed', 'attuned', 'ascended',
   'duo', 'harmonized', 'aided', 'entwined', 'vista', 'chosen', 'refresher',
   'ghb', 'tempest', 'special', 'standard']);
@@ -33,7 +33,7 @@ test('catalog: source string exact', () => {
   assert.equal(catalog.source,
     'feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)');
 });
-test('catalog: every hero has exactly the 26 keys', () => {
+test('catalog: every hero has exactly the 27 keys', () => {
   const want = [...HERO_KEYS].sort();
   for (const h of catalog.heroes) {
     assert.deepEqual(Object.keys(h).sort(), want, `bad shape: ${h.id}`);

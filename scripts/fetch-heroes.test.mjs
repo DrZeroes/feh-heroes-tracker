@@ -52,7 +52,7 @@ const TABLES = {
 test('run normalise, joint, trie et écrit le catalogue', async () => {
   const outPath = path.join(os.tmpdir(), `feh-heroes-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
   const localePath = path.join(os.tmpdir(), `feh-locale-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
-  await writeFile(localePath, JSON.stringify({ titles: { 'Rhea\u001fThe Final Child': "L'Enfant ultime" } }), 'utf8');
+  await writeFile(localePath, JSON.stringify({ titles: { 'Rhea\u001fThe Final Child': "L'Enfant ultime" }, names: { Rhea: 'Rhéa (VF)' } }), 'utf8');
   const partnersPath = path.join(os.tmpdir(), `feh-partners-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
   await writeFile(partnersPath, JSON.stringify({ 'Rhea The Final Child': 'Seiros' }), 'utf8');
   const aliasesPath = path.join(os.tmpdir(), `feh-aliases-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
@@ -82,6 +82,8 @@ test('run normalise, joint, trie et écrit le catalogue', async () => {
   const [first, second] = catalog.heroes;
   assert.equal(first.id, 'Rhea The Final Child');      // date la plus récente en tête
   assert.equal(first.titleFr, "L'Enfant ultime");      // jointure data/locale-fr.json
+  assert.equal(first.nameFr, 'Rhéa (VF)');             // nom FR via locale-fr.json names
+  assert.equal(second.nameFr, null);
   assert.equal(first.partner, 'Seiros');               // jointure data/partners.json
   assert.equal(second.partner, null);
   assert.deepEqual(first.aliases, ['Rhéa']);           // jointure data/name-aliases.json (par Person)

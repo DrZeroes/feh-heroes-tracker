@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-08T16:31:03.213Z",
+  "generatedAt": "2026-09-09T07:53:34.906Z",
   "source": "HertzDevil/feh-assets-json@book7-2023 USEN+EUFR Message/Data",
   "ref": "book7-2023",
   "count": 1003,
@@ -1007,5 +1007,30 @@
     "Tiki\u001fDragon Scion": "Fille dragon",
     "Virion\u001fElite Archer": "Archer effronté",
     "Wrys\u001fKindly Priest": "Soigneur altean"
+  },
+  "names": {
+    "Caeda": "Shiida",
+    "Robin": "Daraen",
+    "Sedgar": "Sagaro",
+    "Gatekeeper": "Garde",
+    "Black Knight": "Chevalier Noir",
+    "Lon'qu": "Lon'zu",
+    "Nephenee": "Nephenie",
+    "Inigo": "Íñigo",
+    "Panne": "Palne",
+    "Cherche": "Zelcher",
+    "Brigand Boss": "Boss (brigands)",
+    "Kyza": "Kysha",
+    "Morgan": "Linfan",
+    "Galle": "Gall",
+    "Navarre": "Nabarl",
+    "Ena": "Ina",
+    "Dheginsea": "Deghinsea",
+    "Gatrie": "Gatorie",
+    "Flame Emperor": "Emp. Flammes",
+    "Death Knight": "Chev. Macabre",
+    "Athena": "Athenais",
+    "Cain": "Caïn",
+    "Draug": "Edgar"
   }
 }

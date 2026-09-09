@@ -1,7 +1,9 @@
 // scripts/fetch-locale.mjs — construit data/locale-fr.json depuis les dumps de messages FEH.
 import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { indexMessages, buildFrTitleIndex, frTitleFor } from './lib/locale.mjs';
+import {
+  indexMessages, buildFrTitleIndex, frTitleFor, frNameFor,
+} from './lib/locale.mjs';
 
 const REPO = 'HertzDevil/feh-assets-json';
 const DEFAULT_REF = 'book7-2023';
@@ -51,12 +53,16 @@ export async function run({
   const index = buildFrTitleIndex(enMsg, frMsg);
 
   const titles = {};
+  const names = {};
   let matched = 0;
   let missed = 0;
+  let namedFr = 0;
   for (const h of catalog.heroes ?? []) {
     const fr = frTitleFor(h.name, h.title, index);
     if (fr) { titles[`${h.name}\u001f${h.title}`] = fr; matched += 1; }
     else missed += 1;
+    const frName = frNameFor(h.name, index);
+    if (frName && !names[h.name]) { names[h.name] = frName; namedFr += 1; }
   }
 
   const outObj = {
@@ -65,15 +71,18 @@ export async function run({
     ref,
     count: matched,
     titles,
+    names,
   };
   await writeFile(outPath, `${JSON.stringify(outObj, null, 2)}\n`, 'utf8');
-  return { count: (catalog.heroes ?? []).length, matched, missed };
+  return {
+    count: (catalog.heroes ?? []).length, matched, missed, names: namedFr,
+  };
 }
 
 const invokedDirectly = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
 if (invokedDirectly) {
   run().then(
-    (r) => console.log(`[fetch-locale] ${r.matched}/${r.count} épithètes FR (${r.missed} sans correspondance)`),
+    (r) => console.log(`[fetch-locale] ${r.matched}/${r.count} épithètes FR, ${r.names} noms FR distincts (${r.missed} épithètes sans correspondance)`),
     (err) => { console.error(err); process.exitCode = 1; },
   );
 }

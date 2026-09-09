@@ -34,6 +34,16 @@ test('applyFilters : recherche par alias VF (aliases)', () => {
   assert.equal(applyFilters(heroes, {}, 'caeda').length, 1);
 });
 
+test('applyFilters : recherche par nom FR (nameFr)', () => {
+  const heroes = [
+    { id: 'C', name: 'Caeda', nameFr: 'Shiida', title: 'Talys Bride', titleFr: null, aliases: [],
+      color: 'b', weapon: 'lance', move: 'flying', gender: 'female', origins: [],
+      blessing: null, poolRarity: null, artist: '', actorEn: [], actorJp: [] },
+  ];
+  assert.equal(applyFilters(heroes, {}, 'shiida').length, 1);
+  assert.equal(applyFilters(heroes, {}, 'caeda').length, 1);
+});
+
 const H = (o) => ({
   id: o.id ?? o.name, name: o.name, title: o.title ?? '', person: o.person ?? o.name,
   color: o.color ?? 'r', weapon: o.weapon ?? 'sword', move: o.move ?? 'infantry',

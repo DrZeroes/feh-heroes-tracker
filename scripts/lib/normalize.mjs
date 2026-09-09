@@ -142,6 +142,7 @@ export function normalizeUnit(raw) {
     image,
     imageFull,
     releaseDate,
+    nameFr: null, // rempli par fetch-heroes depuis data/locale-fr.json (nom FR officiel)
     book: deriveBook(releaseDate),
     partner: null, // rempli par fetch-heroes depuis data/partners.json (Duo/Harmonique)
     aliases: [], // rempli par fetch-heroes depuis data/name-aliases.json (recherche)
@@ -185,6 +186,7 @@ export function buildCatalog(heroes, { generatedAt }) {
   // backfill des champs dérivés pour les ajouts d'overrides qui ne les précisent pas
   const filled = heroes.map((h) => ({
     ...h,
+    nameFr: 'nameFr' in h ? h.nameFr : null,
     book: 'book' in h ? h.book : deriveBook(h.releaseDate ?? null),
     partner: 'partner' in h ? h.partner : null,
     aliases: Array.isArray(h.aliases) ? h.aliases : [],

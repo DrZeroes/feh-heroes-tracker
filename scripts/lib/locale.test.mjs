@@ -1,6 +1,8 @@
 ﻿import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { indexMessages, normalizeTitleKey, buildFrTitleIndex, frTitleFor } from './locale.mjs';
+import {
+  indexMessages, normalizeTitleKey, buildFrTitleIndex, frTitleFor, frNameFor,
+} from './locale.mjs';
 
 test('indexMessages : tableau -> map', () => {
   assert.deepEqual(
@@ -32,4 +34,19 @@ test('buildFrTitleIndex + frTitleFor : exact puis normalisé', () => {
   // titre reçu avec apostrophe droite -> passe par la clé normalisée
   assert.equal(frTitleFor('Anna', "Commander 'n Chief", idx), 'Cheffe en chef');
   assert.equal(frTitleFor('Nobody', 'Nowhere', idx), null);
+});
+
+test('buildFrTitleIndex + frNameFor : nom FR quand il diffère', () => {
+  const en = {
+    MPID_c1: 'Caeda', MPID_HONOR_c1: 'Talys Bride',
+    MPID_c2: 'Marth', MPID_HONOR_c2: 'Altean Prince',
+  };
+  const fr = {
+    MPID_c1: 'Shiida', MPID_HONOR_c1: 'Fiancée de Talys',
+    MPID_c2: 'Marth', MPID_HONOR_c2: "Prince d'Altéa",
+  };
+  const idx = buildFrTitleIndex(en, fr);
+  assert.equal(frNameFor('Caeda', idx), 'Shiida');
+  assert.equal(frNameFor('Marth', idx), null); // identique EN/FR -> pas d'entrée
+  assert.equal(frNameFor('Nobody', idx), null);
 });
