@@ -2,8 +2,27 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   buildFacetOptions, applyFilters, sortHeroes, groupByPerson, orderedBy, poolTier, isDancer,
-  CATEGORY_ORDER,
+  foldText, CATEGORY_ORDER,
 } from './catalog-view.mjs';
+
+test('foldText : accents et lettres nordiques repliés', () => {
+  assert.equal(foldText('Níðhöggr'), 'nidhoggr');
+  assert.equal(foldText('Þjazi'), 'thjazi');
+  assert.equal(foldText('Fjörm'), 'fjorm');
+  assert.equal(foldText('L’Enfant ultime'), "l'enfant ultime");
+});
+
+test('applyFilters : recherche insensible aux accents', () => {
+  const heroes = [
+    { id: 'N', name: 'Níðhöggr', title: 'World Serpent', titleFr: null,
+      color: 'g', weapon: 'tome', move: 'flying', gender: 'female', origins: [],
+      blessing: null, poolRarity: null, artist: '', actorEn: [], actorJp: [] },
+  ];
+  assert.equal(applyFilters(heroes, {}, 'nidhoggr').length, 1);
+  assert.equal(applyFilters(heroes, {}, 'níðhöggr').length, 1);
+  assert.equal(applyFilters(heroes, {}, 'NIDHOGGR').length, 1);
+  assert.equal(applyFilters(heroes, {}, 'xyz').length, 0);
+});
 
 const H = (o) => ({
   id: o.id ?? o.name, name: o.name, title: o.title ?? '', person: o.person ?? o.name,

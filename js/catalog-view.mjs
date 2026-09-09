@@ -110,8 +110,21 @@ export function buildFacetOptions(heroes) {
 
 const SCALAR_FACETS = ['color', 'weapon', 'move', 'gender', 'book'];
 
+// Lettres nordiques/spéciales des noms FE que NFD ne décompose pas.
+const LETTER_FOLD = { ð: 'd', þ: 'th', ø: 'o', æ: 'ae', œ: 'oe', ß: 'ss', ł: 'l', đ: 'd', ħ: 'h', ı: 'i' };
+
+// Casse + accents + lettres spéciales retirés, pour une recherche tolérante.
+export function foldText(s) {
+  return String(s ?? '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[’‘]/g, "'")
+    .replace(/[ðþøæœßłđħı]/g, (c) => LETTER_FOLD[c] ?? c);
+}
+
 export function applyFilters(heroes, filters = {}, query = '') {
-  const terms = String(query).toLowerCase().split(/\s+/).filter(Boolean);
+  const terms = foldText(query).split(/\s+/).filter(Boolean);
   return heroes.filter((h) => {
     for (const f of SCALAR_FACETS) {
       if (filters[f] && h[f] !== filters[f]) return false;
@@ -133,10 +146,10 @@ export function applyFilters(heroes, filters = {}, query = '') {
     }
     if (filters.poolRarity && poolTier(h) !== filters.poolRarity) return false;
     if (terms.length) {
-      const hay = [
-        h.name, h.title, h.artist,
+      const hay = foldText([
+        h.name, h.title, h.titleFr, h.artist,
         (h.actorEn ?? []).join(' '), (h.actorJp ?? []).join(' '),
-      ].join(' ').toLowerCase();
+      ].join(' '));
       if (!terms.every((t) => hay.includes(t))) return false;
     }
     return true;
