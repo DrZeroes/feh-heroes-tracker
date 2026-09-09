@@ -5,6 +5,7 @@ import {
 } from './js/hero-media.mjs';
 import {
   buildFacetOptions, applyFilters, sortHeroes, groupByPerson, orderedBy, poolTier, isDancer,
+  originGroup, GAME_GROUPS,
   CATEGORY_ORDER, BLESSING_ORDER, COLOR_ORDER, WEAPON_ORDER, MOVE_ORDER,
 } from './js/catalog-view.mjs';
 import {
@@ -40,6 +41,7 @@ const state = {
   query: '', sort: 'release-desc', group: false, quickAdd: false,
   list: [], shown: 0, view: 'catalogue',
   collection: emptyCollection(), status: 'all', wishMissingOnly: false, detailCtx: null,
+  statsClosed: [],
   caserne: {
     filters: Object.fromEntries(FACETS.map((f) => [f, null])), query: '', sort: 'release-desc', edit: false,
   },
@@ -90,6 +92,7 @@ function readPrefs() {
         if (p.caserne.sort) state.caserne.sort = p.caserne.sort;
         state.caserne.edit = !!p.caserne.edit;
       }
+      if (Array.isArray(p.statsClosed)) state.statsClosed = p.statsClosed.filter((x) => typeof x === 'string');
       if (p.manuels && typeof p.manuels === 'object') {
         Object.assign(state.manuels.filters, p.manuels.filters || {});
         for (const f of FACETS) if (state.manuels.filters[f] === '') state.manuels.filters[f] = null;
@@ -105,6 +108,7 @@ function writePrefs() {
     localStorage.setItem(LS_PREFS, JSON.stringify({
       filters: state.filters, query: state.query, sort: state.sort, group: state.group,
       status: state.status, quickAdd: state.quickAdd, caserne: state.caserne, manuels: state.manuels,
+      statsClosed: state.statsClosed,
     }));
   } catch { /* ignore */ }
 }
@@ -858,9 +862,16 @@ function caserneCard(hero, unit, idx, total) {
 // rows: { label, owned, total }  -> jauge de complétion (pleine à 100 % = owned === total)
 //       { label, count }          -> barre relative au max du bloc
 function barBlock(titleKey, rows) {
-  const b = document.createElement('div');
+  const b = document.createElement('details');
   b.className = 'stat-block';
-  const h = document.createElement('h3');
+  b.open = !state.statsClosed.includes(titleKey);
+  b.addEventListener('toggle', () => {
+    const set = new Set(state.statsClosed);
+    if (b.open) set.delete(titleKey); else set.add(titleKey);
+    state.statsClosed = [...set];
+    writePrefs();
+  });
+  const h = document.createElement('summary');
   h.textContent = state.t(titleKey);
   b.appendChild(h);
   const max = Math.max(1, ...rows.map((r) => r.count ?? 0));
@@ -935,7 +946,20 @@ function renderStats() {
     if (rows.length) box.appendChild(barBlock(titleKey, rows));
   }
 
-  const tl = acquisitionTimeline(state.collection).map((m) => ({ label: m.month, count: m.count }));
+  const gm = new Map(GAME_GROUPS.map(([label]) => [label, { total: 0, owned: 0 }]));
+  for (const h of state.heroes) {
+    const g = (h.origins || []).map(originGroup).find(Boolean) || originGroup(h.origin);
+    if (!g || !gm.has(g)) continue;
+    const e = gm.get(g);
+    e.total += 1;
+    if (ownedSet.has(h.id)) e.owned += 1;
+  }
+  const gameRows = [...gm]
+    .filter(([, e]) => e.total)
+    .map(([label, e]) => ({ label, total: e.total, owned: e.owned }));
+  if (gameRows.length) box.appendChild(barBlock('stats.byGame', gameRows));
+
+  const tl = acquisitionTimeline(state.collection, 'year').map((m) => ({ label: m.period, count: m.count }));
   if (tl.length) box.appendChild(barBlock('stats.timeline', tl));
 
   const heroById = new Map(state.heroes.map((h) => [h.id, h]));

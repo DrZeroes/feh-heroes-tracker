@@ -26,8 +26,20 @@ test('acquisitionTimeline groupe par mois (toutes unités)', () => {
     C: [{ date: '2025-12-20' }],
   } };
   assert.deepEqual(acquisitionTimeline(col), [
-    { month: '2025-12', count: 2 },
-    { month: '2026-01', count: 2 },
+    { period: '2025-12', count: 2 },
+    { period: '2026-01', count: 2 },
+  ]);
+});
+
+test('acquisitionTimeline groupe par année', () => {
+  const col = { owned: {
+    A: [{ date: '2026-01-15' }, { date: '2025-12-01' }],
+    B: [{ date: '2026-07-02' }],
+    C: [{ date: '2025-03-20' }],
+  } };
+  assert.deepEqual(acquisitionTimeline(col, 'year'), [
+    { period: '2025', count: 2 },
+    { period: '2026', count: 2 },
   ]);
 });
 

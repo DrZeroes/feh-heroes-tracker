@@ -13,19 +13,21 @@ export function distribution(heroes, ownedSet, key) {
   return [...map.values()].sort((a, b) => b.total - a.total || String(a.value).localeCompare(String(b.value)));
 }
 
-export function acquisitionTimeline(collection) {
+// by = 'month' -> clés 'YYYY-MM' ; by = 'year' -> clés 'YYYY'.
+export function acquisitionTimeline(collection, by = 'month') {
   const owned = collection && collection.owned ? collection.owned : {};
+  const cut = by === 'year' ? 4 : 7;
   const map = new Map();
   for (const units of Object.values(owned)) {
     for (const u of units || []) {
-      if (!u || typeof u.date !== 'string' || u.date.length < 7) continue;
-      const month = u.date.slice(0, 7);
-      map.set(month, (map.get(month) || 0) + 1);
+      if (!u || typeof u.date !== 'string' || u.date.length < cut) continue;
+      const period = u.date.slice(0, cut);
+      map.set(period, (map.get(period) || 0) + 1);
     }
   }
   return [...map.entries()]
-    .map(([month, count]) => ({ month, count }))
-    .sort((a, b) => a.month.localeCompare(b.month));
+    .map(([period, count]) => ({ period, count }))
+    .sort((a, b) => a.period.localeCompare(b.period));
 }
 
 // Héros détenus en plusieurs exemplaires (doublons de caserne).

@@ -198,6 +198,12 @@ img { max-width: 100%; }
 
 .stat-block { margin: 1rem; }
 .stat-block h3 { margin: 0 0 .5rem; font-size: .95rem; }
+details.stat-block > summary { margin: 0 0 .5rem; font-size: .95rem; font-weight: 700;
+  cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: .4rem; }
+details.stat-block > summary::-webkit-details-marker { display: none; }
+details.stat-block > summary::before { content: "▸"; color: var(--muted); font-size: .8rem; }
+details.stat-block[open] > summary::before { content: "▾"; }
+details.stat-block:not([open]) > summary { margin-bottom: 0; }
 .bar-row { display: grid; grid-template-columns: 7rem 1fr auto; gap: .5rem; align-items: center;
   font-size: .82rem; margin: .2rem 0; }
 .bar { height: .8rem; border-radius: 4px; background: color-mix(in srgb, var(--accent) 30%, var(--card));
