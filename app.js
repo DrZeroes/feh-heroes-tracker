@@ -40,7 +40,9 @@ const state = {
   query: '', sort: 'release-desc', group: false, quickAdd: false,
   list: [], shown: 0, view: 'catalogue',
   collection: emptyCollection(), status: 'all', wishMissingOnly: false,
-  caserne: { filters: Object.fromEntries(FACETS.map((f) => [f, null])), query: '', sort: 'release-desc' },
+  caserne: {
+    filters: Object.fromEntries(FACETS.map((f) => [f, null])), query: '', sort: 'release-desc', edit: false,
+  },
 };
 
 function loadCollection() {
@@ -83,6 +85,7 @@ function readPrefs() {
         for (const f of FACETS) if (state.caserne.filters[f] === '') state.caserne.filters[f] = null;
         if (typeof p.caserne.query === 'string') state.caserne.query = p.caserne.query;
         if (p.caserne.sort) state.caserne.sort = p.caserne.sort;
+        state.caserne.edit = !!p.caserne.edit;
       }
     }
   } catch { /* ignore */ }
@@ -609,7 +612,20 @@ function renderCaserne() {
   }
   const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
   const pool = Object.keys(state.collection.owned).map((id) => heroesById.get(id)).filter(Boolean);
-  box.appendChild(buildControlsBar(state.caserne, pool, renderCaserneList, renderCaserne));
+  const bar = buildControlsBar(state.caserne, pool, renderCaserneList, renderCaserne);
+  const editBtn = document.createElement('button');
+  editBtn.type = 'button';
+  editBtn.className = 'sortbtn';
+  editBtn.textContent = `✎ ${state.t('caserne.edit')}`;
+  editBtn.setAttribute('aria-pressed', state.caserne.edit ? 'true' : 'false');
+  editBtn.addEventListener('click', () => {
+    state.caserne.edit = !state.caserne.edit;
+    editBtn.setAttribute('aria-pressed', state.caserne.edit ? 'true' : 'false');
+    writePrefs();
+    renderCaserneList();
+  });
+  bar.appendChild(editBtn);
+  box.appendChild(bar);
   const listBox = document.createElement('div');
   listBox.id = 'caserne-list';
   box.appendChild(listBox);
@@ -638,6 +654,7 @@ function renderCaserneList() {
 
   const grid = document.createElement('main');
   grid.className = 'grid caserne-grid';
+  grid.classList.toggle('editing', state.caserne.edit);
   for (const hero of list) {
     const units = state.collection.owned[hero.id];
     units.forEach((unit, idx) => grid.appendChild(caserneCard(hero, unit, idx, units.length)));
@@ -674,6 +691,22 @@ function caserneCard(hero, unit, idx, total) {
   });
   el.appendChild(rm);
 
+  const cbadges = document.createElement('span');
+  cbadges.className = 'badges';
+  if (hero.category && hero.category !== 'standard') {
+    const b = document.createElement('span');
+    b.className = 'badge';
+    b.textContent = state.t(`category.${hero.category}`);
+    cbadges.appendChild(b);
+  }
+  if (isDancer(hero)) {
+    const b = document.createElement('span');
+    b.className = 'badge badge-dance';
+    b.textContent = state.t('category.refresher');
+    cbadges.appendChild(b);
+  }
+  if (cbadges.childElementCount) el.appendChild(cbadges);
+
   el.appendChild(portrait(hero, 'portrait', imageCandidates(hero)));
 
   const name = document.createElement('span');
@@ -684,6 +717,42 @@ function caserneCard(hero, unit, idx, total) {
   ep.className = 'epithet';
   ep.textContent = epithetFor(hero);
   el.appendChild(ep);
+
+  const icons = document.createElement('div');
+  icons.className = 'icons';
+  for (const p of [classIconPath(hero), moveIconPath(hero)]) {
+    if (!p) continue;
+    const i = document.createElement('img');
+    i.src = p; i.alt = ''; i.loading = 'lazy';
+    icons.appendChild(i);
+  }
+  if (icons.childElementCount) el.appendChild(icons);
+
+  // résumé lecture seule (masqué en mode édition)
+  const badges = document.createElement('div');
+  badges.className = 'cc-badges';
+  const addBadge = (cls, text) => {
+    if (!text) return;
+    const s = document.createElement('span');
+    s.className = `cc-b ${cls}`;
+    s.textContent = text;
+    badges.appendChild(s);
+  };
+  addBadge(unit.rarity ? `star-${unit.rarity}` : '', unit.rarity ? `${unit.rarity}★` : '');
+  addBadge('cc-b-merge', unit.merges > 0 ? `+${unit.merges}` : '');
+  addBadge('cc-b-iv', [
+    unit.ivPlus ? `+${state.t(`iv.${unit.ivPlus}`)}` : '',
+    unit.ivMinus ? `−${state.t(`iv.${unit.ivMinus}`)}` : '',
+  ].filter(Boolean).join(' '));
+  addBadge('cc-b-sup', unit.support ? state.t(`support.${unit.support}`) : '');
+  addBadge('cc-b-df', unit.dragonflowers > 0 ? `🌸${unit.dragonflowers}` : '');
+  if (!badges.childElementCount) {
+    const s = document.createElement('span');
+    s.className = 'cc-b cc-b-empty';
+    s.textContent = state.t('caserne.blank');
+    badges.appendChild(s);
+  }
+  el.appendChild(badges);
 
   // édition inline compacte (rareté / fusions / IV / soutien)
   const edit = document.createElement('div');
@@ -770,7 +839,7 @@ function caserneCard(hero, unit, idx, total) {
 
   el.appendChild(edit);
 
-  const open = () => openDetail(hero, idx);
+  const open = () => { if (!state.caserne.edit) openDetail(hero, idx); };
   el.addEventListener('click', open);
   el.addEventListener('keydown', (e) => { if (e.key === 'Enter') open(); });
   return el;

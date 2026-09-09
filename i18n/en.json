@@ -154,6 +154,8 @@
   "caserne.remove": "Remove this copy",
   "caserne.removeConfirm": "Remove your last copy of {name}? Its merges, IVs and project will be lost.",
   "caserne.addCopy": "Add a copy",
+  "caserne.edit": "Edit",
+  "caserne.blank": "not built",
   "stats.units": "{n} copies across the barracks",
   "detail.addManual": "+1 combat manual",
   "detail.manuals": "Combat manuals",

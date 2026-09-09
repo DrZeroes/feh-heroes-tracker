@@ -154,6 +154,8 @@
   "caserne.remove": "Retirer cet exemplaire",
   "caserne.removeConfirm": "Retirer ton dernier exemplaire de {name} ? Ses fusions, IV et projet seront perdus.",
   "caserne.addCopy": "Ajouter une copie",
+  "caserne.edit": "Éditer",
+  "caserne.blank": "non travaillé",
   "stats.units": "{n} exemplaires en caserne",
   "detail.addManual": "+1 manuel de combat",
   "detail.manuals": "Manuels de combat",
