@@ -46,7 +46,7 @@ body { margin: 0; background: var(--bg); color: var(--fg);
 
 .controls { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center;
   padding: .75rem 1rem; border-bottom: 1px solid var(--border); }
-.controls input#search { flex: 1 1 14rem; min-width: 10rem; padding: .45rem .6rem;
+.controls input#search, .controls input.ctl-search { flex: 1 1 14rem; min-width: 10rem; padding: .45rem .6rem;
   border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--fg); }
 .filters { display: flex; flex-wrap: wrap; gap: .5rem; }
 .filters select, .sort select { padding: .4rem .5rem; border: 1px solid var(--border);

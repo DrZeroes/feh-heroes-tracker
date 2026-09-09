@@ -40,6 +40,7 @@ const state = {
   query: '', sort: 'release-desc', group: false, quickAdd: false,
   list: [], shown: 0, view: 'catalogue',
   collection: emptyCollection(), status: 'all', wishMissingOnly: false,
+  caserne: { filters: Object.fromEntries(FACETS.map((f) => [f, null])), query: '', sort: 'release-desc' },
 };
 
 function loadCollection() {
@@ -77,6 +78,12 @@ function readPrefs() {
       state.group = !!p.group;
       state.quickAdd = !!p.quickAdd;
       if (STATUSES.includes(p.status)) state.status = p.status;
+      if (p.caserne && typeof p.caserne === 'object') {
+        Object.assign(state.caserne.filters, p.caserne.filters || {});
+        for (const f of FACETS) if (state.caserne.filters[f] === '') state.caserne.filters[f] = null;
+        if (typeof p.caserne.query === 'string') state.caserne.query = p.caserne.query;
+        if (p.caserne.sort) state.caserne.sort = p.caserne.sort;
+      }
     }
   } catch { /* ignore */ }
 }
@@ -84,7 +91,7 @@ function writePrefs() {
   try {
     localStorage.setItem(LS_PREFS, JSON.stringify({
       filters: state.filters, query: state.query, sort: state.sort, group: state.group,
-      status: state.status, quickAdd: state.quickAdd,
+      status: state.status, quickAdd: state.quickAdd, caserne: state.caserne,
     }));
   } catch { /* ignore */ }
 }
@@ -484,16 +491,150 @@ function rfield(captionKey, control) {
   return l;
 }
 
+// Barre de contrôles (recherche + facettes repliables + tri) partagée entre
+// le catalogue et Ma caserne. `ns` = état { filters, query, sort }, `pool` =
+// héros servant à lister les valeurs de facettes, `onChange` = re-rendu.
+function buildControlsBar(ns, pool, onChange, onFullRender) {
+  const bar = document.createElement('section');
+  bar.className = 'controls';
+
+  const search = document.createElement('input');
+  search.type = 'search';
+  search.className = 'ctl-search';
+  search.autocomplete = 'off';
+  search.placeholder = state.t('search.placeholder');
+  search.value = ns.query;
+  search.addEventListener('input', () => { ns.query = search.value; writePrefs(); onChange(); });
+  bar.appendChild(search);
+
+  const facets = buildFacetOptions(pool);
+  const panel = document.createElement('details');
+  panel.className = 'filter-panel';
+  const sum = document.createElement('summary');
+  const sumTxt = document.createElement('span');
+  sumTxt.textContent = state.t('filter.title');
+  const badge = document.createElement('span');
+  badge.className = 'filter-count';
+  const nActive = FACETS.filter((f) => ns.filters[f]).length;
+  badge.hidden = !nActive;
+  badge.textContent = nActive || '';
+  panel.classList.toggle('is-active', nActive > 0);
+  sum.append(sumTxt, badge);
+  panel.appendChild(sum);
+
+  const bodyEl = document.createElement('div');
+  bodyEl.className = 'filter-panel-body';
+  const filtersBox = document.createElement('div');
+  filtersBox.className = 'filters';
+  for (const f of FACETS) {
+    const sel = document.createElement('select');
+    const any = document.createElement('option');
+    any.value = '';
+    any.textContent = `${state.t(`filter.${f}`)}: ${state.t('filter.any')}`;
+    sel.appendChild(any);
+    for (const v of facets[f]) {
+      const opt = document.createElement('option');
+      opt.value = v;
+      opt.textContent = f === 'origin' ? shortOrigin(v) : labelFor(f, v);
+      if (ns.filters[f] === v) opt.selected = true;
+      sel.appendChild(opt);
+    }
+    sel.classList.toggle('is-active', !!ns.filters[f]);
+    sel.addEventListener('change', () => {
+      ns.filters[f] = sel.value || null;
+      sel.classList.toggle('is-active', !!ns.filters[f]);
+      const n = FACETS.filter((x) => ns.filters[x]).length;
+      badge.hidden = !n;
+      badge.textContent = n || '';
+      panel.classList.toggle('is-active', n > 0);
+      writePrefs();
+      onChange();
+    });
+    filtersBox.appendChild(sel);
+  }
+  const reset = document.createElement('button');
+  reset.type = 'button';
+  reset.className = 'reset';
+  reset.textContent = state.t('filter.reset');
+  reset.addEventListener('click', () => {
+    for (const f of FACETS) ns.filters[f] = null;
+    ns.query = '';
+    ns.sort = 'release-desc';
+    writePrefs();
+    (onFullRender || onChange)();
+  });
+  bodyEl.append(filtersBox, reset);
+  panel.appendChild(bodyEl);
+  bar.appendChild(panel);
+
+  const sortWrap = document.createElement('div');
+  sortWrap.className = 'sort';
+  const sl = document.createElement('span');
+  sl.textContent = state.t('sort.label');
+  sortWrap.appendChild(sl);
+  for (const [key, i18n] of [['release', 'sort.byDate'], ['name', 'sort.byName']]) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'sortbtn';
+    b.textContent = state.t(i18n);
+    const active = ns.sort.startsWith(key);
+    b.setAttribute('aria-pressed', active ? 'true' : 'false');
+    if (active) b.dataset.dir = ns.sort.endsWith('asc') ? '▲' : '▼';
+    b.addEventListener('click', () => {
+      if (ns.sort.startsWith(key)) ns.sort = ns.sort.endsWith('asc') ? `${key}-desc` : `${key}-asc`;
+      else ns.sort = key === 'name' ? 'name-asc' : 'release-desc';
+      writePrefs();
+      (onFullRender || onChange)();
+    });
+    sortWrap.appendChild(b);
+  }
+  bar.appendChild(sortWrap);
+
+  return bar;
+}
+
+function caserneHeroList() {
+  const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
+  const owned = Object.keys(state.collection.owned).map((id) => heroesById.get(id)).filter(Boolean);
+  const filtered = applyFilters(owned, state.caserne.filters, state.caserne.query);
+  return sortHeroes(filtered, state.caserne.sort);
+}
+
 function renderCaserne() {
   const box = $('#view-caserne');
   box.innerHTML = '';
-  const ids = Object.keys(state.collection.owned);
-  const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
-  const list = sortHeroes(ids.map((id) => heroesById.get(id)).filter(Boolean), 'release-desc');
-  if (!list.length) {
+  if (!Object.keys(state.collection.owned).length) {
     box.innerHTML = `<p class="empty-note">${state.t('caserne.empty')}</p>`;
     return;
   }
+  const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
+  const pool = Object.keys(state.collection.owned).map((id) => heroesById.get(id)).filter(Boolean);
+  box.appendChild(buildControlsBar(state.caserne, pool, renderCaserneList, renderCaserne));
+  const listBox = document.createElement('div');
+  listBox.id = 'caserne-list';
+  box.appendChild(listBox);
+  renderCaserneList();
+}
+
+function renderCaserneList() {
+  const listBox = $('#caserne-list');
+  if (!listBox) return;
+  listBox.innerHTML = '';
+  const list = caserneHeroList();
+
+  const count = document.createElement('p');
+  count.className = 'grid-count';
+  count.textContent = state.t('grid.count', { n: list.length });
+  listBox.appendChild(count);
+
+  if (!list.length) {
+    const p = document.createElement('p');
+    p.className = 'empty-note';
+    p.textContent = state.t('grid.empty');
+    listBox.appendChild(p);
+    return;
+  }
+
   const wrap = document.createElement('div');
   wrap.className = 'roster';
 
@@ -511,7 +652,7 @@ function renderCaserne() {
 
   const commit = (rerender) => {
     saveCollection();
-    if (rerender) renderCaserne();
+    if (rerender) renderCaserneList();
   };
 
   for (const hero of list) {
@@ -616,7 +757,7 @@ function renderCaserne() {
     addRow.appendChild(addBtn);
     wrap.appendChild(addRow);
   }
-  box.appendChild(wrap);
+  listBox.appendChild(wrap);
 }
 // rows: { label, owned, total }  -> jauge de complétion (pleine à 100 % = owned === total)
 //       { label, count }          -> barre relative au max du bloc
@@ -1312,7 +1453,11 @@ function openDetail(hero, unitIndex = 0) {
 
   $('#detail').hidden = false;
 }
-function closeDetail() { $('#detail').hidden = true; }
+function closeDetail() {
+  $('#detail').hidden = true;
+  if (state.view === 'caserne') renderCaserneList();
+  else if (state.view === 'manuels') renderManuels();
+}
 
 function syncSortButtons() {
   const dim = state.sort.startsWith('name') ? 'name' : 'release';
