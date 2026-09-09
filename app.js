@@ -622,9 +622,10 @@ function renderCaserneList() {
   listBox.innerHTML = '';
   const list = caserneHeroList();
 
+  const nUnits = list.reduce((a, h) => a + state.collection.owned[h.id].length, 0);
   const count = document.createElement('p');
   count.className = 'grid-count';
-  count.textContent = state.t('grid.count', { n: list.length });
+  count.textContent = state.t('grid.count', { n: nUnits });
   listBox.appendChild(count);
 
   if (!list.length) {
@@ -635,129 +636,112 @@ function renderCaserneList() {
     return;
   }
 
-  const wrap = document.createElement('div');
-  wrap.className = 'roster';
-
-  const head = document.createElement('div');
-  head.className = 'roster-row roster-head';
-  for (const label of [
-    '', state.t('caserne.colHero'), state.t('field.rarity'), state.t('field.merges'),
-    state.t('field.ivPlus'), state.t('field.ivMinus'), state.t('field.support'), '',
-  ]) {
-    const c = document.createElement('span');
-    c.textContent = label;
-    head.appendChild(c);
-  }
-  wrap.appendChild(head);
-
-  const commit = (rerender) => {
-    saveCollection();
-    if (rerender) renderCaserneList();
-  };
-
+  const grid = document.createElement('main');
+  grid.className = 'grid caserne-grid';
   for (const hero of list) {
     const units = state.collection.owned[hero.id];
-    units.forEach((unit, idx) => {
-      const row = document.createElement('div');
-      row.className = 'roster-row';
-
-      const img = document.createElement('img');
-      img.loading = 'lazy'; img.alt = hero.name; img.src = hero.image || '';
-      img.className = 'roster-portrait';
-      img.title = epithetFor(hero);
-      img.addEventListener('click', () => openDetail(hero, idx));
-      if (idx > 0) img.style.visibility = 'hidden';
-      row.appendChild(img);
-
-      const who = document.createElement('button');
-      who.type = 'button';
-      who.className = 'who';
-      who.innerHTML = '<b></b><span></span>';
-      who.querySelector('b').textContent = units.length > 1 ? `${nameFor(hero)} #${idx + 1}` : nameFor(hero);
-      who.querySelector('span').textContent = epithetFor(hero);
-      who.addEventListener('click', () => openDetail(hero, idx));
-      row.appendChild(who);
-
-      const rar = document.createElement('select');
-      rarityOptions(rar, unit.rarity);
-      rar.addEventListener('change', () => {
-        state.collection = setUnit(state.collection, hero.id, idx, { rarity: rar.value || null });
-        commit(false);
-      });
-      row.appendChild(rfield('field.rarity', rar));
-
-      const merges = document.createElement('input');
-      merges.type = 'number'; merges.min = '0'; merges.max = '10'; merges.value = String(unit.merges);
-      merges.addEventListener('change', () => {
-        merges.value = String(clampMerges(merges.value));
-        state.collection = setUnit(state.collection, hero.id, idx, { merges: merges.value });
-        commit(false);
-      });
-      row.appendChild(rfield('field.merges', merges));
-
-      const ivP = document.createElement('select');
-      ivOptions(ivP, unit.ivPlus);
-      ivP.addEventListener('change', () => {
-        state.collection = setUnit(state.collection, hero.id, idx, { ivPlus: ivP.value || null });
-        commit(false);
-      });
-      row.appendChild(rfield('field.ivPlus', ivP));
-
-      const ivM = document.createElement('select');
-      ivOptions(ivM, unit.ivMinus);
-      ivM.addEventListener('change', () => {
-        state.collection = setUnit(state.collection, hero.id, idx, { ivMinus: ivM.value || null });
-        commit(false);
-      });
-      row.appendChild(rfield('field.ivMinus', ivM));
-
-      const sup = document.createElement('select');
-      for (const v of ['none', 'C', 'B', 'A', 'S']) {
-        const o = document.createElement('option');
-        o.value = v === 'none' ? '' : v;
-        o.textContent = state.t(`support.${v}`);
-        if ((unit.support ?? '') === o.value) o.selected = true;
-        sup.appendChild(o);
-      }
-      sup.addEventListener('change', () => {
-        state.collection = setSupport(state.collection, hero.id, idx, sup.value || null);
-        commit(true); // règle un-seul-S : d'autres lignes peuvent changer
-      });
-      row.appendChild(rfield('field.support', sup));
-
-      const rm = document.createElement('button');
-      rm.type = 'button';
-      rm.className = 'roster-remove';
-      rm.textContent = '✕';
-      rm.title = state.t('caserne.remove');
-      rm.setAttribute('aria-label', state.t('caserne.remove'));
-      rm.addEventListener('click', () => {
-        const last = units.length === 1;
-        if (last && !window.confirm(state.t('caserne.removeConfirm', { name: nameFor(hero) }))) return;
-        state.collection = removeUnit(state.collection, hero.id, idx);
-        if (last) refreshCard(hero.id);
-        updateCollectionCount();
-        commit(true);
-      });
-      row.appendChild(rm);
-
-      wrap.appendChild(row);
-    });
-
-    const addRow = document.createElement('div');
-    addRow.className = 'roster-add';
-    const addBtn = document.createElement('button');
-    addBtn.type = 'button';
-    addBtn.textContent = `＋ ${state.t('caserne.addCopy')}`;
-    addBtn.addEventListener('click', () => {
-      state.collection = addUnit(state.collection, hero.id);
-      updateCollectionCount();
-      commit(true);
-    });
-    addRow.appendChild(addBtn);
-    wrap.appendChild(addRow);
+    units.forEach((unit, idx) => grid.appendChild(caserneCard(hero, unit, idx, units.length)));
   }
-  listBox.appendChild(wrap);
+  listBox.appendChild(grid);
+}
+
+function ivShort(unit) {
+  const p = unit.ivPlus ? `+${state.t(`iv.${unit.ivPlus}`)}` : '';
+  const m = unit.ivMinus ? `−${state.t(`iv.${unit.ivMinus}`)}` : '';
+  return [p, m].filter(Boolean).join(' ');
+}
+
+function caserneCard(hero, unit, idx, total) {
+  const el = document.createElement('article');
+  el.className = 'card caserne-card';
+  el.style.setProperty('--card-accent', colorHex(hero.color));
+  el.tabIndex = 0;
+
+  const pip = document.createElement('span');
+  pip.className = 'pip';
+  pip.style.background = colorHex(hero.color);
+  el.appendChild(pip);
+
+  const rm = document.createElement('button');
+  rm.type = 'button';
+  rm.className = 'card-rm';
+  rm.textContent = '✕';
+  rm.title = state.t('caserne.remove');
+  rm.setAttribute('aria-label', state.t('caserne.remove'));
+  rm.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const last = total === 1;
+    if (last && !window.confirm(state.t('caserne.removeConfirm', { name: nameFor(hero) }))) return;
+    state.collection = removeUnit(state.collection, hero.id, idx);
+    if (last) refreshCard(hero.id);
+    saveCollection();
+    updateCollectionCount();
+    renderCaserneList();
+  });
+  el.appendChild(rm);
+
+  if (unit.merges > 0) {
+    const mg = document.createElement('span');
+    mg.className = 'cc-merge';
+    mg.textContent = `+${unit.merges}`;
+    el.appendChild(mg);
+  }
+
+  el.appendChild(portrait(hero, 'portrait', imageCandidates(hero)));
+
+  const name = document.createElement('span');
+  name.className = 'name';
+  name.textContent = total > 1 ? `${nameFor(hero)} #${idx + 1}` : nameFor(hero);
+  el.appendChild(name);
+  const ep = document.createElement('span');
+  ep.className = 'epithet';
+  ep.textContent = epithetFor(hero);
+  el.appendChild(ep);
+
+  const badges = document.createElement('div');
+  badges.className = 'cc-badges';
+  if (unit.rarity) {
+    const r = document.createElement('span');
+    r.className = `cc-star star-${unit.rarity}`;
+    r.textContent = `${unit.rarity}★`;
+    badges.appendChild(r);
+  }
+  const iv = ivShort(unit);
+  if (iv) {
+    const s = document.createElement('span');
+    s.className = 'cc-iv';
+    s.textContent = iv;
+    badges.appendChild(s);
+  }
+  if (unit.support) {
+    const s = document.createElement('span');
+    s.className = 'cc-sup';
+    s.textContent = state.t(`support.${unit.support}`);
+    badges.appendChild(s);
+  }
+  if (badges.childElementCount) el.appendChild(badges);
+
+  if (idx === total - 1) {
+    const add = document.createElement('button');
+    add.type = 'button';
+    add.className = 'cc-add';
+    add.textContent = '＋';
+    add.title = state.t('caserne.addCopy');
+    add.setAttribute('aria-label', state.t('caserne.addCopy'));
+    add.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.collection = addUnit(state.collection, hero.id);
+      saveCollection();
+      updateCollectionCount();
+      renderCaserneList();
+    });
+    el.appendChild(add);
+  }
+
+  const open = () => openDetail(hero, idx);
+  el.addEventListener('click', open);
+  el.addEventListener('keydown', (e) => { if (e.key === 'Enter') open(); });
+  return el;
 }
 // rows: { label, owned, total }  -> jauge de complétion (pleine à 100 % = owned === total)
 //       { label, count }          -> barre relative au max du bloc

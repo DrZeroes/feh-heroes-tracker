@@ -277,6 +277,26 @@ img { max-width: 100%; }
 .card.is-owned .card-add { background: var(--owned, #3fae52); color: #fff; border-color: transparent; }
 .empty-note { padding: 2rem 1rem; text-align: center; color: var(--muted); }
 
+/* Ma caserne : vignettes */
+.caserne-card .card-rm { position: absolute; top: .3rem; left: .3rem; width: 1.35rem; height: 1.35rem;
+  border-radius: 50%; border: 1px solid var(--border); background: var(--card); color: var(--muted);
+  font-size: .7rem; line-height: 1; cursor: pointer; z-index: 3; padding: 0; opacity: .6; }
+.caserne-card:hover .card-rm, .caserne-card:focus-within .card-rm { opacity: 1; }
+.caserne-card .card-rm:hover { border-color: #c0392b; color: #c0392b; }
+.caserne-card .cc-merge { position: absolute; top: .35rem; right: .4rem; z-index: 3;
+  font-size: .7rem; font-weight: 800; color: var(--accent); }
+.caserne-card .cc-badges { display: flex; flex-wrap: wrap; gap: .25rem; justify-content: center;
+  margin-top: .3rem; }
+.caserne-card .cc-badges span { font-size: .64rem; font-weight: 700; line-height: 1;
+  border: 1px solid var(--border); border-radius: 5px; padding: .12rem .28rem; }
+.caserne-card .cc-star { border-color: transparent; }
+.caserne-card .cc-iv { color: var(--muted); }
+.caserne-card .cc-sup { color: var(--star-5); border-color: var(--star-5); }
+.caserne-card .cc-add { position: absolute; bottom: .35rem; right: .35rem; width: 1.4rem; height: 1.4rem;
+  border-radius: 50%; border: 1px dashed var(--border); background: var(--card); color: var(--muted);
+  font-weight: 700; line-height: 1; cursor: pointer; z-index: 3; }
+.caserne-card .cc-add:hover { border-style: solid; border-color: var(--accent); color: var(--accent); }
+
 /* wishlist star on cards: top-left, clear of the category badge (top-right)
    and shifted right of the "owned" check mark */
 .card .card-star { position: absolute; top: .3rem; left: 1.7rem; font-size: .8rem;
