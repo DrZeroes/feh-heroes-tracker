@@ -174,6 +174,18 @@ function cmpReleaseDateAsc(a, b) {
   return da < db ? -1 : da > db ? 1 : 0;
 }
 
+// Numéro du Recueil des Héros (data/hero-dex.json, injecté sur h.dex à l'exécution).
+// Les héros sans numéro (feuille pas à jour) vont toujours en fin de liste,
+// quel que soit le sens ; `dir` n'inverse que la comparaison des numéros.
+function cmpDex(a, b, dir = 1) {
+  const ha = Number.isFinite(a.dex);
+  const hb = Number.isFinite(b.dex);
+  if (ha !== hb) return ha ? -1 : 1;
+  if (!ha) return cmpReleaseDateAsc(a, b) || cmpName(a, b);
+  if (a.dex !== b.dex) return (a.dex < b.dex ? -1 : 1) * dir;
+  return cmpReleaseDateAsc(a, b) || cmpName(a, b);
+}
+
 export function sortHeroes(heroes, key = 'release-desc') {
   const out = [...heroes];
   switch (key) {
@@ -191,6 +203,12 @@ export function sortHeroes(heroes, key = 'release-desc') {
         const n = -cmpName(a, b);
         return n !== 0 ? n : cmpReleaseDesc(a, b);
       });
+      break;
+    case 'dex-asc':
+      out.sort((a, b) => cmpDex(a, b, 1));
+      break;
+    case 'dex-desc':
+      out.sort((a, b) => cmpDex(a, b, -1));
       break;
     case 'release-desc':
     default:

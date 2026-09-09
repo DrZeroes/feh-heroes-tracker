@@ -41,7 +41,7 @@ const state = {
   query: '', sort: 'release-desc', group: false, quickAdd: false,
   list: [], shown: 0, view: 'catalogue',
   collection: emptyCollection(), status: 'all', wishMissingOnly: false, detailCtx: null,
-  statsClosed: [],
+  statsClosed: [], frManual: {},
   caserne: {
     filters: Object.fromEntries(FACETS.map((f) => [f, null])), query: '', sort: 'release-desc', edit: false,
   },
@@ -65,11 +65,18 @@ function updateCollectionCount() {
   $('#collection-count').textContent = state.t('collection.count', s);
 }
 
+// Un « * » signale un texte FR saisi à la main (data/locale-fr.manual.json),
+// modifiable et remplacé dès qu'une traduction officielle arrive.
+function isManualFr(id, field, value) {
+  return state.lang === 'fr' && !!value && state.frManual[id] && state.frManual[id][field] === value;
+}
 function epithetFor(hero) {
-  return state.lang === 'fr' && hero.titleFr ? hero.titleFr : hero.title;
+  const t = state.lang === 'fr' && hero.titleFr ? hero.titleFr : hero.title;
+  return isManualFr(hero.id, 'titleFr', hero.titleFr) && t === hero.titleFr ? `${t} *` : t;
 }
 function nameFor(hero) {
-  return state.lang === 'fr' && hero.nameFr ? hero.nameFr : hero.name;
+  const n = state.lang === 'fr' && hero.nameFr ? hero.nameFr : hero.name;
+  return isManualFr(hero.id, 'nameFr', hero.nameFr) && n === hero.nameFr ? `${n} *` : n;
 }
 
 // Noms FR de partenaires Duo/Harmonique absents du catalogue (perso non jouable,
@@ -612,17 +619,17 @@ function buildControlsBar(ns, pool, onChange, onFullRender) {
   const sl = document.createElement('span');
   sl.textContent = state.t('sort.label');
   sortWrap.appendChild(sl);
-  for (const [key, i18n] of [['release', 'sort.byDate'], ['name', 'sort.byName']]) {
+  for (const [key, i18n] of [['dex', 'sort.byDex'], ['release', 'sort.byDate'], ['name', 'sort.byName']]) {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'sortbtn';
     b.textContent = state.t(i18n);
-    const active = ns.sort.startsWith(key);
+    const active = ns.sort.split('-')[0] === key;
     b.setAttribute('aria-pressed', active ? 'true' : 'false');
     if (active) b.dataset.dir = ns.sort.endsWith('asc') ? '▲' : '▼';
     b.addEventListener('click', () => {
       if (ns.sort.startsWith(key)) ns.sort = ns.sort.endsWith('asc') ? `${key}-desc` : `${key}-asc`;
-      else ns.sort = key === 'name' ? 'name-asc' : 'release-desc';
+      else ns.sort = key === 'release' ? 'release-desc' : `${key}-asc`;
       writePrefs();
       (onFullRender || onChange)();
     });
@@ -1745,7 +1752,7 @@ function closeDetail() {
 }
 
 function syncSortButtons() {
-  const dim = state.sort.startsWith('name') ? 'name' : 'release';
+  const dim = state.sort.split('-')[0];
   const dir = state.sort.endsWith('asc') ? 'asc' : 'desc';
   for (const btn of document.querySelectorAll('.sortbtn')) {
     const active = btn.dataset.sortkey === dim;
@@ -1758,7 +1765,7 @@ function onSortClick(dim) {
   if (cur.startsWith(dim)) {
     state.sort = cur.endsWith('asc') ? `${dim}-desc` : `${dim}-asc`;
   } else {
-    state.sort = dim === 'name' ? 'name-asc' : 'release-desc';
+    state.sort = dim === 'release' ? 'release-desc' : `${dim}-asc`;
   }
   writePrefs();
   syncSortButtons();
@@ -1779,12 +1786,19 @@ function setLang(lang) {
 }
 
 async function main() {
-  const [heroesRes, enRes, frRes] = await Promise.all([
+  const [heroesRes, enRes, frRes, manRes, dexRes] = await Promise.all([
     fetch('data/heroes.json'), fetch('i18n/en.json'), fetch('i18n/fr.json'),
+    fetch('data/locale-fr.manual.json').catch(() => null),
+    fetch('data/hero-dex.json').catch(() => null),
   ]);
   const catalog = await heroesRes.json();
   state.heroes = catalog.heroes || [];
   state.dicts = { en: await enRes.json(), fr: await frRes.json() };
+  try { state.frManual = manRes && manRes.ok ? await manRes.json() : {}; } catch { state.frManual = {}; }
+  try {
+    const dex = dexRes && dexRes.ok ? await dexRes.json() : {};
+    for (const h of state.heroes) h.dex = Number.isFinite(dex[h.id]) ? dex[h.id] : null;
+  } catch { /* pas de numéros */ }
 
   readPrefs();
   loadCollection();
@@ -1823,6 +1837,7 @@ async function main() {
     applyThemeButton();
   });
   $('#search').addEventListener('input', (e) => { state.query = e.target.value; writePrefs(); recompute(); });
+  $('#sort-dex').addEventListener('click', () => onSortClick('dex'));
   $('#sort-date').addEventListener('click', () => onSortClick('release'));
   $('#sort-name').addEventListener('click', () => onSortClick('name'));
   $('#group-toggle').addEventListener('change', (e) => { state.group = e.target.checked; writePrefs(); recompute(); });

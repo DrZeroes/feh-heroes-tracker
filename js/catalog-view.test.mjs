@@ -161,6 +161,17 @@ test('sortHeroes : name-desc (nom Z->A, puis date desc)', () => {
   assert.deepEqual(out.map((h) => `${h.name}${h.title}`), ['CharlieAlt', 'Charlie', 'Bravo', 'Alpha']);
 });
 
+test('sortHeroes : dex-asc suit le numéro, sans-numéro en fin', () => {
+  const d = [
+    { name: 'Z', title: '', releaseDate: '2020-01-01', dex: 3 },
+    { name: 'Y', title: '', releaseDate: '2019-01-01', dex: null },
+    { name: 'X', title: '', releaseDate: '2021-01-01', dex: 1 },
+    { name: 'W', title: '', releaseDate: '2018-01-01' },
+  ];
+  assert.deepEqual(sortHeroes(d, 'dex-asc').map((h) => h.name), ['X', 'Z', 'W', 'Y']);
+  assert.deepEqual(sortHeroes(d, 'dex-desc').map((h) => h.name), ['Z', 'X', 'W', 'Y']);
+});
+
 test('sortHeroes : clé inconnue -> release-desc', () => {
   assert.deepEqual(
     sortHeroes(DATA, 'bogus').map((h) => h.name),
