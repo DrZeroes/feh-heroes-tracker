@@ -72,6 +72,27 @@ function nameFor(hero) {
   return state.lang === 'fr' && hero.nameFr ? hero.nameFr : hero.name;
 }
 
+// Noms FR de partenaires Duo/Harmonique absents du catalogue (perso non jouable,
+// ou héros post-2023 sans nameFr). À compléter à la main au fil de l'eau.
+const PARTNER_FR = {
+  Elice: 'Élice',
+};
+let partnerNameFrIndex = null;
+function partnerFor(hero) {
+  if (!hero.partner) return '';
+  if (state.lang !== 'fr') return hero.partner;
+  if (!partnerNameFrIndex) {
+    partnerNameFrIndex = new Map();
+    for (const h of state.heroes) {
+      if (h.nameFr && !partnerNameFrIndex.has(h.name)) partnerNameFrIndex.set(h.name, h.nameFr);
+    }
+  }
+  return hero.partner.split(',')
+    .map((s) => s.trim())
+    .map((t) => PARTNER_FR[t] || partnerNameFrIndex.get(t) || t)
+    .join(', ');
+}
+
 function readPrefs() {
   try {
     const p = JSON.parse(localStorage.getItem(LS_PREFS) || '{}');
@@ -270,7 +291,7 @@ function card(hero) {
   if (hero.partner) {
     const pn = document.createElement('span');
     pn.className = 'partner';
-    pn.textContent = `& ${hero.partner}`;
+    pn.textContent = `& ${partnerFor(hero)}`;
     el.appendChild(pn);
   }
   const ep = document.createElement('span');
@@ -1427,7 +1448,7 @@ function openDetail(hero, unitIndex = 0) {
   };
   row('detail.category', state.t(`category.${hero.category || 'standard'}`)
     + (isDancer(hero) ? ` · ${state.t('category.refresher')}` : ''));
-  row('detail.partner', hero.partner ? `& ${hero.partner}` : '');
+  row('detail.partner', hero.partner ? `& ${partnerFor(hero)}` : '');
   row('detail.origin', (hero.origins || []).map(shortOrigin).join(' · '));
   row('detail.released', hero.releaseDate);
   row('detail.book', hero.book ? state.t(`book.${hero.book}`) : '');
