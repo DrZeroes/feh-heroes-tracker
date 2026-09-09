@@ -12,6 +12,7 @@ import {
 const UNIT_FIELDS = [
   'WikiName', 'Name', 'Title', 'Person', 'Origin', 'IntID', 'Gender',
   'WeaponType', 'MoveType', 'Artist', 'ActorEN', 'ActorJP', 'ReleaseDate', 'Properties',
+  'GameSort', 'CharSort',
 ].join(',');
 
 export async function run({
@@ -27,6 +28,7 @@ export async function run({
   localeManualPath = new URL('../data/locale-fr.manual.json', import.meta.url),
   partnersPath = new URL('../data/partners.json', import.meta.url),
   aliasesPath = new URL('../data/name-aliases.json', import.meta.url),
+  heroDexPath = new URL('../data/hero-dex.json', import.meta.url),
 } = {}) {
   const common = { fetchImpl };
   if (sleepImpl) common.sleepImpl = sleepImpl;
@@ -177,6 +179,27 @@ export async function run({
   }
 
   await writeFile(outPath, `${JSON.stringify(catalog, null, 2)}\n`, 'utf8');
+
+  // data/hero-dex.json : numéro du Recueil des Héros (ordre in-game), dérivé des
+  // clés de tri du jeu exposées par le wiki (GameSort, CharSort). Aucun entretien
+  // manuel : les nouveaux héros sont numérotés dès que le wiki leur pose un GameSort.
+  const sortMeta = new Map();
+  for (const u of units) {
+    const g = Number.parseInt(u.GameSort, 10);
+    const c = Number.parseInt(u.CharSort, 10);
+    if (Number.isFinite(g)) sortMeta.set(u.WikiName, { g, c: Number.isFinite(c) ? c : 0 });
+  }
+  const dexOrder = catalog.heroes
+    .filter((h) => sortMeta.has(h.id))
+    .sort((a, b) => {
+      const A = sortMeta.get(a.id); const B = sortMeta.get(b.id);
+      return A.g - B.g || A.c - B.c
+        || String(a.releaseDate).localeCompare(String(b.releaseDate))
+        || String(a.name).localeCompare(String(b.name));
+    });
+  const dex = {};
+  dexOrder.forEach((h, i) => { dex[h.id] = i + 1; });
+  await writeFile(heroDexPath, `${JSON.stringify(dex)}\n`, 'utf8');
   return catalog;
 }
 
