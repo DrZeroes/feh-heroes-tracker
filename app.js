@@ -1098,9 +1098,13 @@ function renderManuels() {
   input.placeholder = state.t('manuels.add');
   const dl = document.createElement('datalist');
   dl.id = 'manual-hero-list';
+  const nameSeen = new Map();
+  for (const h of state.heroes) nameSeen.set(nameFor(h), (nameSeen.get(nameFor(h)) || 0) + 1);
   for (const h of state.heroes) {
     const o = document.createElement('option');
-    o.value = `${nameFor(h)} · ${epithetFor(h)}`;
+    // nom seul ; l'épithète va dans le label (sous-titre discret), sauf homonymes
+    o.value = nameSeen.get(nameFor(h)) > 1 ? `${nameFor(h)} (${epithetFor(h)})` : nameFor(h);
+    o.label = epithetFor(h);
     o.dataset.id = h.id;
     dl.appendChild(o);
   }
