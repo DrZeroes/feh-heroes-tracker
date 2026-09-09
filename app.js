@@ -645,12 +645,6 @@ function renderCaserneList() {
   listBox.appendChild(grid);
 }
 
-function ivShort(unit) {
-  const p = unit.ivPlus ? `+${state.t(`iv.${unit.ivPlus}`)}` : '';
-  const m = unit.ivMinus ? `−${state.t(`iv.${unit.ivMinus}`)}` : '';
-  return [p, m].filter(Boolean).join(' ');
-}
-
 function caserneCard(hero, unit, idx, total) {
   const el = document.createElement('article');
   el.className = 'card caserne-card';
@@ -680,13 +674,6 @@ function caserneCard(hero, unit, idx, total) {
   });
   el.appendChild(rm);
 
-  if (unit.merges > 0) {
-    const mg = document.createElement('span');
-    mg.className = 'cc-merge';
-    mg.textContent = `+${unit.merges}`;
-    el.appendChild(mg);
-  }
-
   el.appendChild(portrait(hero, 'portrait', imageCandidates(hero)));
 
   const name = document.createElement('span');
@@ -698,36 +685,76 @@ function caserneCard(hero, unit, idx, total) {
   ep.textContent = epithetFor(hero);
   el.appendChild(ep);
 
-  const badges = document.createElement('div');
-  badges.className = 'cc-badges';
-  if (unit.rarity) {
-    const r = document.createElement('span');
-    r.className = `cc-star star-${unit.rarity}`;
-    r.textContent = `${unit.rarity}★`;
-    badges.appendChild(r);
+  // édition inline compacte (rareté / fusions / IV / soutien)
+  const edit = document.createElement('div');
+  edit.className = 'cc-edit';
+  edit.addEventListener('click', (e) => e.stopPropagation());
+  const patch = (p) => { state.collection = setUnit(state.collection, hero.id, idx, p); saveCollection(); };
+
+  const rar = document.createElement('select');
+  rar.title = state.t('field.rarity');
+  rarityOptions(rar, unit.rarity);
+  rar.addEventListener('change', () => patch({ rarity: rar.value || null }));
+  edit.appendChild(rar);
+
+  const mrg = document.createElement('input');
+  mrg.type = 'number'; mrg.min = '0'; mrg.max = '10'; mrg.value = String(unit.merges);
+  mrg.title = state.t('field.merges');
+  mrg.className = 'cc-merges';
+  mrg.addEventListener('change', () => {
+    mrg.value = String(clampMerges(mrg.value));
+    patch({ merges: mrg.value });
+  });
+  edit.appendChild(mrg);
+
+  const dfWrap = document.createElement('label');
+  dfWrap.className = 'cc-df';
+  dfWrap.title = state.t('field.dragonflowers');
+  const dfIcon = document.createElement('b');
+  dfIcon.textContent = '🌸';
+  const df = document.createElement('input');
+  df.type = 'number'; df.min = '0'; df.value = String(unit.dragonflowers ?? 0);
+  df.addEventListener('change', () => {
+    patch({ dragonflowers: df.value });
+    df.value = String(state.collection.owned[hero.id][idx].dragonflowers);
+  });
+  dfWrap.append(dfIcon, df);
+  edit.appendChild(dfWrap);
+
+  const ivP = document.createElement('select');
+  ivP.title = state.t('field.ivPlus');
+  ivOptions(ivP, unit.ivPlus);
+  ivP.addEventListener('change', () => patch({ ivPlus: ivP.value || null }));
+  edit.appendChild(ivP);
+
+  const ivM = document.createElement('select');
+  ivM.title = state.t('field.ivMinus');
+  ivOptions(ivM, unit.ivMinus);
+  ivM.addEventListener('change', () => patch({ ivMinus: ivM.value || null }));
+  edit.appendChild(ivM);
+
+  const sup = document.createElement('select');
+  sup.title = state.t('field.support');
+  sup.className = 'cc-sup-sel';
+  for (const v of ['none', 'C', 'B', 'A', 'S']) {
+    const o = document.createElement('option');
+    o.value = v === 'none' ? '' : v;
+    o.textContent = v === 'none' ? state.t('field.support') : state.t(`support.${v}`);
+    if ((unit.support ?? '') === o.value) o.selected = true;
+    sup.appendChild(o);
   }
-  const iv = ivShort(unit);
-  if (iv) {
-    const s = document.createElement('span');
-    s.className = 'cc-iv';
-    s.textContent = iv;
-    badges.appendChild(s);
-  }
-  if (unit.support) {
-    const s = document.createElement('span');
-    s.className = 'cc-sup';
-    s.textContent = state.t(`support.${unit.support}`);
-    badges.appendChild(s);
-  }
-  if (badges.childElementCount) el.appendChild(badges);
+  sup.addEventListener('change', () => {
+    state.collection = setSupport(state.collection, hero.id, idx, sup.value || null);
+    saveCollection();
+    renderCaserneList(); // règle un-seul-S : d'autres vignettes peuvent changer
+  });
+  edit.appendChild(sup);
 
   if (idx === total - 1) {
     const add = document.createElement('button');
     add.type = 'button';
     add.className = 'cc-add';
-    add.textContent = '＋';
-    add.title = state.t('caserne.addCopy');
-    add.setAttribute('aria-label', state.t('caserne.addCopy'));
+    add.textContent = `＋ ${state.t('caserne.addCopy')}`;
     add.addEventListener('click', (e) => {
       e.stopPropagation();
       state.collection = addUnit(state.collection, hero.id);
@@ -735,8 +762,10 @@ function caserneCard(hero, unit, idx, total) {
       updateCollectionCount();
       renderCaserneList();
     });
-    el.appendChild(add);
+    edit.appendChild(add);
   }
+
+  el.appendChild(edit);
 
   const open = () => openDetail(hero, idx);
   el.addEventListener('click', open);
@@ -1268,6 +1297,15 @@ function openDetail(hero, unitIndex = 0) {
       saveCollection();
     });
     addRow('field.merges', merges);
+
+    const dflowers = document.createElement('input');
+    dflowers.type = 'number'; dflowers.min = '0'; dflowers.value = String(unit.dragonflowers ?? 0);
+    dflowers.addEventListener('change', () => {
+      state.collection = setUnit(state.collection, hero.id, idx, { dragonflowers: dflowers.value });
+      dflowers.value = String(state.collection.owned[hero.id][idx].dragonflowers);
+      saveCollection();
+    });
+    addRow('field.dragonflowers', dflowers);
 
     const ivSelect = (cur, onChange) => {
       const s = document.createElement('select');

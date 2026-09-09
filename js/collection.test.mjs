@@ -9,7 +9,8 @@ import {
 } from './collection.mjs';
 
 const U = (o = {}) => ({
-  rarity: null, merges: 0, ivPlus: null, ivMinus: null, support: null, date: null, project: null, ...o,
+  rarity: null, merges: 0, dragonflowers: 0, ivPlus: null, ivMinus: null, support: null,
+  date: null, project: null, ...o,
 });
 
 test('emptyCollection', () => {
@@ -99,6 +100,10 @@ test('setUnit : modifie l\'exemplaire ciblé seulement', () => {
   assert.equal(c.owned.A[1].date, null);
   c = setUnit(c, 'A', 0, { rarity: 4 });
   assert.equal(c.owned.A[0].rarity, 4);
+  c = setUnit(c, 'A', 0, { dragonflowers: 20 });
+  assert.equal(c.owned.A[0].dragonflowers, 20);
+  c = setUnit(c, 'A', 0, { dragonflowers: -3 });
+  assert.equal(c.owned.A[0].dragonflowers, 0);
   c = setUnit(c, 'A', 0, { rarity: 9 });
   assert.equal(c.owned.A[0].rarity, null);
   assert.equal(setUnit(c, 'A', 9, { merges: 1 }), c);

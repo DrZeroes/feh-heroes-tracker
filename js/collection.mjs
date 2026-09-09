@@ -43,6 +43,7 @@ function normUnit(e) {
   return {
     rarity: star(o.rarity),
     merges: clampMerges(o.merges),
+    dragonflowers: clampCount(o.dragonflowers),
     ivPlus: IVS.has(o.ivPlus) ? o.ivPlus : null,
     ivMinus: IVS.has(o.ivMinus) ? o.ivMinus : null,
     support: RANKS.has(o.support) ? o.support : null,
@@ -53,7 +54,8 @@ function normUnit(e) {
 
 export function freshUnit() {
   return {
-    rarity: null, merges: 0, ivPlus: null, ivMinus: null, support: null, date: null, project: null,
+    rarity: null, merges: 0, dragonflowers: 0, ivPlus: null, ivMinus: null, support: null,
+    date: null, project: null,
   };
 }
 
@@ -173,6 +175,7 @@ export function setUnit(col, id, index, patch) {
     ...cur,
     ...('rarity' in patch ? { rarity: star(patch.rarity) } : {}),
     ...('merges' in patch ? { merges: clampMerges(patch.merges) } : {}),
+    ...('dragonflowers' in patch ? { dragonflowers: clampCount(patch.dragonflowers) } : {}),
     ...('ivPlus' in patch ? { ivPlus: IVS.has(patch.ivPlus) ? patch.ivPlus : null } : {}),
     ...('ivMinus' in patch ? { ivMinus: IVS.has(patch.ivMinus) ? patch.ivMinus : null } : {}),
     ...('date' in patch
