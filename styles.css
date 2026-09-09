@@ -278,8 +278,11 @@ img { max-width: 100%; }
 .empty-note { padding: 2rem 1rem; text-align: center; color: var(--muted); }
 
 /* Ma caserne : vignettes (résumé par défaut, édition sur bouton « Éditer ») */
-.caserne-grid { grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); }
-.caserne-card { cursor: pointer; }
+.caserne-grid { grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: 1rem; }
+.caserne-card { cursor: pointer; padding: .7rem; }
+.caserne-card .portrait { max-height: 8.5rem; }
+.caserne-card .name { font-size: .95rem; }
+.caserne-card .epithet { font-size: .78rem; }
 .caserne-card .card-rm { position: absolute; top: .3rem; left: .3rem; width: 1.35rem; height: 1.35rem;
   border-radius: 50%; border: 1px solid var(--border); background: var(--card); color: var(--muted);
   font-size: .7rem; line-height: 1; cursor: pointer; z-index: 3; padding: 0; opacity: .55; }
@@ -288,9 +291,9 @@ img { max-width: 100%; }
 .caserne-card .name { margin-top: .35rem; }
 
 /* résumé lecture seule */
-.cc-badges { display: flex; flex-wrap: wrap; gap: .2rem .25rem; justify-content: center; margin-top: .35rem; }
-.cc-b { font-size: .66rem; font-weight: 700; line-height: 1.5; padding: 0 .3rem;
-  border: 1px solid var(--border); border-radius: 5px; }
+.cc-badges { display: flex; flex-wrap: wrap; gap: .3rem; justify-content: center; margin-top: .45rem; }
+.cc-b { font-size: .74rem; font-weight: 700; line-height: 1.6; padding: .05rem .4rem;
+  border: 1px solid var(--border); border-radius: 6px; }
 .cc-b-merge { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
 .cc-b-iv { color: var(--muted); font-weight: 600; }
 .cc-b-sup { color: var(--star-5); border-color: var(--star-5); }
