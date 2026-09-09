@@ -166,8 +166,16 @@ function csvCell(v) {
 // attrs : { color, weapon, move, date } (move/date facultatifs, ex. livrets).
 // ctx   : { byFirstTok, byId, ownedSet }
 // -> { id, second, tie, clampedDate, why }  (id=null si non apparié)
+const NON_BASE_CAT = new Set([
+  'mythic', 'legendary', 'emblem', 'aided', 'entwined', 'rearmed', 'ascended',
+  'chosen', 'vista', 'duo', 'harmonized',
+]);
+const poolLow = (h) => h.poolRarity === 3 || h.poolRarity === 4;
+
 function matchHero(heroRaw, attrs, ctx) {
-  const { color, weapon, move, date } = attrs;
+  const {
+    color, weapon, move, date, poolStar,
+  } = attrs;
   const { byFirstTok, byId, ownedSet } = ctx;
   const GRACE = 30 * 864e5;
 
@@ -222,9 +230,18 @@ function matchHero(heroRaw, attrs, ctx) {
     }
     if (['old', 'vieille', 'vieux', 'adulte', 'grande'].some((t) => tags.includes(t))
       && ['naga', 'young', 'scion'].some((w) => title.includes(w))) s -= 6;
-    if (tags.length === 0
-      && !['mythic', 'legendary', 'emblem', 'aided', 'entwined'].some((p) => props.has(p))
-      && !props.has('hat') && !props.has('tiara')) s += 3;
+    // nom nu (aucune balise) -> version de BASE attendue
+    if (tags.length === 0) {
+      const seasonal = props.has('hat') || props.has('tiara') || props.has('fallen') || props.has('refresher');
+      if (!NON_BASE_CAT.has(h.category) && !seasonal) s += 6;
+      else s -= 5;
+      if (poolLow(h)) s += 3; // les héros démote-ables = les plus « de base »
+    }
+    // rareté du livret 3★/4★ -> héros du pool général (démote-able)
+    if (poolStar && poolStar <= 4) {
+      if (poolLow(h)) s += 4;
+      else if (h.poolRarity == null) s -= 3;
+    }
     if (ownedSet.has(h.id)) s += 2;
     if (date && h.releaseDate) {
       const days = (new Date(date) - new Date(h.releaseDate)) / 864e5;
@@ -325,7 +342,9 @@ async function run() {
       if (!rarity || nb <= 0) continue;
       const color = ['r', 'b', 'v', 'g'].includes((rvbg || '').trim()) ? rvbg.trim() : null;
       const weapon = HERO_WEAPON[foldText(armeRaw)] ?? null;
-      const mm = matchHero(heroRaw, { color, weapon, move: null, date: null }, ctx);
+      const mm = matchHero(heroRaw, {
+        color, weapon, move: null, date: null, poolStar: Number(rarity),
+      }, ctx);
       if (!mm.id) { report.manualsUnmatched.push(`${heroRaw} [${rarity}★ ${color}/${weapon}] — ${mm.why}`); continue; }
       const rec = manuals[mm.id] && typeof manuals[mm.id] === 'object' ? manuals[mm.id] : {};
       rec[rarity] = (rec[rarity] || 0) + nb;
