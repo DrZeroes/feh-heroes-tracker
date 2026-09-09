@@ -43,6 +43,9 @@ const state = {
   caserne: {
     filters: Object.fromEntries(FACETS.map((f) => [f, null])), query: '', sort: 'release-desc', edit: false,
   },
+  manuels: {
+    filters: Object.fromEntries(FACETS.map((f) => [f, null])), query: '', sort: 'release-desc', rarity: null,
+  },
 };
 
 function loadCollection() {
@@ -87,6 +90,13 @@ function readPrefs() {
         if (p.caserne.sort) state.caserne.sort = p.caserne.sort;
         state.caserne.edit = !!p.caserne.edit;
       }
+      if (p.manuels && typeof p.manuels === 'object') {
+        Object.assign(state.manuels.filters, p.manuels.filters || {});
+        for (const f of FACETS) if (state.manuels.filters[f] === '') state.manuels.filters[f] = null;
+        if (typeof p.manuels.query === 'string') state.manuels.query = p.manuels.query;
+        if (p.manuels.sort) state.manuels.sort = p.manuels.sort;
+        if ([3, 4, 5].includes(p.manuels.rarity)) state.manuels.rarity = p.manuels.rarity;
+      }
     }
   } catch { /* ignore */ }
 }
@@ -94,7 +104,7 @@ function writePrefs() {
   try {
     localStorage.setItem(LS_PREFS, JSON.stringify({
       filters: state.filters, query: state.query, sort: state.sort, group: state.group,
-      status: state.status, quickAdd: state.quickAdd, caserne: state.caserne,
+      status: state.status, quickAdd: state.quickAdd, caserne: state.caserne, manuels: state.manuels,
     }));
   } catch { /* ignore */ }
 }
@@ -1080,11 +1090,32 @@ function renderWishlist() {
   box.appendChild(wrap);
 }
 
+// Héros du catalogue possédant au moins un manuel (pool des facettes).
+function manuelsPool() {
+  const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
+  return Object.keys(state.collection.manuals).map((id) => heroesById.get(id)).filter(Boolean);
+}
+
+// Liste filtrée + triée pour l'affichage des manuels.
+function manuelsHeroList() {
+  let pool = manuelsPool();
+  const r = state.manuels.rarity;
+  if (r) pool = pool.filter((h) => manualsByRarity(state.collection, h.id)[r] > 0);
+  const filtered = applyFilters(pool, state.manuels.filters, state.manuels.query);
+  return sortHeroes(filtered, state.manuels.sort);
+}
+
+function refreshManuelsMeta() {
+  const t = $('#manuels-total');
+  if (t) t.textContent = state.t('manuels.total', { n: manualsTotal(state.collection) });
+}
+
 function renderManuels() {
   const box = $('#view-manuels');
   box.innerHTML = '';
 
   const total = document.createElement('p');
+  total.id = 'manuels-total';
   total.className = 'stat-block';
   total.style.fontWeight = '700';
   total.textContent = state.t('manuels.total', { n: manualsTotal(state.collection) });
@@ -1098,13 +1129,9 @@ function renderManuels() {
   input.placeholder = state.t('manuels.add');
   const dl = document.createElement('datalist');
   dl.id = 'manual-hero-list';
-  const nameSeen = new Map();
-  for (const h of state.heroes) nameSeen.set(nameFor(h), (nameSeen.get(nameFor(h)) || 0) + 1);
   for (const h of state.heroes) {
     const o = document.createElement('option');
-    // nom seul ; l'épithète va dans le label (sous-titre discret), sauf homonymes
-    o.value = nameSeen.get(nameFor(h)) > 1 ? `${nameFor(h)} (${epithetFor(h)})` : nameFor(h);
-    o.label = epithetFor(h);
+    o.value = `${nameFor(h)} · ${epithetFor(h)}`;
     o.dataset.id = h.id;
     dl.appendChild(o);
   }
@@ -1133,18 +1160,62 @@ function renderManuels() {
   addWrap.append(input, dl, addStar, addBtn);
   box.appendChild(addWrap);
 
-  const entries = Object.entries(state.collection.manuals);
-  if (!entries.length) {
+  if (!Object.keys(state.collection.manuals).length) {
     const p = document.createElement('p');
     p.className = 'empty-note';
     p.textContent = state.t('manuels.empty');
     box.appendChild(p);
     return;
   }
-  const heroesById = new Map(state.heroes.map((h) => [h.id, h]));
-  entries.sort((a, b) => (heroesById.get(a[0])?.name || a[0]).localeCompare(heroesById.get(b[0])?.name || b[0]));
-  for (const [id] of entries) {
-    const h = heroesById.get(id) || { name: id, title: '' };
+
+  // recherche + facettes (arme, couleur…) + tri, partagées avec le catalogue
+  const bar = buildControlsBar(state.manuels, manuelsPool(), renderManuelsList, renderManuels);
+  const rar = document.createElement('select');
+  rar.className = 'star-sel manuels-rarity';
+  for (const [v, lbl] of [['', `${state.t('field.rarity')}: ${state.t('filter.any')}`], ['5', '5★'], ['4', '4★'], ['3', '3★']]) {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = lbl;
+    if (String(state.manuels.rarity || '') === v) o.selected = true;
+    rar.appendChild(o);
+  }
+  if (state.manuels.rarity) rar.classList.add(`star-${state.manuels.rarity}`);
+  rar.addEventListener('change', () => {
+    state.manuels.rarity = [3, 4, 5].includes(Number(rar.value)) ? Number(rar.value) : null;
+    rar.classList.remove('star-3', 'star-4', 'star-5');
+    if (state.manuels.rarity) rar.classList.add(`star-${state.manuels.rarity}`);
+    writePrefs();
+    renderManuelsList();
+  });
+  bar.appendChild(rar);
+  box.appendChild(bar);
+
+  const listBox = document.createElement('div');
+  listBox.id = 'manuels-list';
+  box.appendChild(listBox);
+  renderManuelsList();
+}
+
+function renderManuelsList() {
+  const listBox = $('#manuels-list');
+  if (!listBox) return;
+  listBox.innerHTML = '';
+  const list = manuelsHeroList();
+
+  const countLine = document.createElement('p');
+  countLine.className = 'grid-count';
+  countLine.textContent = state.t('grid.count', { n: list.length });
+  listBox.appendChild(countLine);
+
+  if (!list.length) {
+    const p = document.createElement('p');
+    p.className = 'empty-note';
+    p.textContent = state.t('grid.empty');
+    listBox.appendChild(p);
+    return;
+  }
+
+  for (const h of list) {
+    const id = h.id;
     const by = manualsByRarity(state.collection, id);
     const row = document.createElement('div');
     row.className = 'manual-row';
@@ -1152,7 +1223,7 @@ function renderManuels() {
     const img = document.createElement('img');
     img.className = 'roster-portrait';
     img.loading = 'lazy'; img.alt = h.name; img.src = h.image || '';
-    if (heroesById.has(id)) img.addEventListener('click', () => openDetail(h));
+    img.addEventListener('click', () => openDetail(h));
     row.appendChild(img);
 
     const info = document.createElement('div');
@@ -1187,7 +1258,8 @@ function renderManuels() {
       minus.addEventListener('click', () => {
         state.collection = setManualCount(state.collection, id, r, by[r] - 1);
         saveCollection();
-        renderManuels();
+        refreshManuelsMeta();
+        renderManuelsList();
       });
       const count = document.createElement('span');
       count.className = 'mcount';
@@ -1197,13 +1269,14 @@ function renderManuels() {
       plus.addEventListener('click', () => {
         state.collection = setManualCount(state.collection, id, r, by[r] + 1);
         saveCollection();
-        renderManuels();
+        refreshManuelsMeta();
+        renderManuelsList();
       });
       grp.append(cap, minus, count, plus);
       steppers.appendChild(grp);
     }
     row.appendChild(steppers);
-    box.appendChild(row);
+    listBox.appendChild(row);
   }
 }
 
