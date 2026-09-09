@@ -24,6 +24,7 @@ export async function run({
   outPath = new URL('../data/heroes.json', import.meta.url),
   overridesPath = new URL('../data/heroes.overrides.json', import.meta.url),
   localePath = new URL('../data/locale-fr.json', import.meta.url),
+  localeManualPath = new URL('../data/locale-fr.manual.json', import.meta.url),
   partnersPath = new URL('../data/partners.json', import.meta.url),
   aliasesPath = new URL('../data/name-aliases.json', import.meta.url),
 } = {}) {
@@ -91,6 +92,24 @@ export async function run({
     h.titleFr = localeTitles[`${h.name}\u001f${h.title}`] ?? null;
     const nf = localeNames[h.name];
     h.nameFr = typeof nf === 'string' && nf.trim() && nf !== h.name ? nf.trim() : null;
+  }
+
+  // Repli FR « à la main » (data/locale-fr.manual.json) : ne remplit QUE ce que
+  // la localisation officielle n'a pas fourni. Un vrai texte officiel gagne
+  // toujours et écrase le manuel au prochain regen.
+  let localeManual = {};
+  try {
+    localeManual = JSON.parse(await readFile(localeManualPath, 'utf8'));
+  } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+  }
+  for (const h of heroes) {
+    const m = localeManual[h.id];
+    if (!m || typeof m !== 'object') continue;
+    if (!h.titleFr && typeof m.titleFr === 'string' && m.titleFr.trim()) h.titleFr = m.titleFr.trim();
+    if (!h.nameFr && typeof m.nameFr === 'string' && m.nameFr.trim() && m.nameFr.trim() !== h.name) {
+      h.nameFr = m.nameFr.trim();
+    }
   }
 
   let partners = {};
