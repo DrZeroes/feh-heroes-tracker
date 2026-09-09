@@ -91,6 +91,8 @@ const FR_PHRASE_FIX = {
 };
 
 // Corrections manuelles : nom de ligne (folded) -> WikiName exact. Priorité absolue.
+// Le folded suit matchHero : espace insérée avant chaque majuscule (BylethH -> "byleth h"),
+// accents/apostrophes retirés.
 const SHEET_FIX = {
   'corrinf adrift': 'Corrin Dream Princess',
   'corrin adrift': 'Corrin Dream Princess',
@@ -98,6 +100,83 @@ const SHEET_FIX = {
   'camilla adrift': 'Camilla Flower of Fantasy',
   'reginn newyear': 'Reginn Bearing Dawn',
   'reginn new year': 'Reginn Bearing Dawn',
+
+  // livrets + caserne ambigus tranchés à la main par l'utilisateur (sept. 2026).
+  alear: 'Alear Dragon Youth',
+  alm: 'Alm Hero of Prophecy',
+  'alm brave': 'Alm Imperial Ascent',
+  azura: 'Azura Lady of the Lake',
+  'azura new year': 'Azura Celebratory Spirit',
+  'byleth h': 'Byleth Tested Professor',
+  'camilla ninja': 'Camilla Midnight Bloom',
+  'camilla source': 'Camilla Steamy Secrets',
+  'celica brave': 'Celica Warrior Priestess',
+  'chevalier noir': 'Black Knight Sinister General',
+  'chrom saint': 'Chrom Knight Exalt',
+  claude: 'Claude The Schemer',
+  'claude noel': 'Claude Yuletide Schemer',
+  'cordelia summer': 'Cordelia Knight Paradise',
+  'dagr vent': 'Dagr Bluster Princess',
+  'daraen f': 'Robin Mystery Tactician',
+  dedue: 'Dedue Dimitris Vassal',
+  delthea: 'Delthea Free Spirit',
+  dimitri: 'Dimitri The Protector',
+  'dimitri noel': 'Dimitri Blessed Protector',
+  'dorothea noel': 'Dorothea Yuletide Dancer',
+  edelgard: 'Edelgard The Future',
+  'eirika cheval': 'Eirika Anamnesis Lady',
+  elise: 'Elise Budding Flower',
+  'eliwood enfant': 'Eliwood Pledged Friend',
+  'ephraim winter': 'Ephraim Sparkling Gallantly',
+  'fae winter': 'Fae Holiday Dear',
+  'faye love': 'Faye Drawn Heartstring',
+  'felicia piquenique': 'Felicia Off the Menu',
+  flora: 'Flora Cold as Ice',
+  genny: 'Genny Endearing Ally',
+  'genny piquenique': 'Genny Dressed with Care',
+  hector: 'Hector General of Ostia',
+  idunn: 'Idunn Dark Priestess',
+  ingrid: 'Ingrid Galateas Heir',
+  innes: 'Innes Regal Strategician',
+  joshua: 'Joshua Tempest King',
+  leo: 'Leo Sorcerous Prince',
+  'linfan h': 'Morgan Lad from Afar',
+  'lissa winter': 'Lissa Pure Joy',
+  loki: 'Loki The Trickster',
+  louise: 'Louise Lady of Violets',
+  'lucina love': 'Lucina Future Fondness',
+  'lucius enfant': 'Lucius Calming Light',
+  'lukas piquenique': 'Lukas Buffet for One',
+  lute: 'Lute Prodigy',
+  'lysithea the': 'Lysithea Tea Sweetener',
+  'marth enfant': 'Marth Legacied Hero',
+  'merric enfant': 'Merric Changing Winds',
+  'micaiah summer': 'Micaiah Wavecrest Maiden',
+  minerva: 'Minerva Red Dragoon',
+  nils: 'Nils Bright Bard',
+  ninian: 'Ninian Oracle of Destiny',
+  'nino fly': 'Nino Pale Flower',
+  'noire ninja': 'Noire Demurely Deft',
+  'olivia fly': 'Olivia Sky-High Dancer',
+  rhea: 'Rhea Loving Matriarch',
+  ryoma: 'Ryoma Peerless Samurai',
+  'shiida enfant': 'Caeda Princess of Talys',
+  sigurd: 'Sigurd Holy Knight',
+  'sophia love': 'Sophia Prescient Bride',
+  'soren love': 'Soren Addled Strategist',
+  takumi: 'Takumi Wild Card',
+  'takumi fest dance': 'Takumi Prince of Soup',
+  'takumi summer': 'Takumi Prince at Play',
+  tana: 'Tana Winged Princess',
+  'tana enfant': 'Tana Frelian Starlight',
+  'tharja desert': 'Tharja Florid Charmer',
+  'tharja winter': 'Tharja Normal Girl',
+  'tiki old': 'Tiki Nagas Voice',
+  'tiki young': 'Tiki Dragon Scion',
+  'xander enfant': 'Xander Focused Firstborn',
+  'xander summer': 'Xander Student Swimmer',
+  'yunaka noel': 'Yunaka Spirited Envoy',
+  'zelcher ninja': 'Cherche Shaded by Wings',
 };
 
 function foldText(s) {
@@ -181,7 +260,9 @@ function matchHero(heroRaw, attrs, ctx) {
 
   const foldName = foldText(String(heroRaw).replace(/([a-zà-ÿ0-9])([A-Z])/g, '$1 $2'));
   if (SHEET_FIX[foldName] && byId.has(SHEET_FIX[foldName])) {
-    return { id: SHEET_FIX[foldName], second: null, tie: false, clampedDate: date, why: null };
+    return {
+      id: SHEET_FIX[foldName], second: null, tie: false, clampedDate: date, why: null,
+    };
   }
 
   const isDuo = /\+/.test(heroRaw);
