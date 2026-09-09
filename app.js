@@ -16,7 +16,7 @@ import {
   setWantedPriority, setWantedNote, setProject,
 } from './js/collection.mjs';
 import {
-  distribution, acquisitionTimeline, topCopies, wishlistSummary,
+  distribution, topCopies, wishlistSummary,
   wishlistByPriority, projectProgress,
 } from './js/stats.mjs';
 
@@ -987,8 +987,18 @@ function renderStats() {
     .map(([label, e]) => ({ label, total: e.total, owned: e.owned }));
   if (gameRows.length) box.appendChild(barBlock('stats.byGame', gameRows));
 
-  const tl = acquisitionTimeline(state.collection, 'year').map((m) => ({ label: m.period, count: m.count }));
-  if (tl.length) box.appendChild(barBlock('stats.timeline', tl));
+  const yr = new Map();
+  for (const h of state.heroes) {
+    const y = (h.releaseDate || '').slice(0, 4);
+    if (!/^\d{4}$/.test(y)) continue;
+    const e = yr.get(y) || { total: 0, owned: 0 };
+    e.total += 1;
+    if (ownedSet.has(h.id)) e.owned += 1;
+    yr.set(y, e);
+  }
+  const yearRows = [...yr].sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([y, e]) => ({ label: y, total: e.total, owned: e.owned }));
+  if (yearRows.length) box.appendChild(barBlock('stats.byYear', yearRows));
 
   const heroById = new Map(state.heroes.map((h) => [h.id, h]));
   const dispName = (id, fallback) => {

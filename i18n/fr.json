@@ -152,6 +152,7 @@
   "stats.byBlessing": "Par bénédiction",
   "stats.byGame": "Par jeu",
   "stats.timeline": "Héros obtenus par an",
+  "stats.byYear": "Par année de sortie",
   "stats.topCopies": "Le plus d'exemplaires",
   "stats.wishlist": "Wishlist",
   "stats.wishlistLine": "{total} voulus, {missing} encore manquants",

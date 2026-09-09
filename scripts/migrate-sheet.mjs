@@ -63,6 +63,8 @@ const TAG_TITLE = {
   performing: ['dance', 'dancer', 'performing', 'stage', 'song'],
   festival: ['festival', 'dance', 'performing'],
   halloween: ['halloween', 'trick', 'treat', 'pumpkin', 'costume'],
+  haloween: ['halloween', 'trick', 'treat', 'pumpkin', 'costume'],
+  hallow: ['halloween', 'trick', 'treat', 'pumpkin'],
   picnic: ['picnic', 'flower', 'spring'],
   young: ['naga', 'young', 'dragon scion'],
   enfant: ['child', 'young', 'little', 'tiny', 'naga'],
@@ -177,6 +179,10 @@ const SHEET_FIX = {
   'xander summer': 'Xander Student Swimmer',
   'yunaka noel': 'Yunaka Spirited Envoy',
   'zelcher ninja': 'Cherche Shaded by Wings',
+
+  // couleur fausse dans la feuille -> le filtre couleur pointait le mauvais alt.
+  'naesala pirate': 'Naesala Seas Shadow',
+  'nailah mariage': 'Nailah Blessed Queen',
 };
 
 function foldText(s) {
@@ -220,20 +226,17 @@ function toIso(dmy) {
   return `20${y}-${mo.padStart(2, '0')}-${d.padStart(2, '0')}`;
 }
 
-// Crée l'unité (rareté 5★ par défaut, la feuille étant du 5★) ou remplit les vides.
+// Chaque ligne de feuille = un exemplaire physique. Crée le héros, ou ajoute
+// un exemplaire supplémentaire (à moins qu'un exemplaire identique existe déjà).
 function applyUnit(owned, id, { merges, ivPlus, ivMinus, date }) {
-  if (!owned[id]) {
-    owned[id] = [{
-      rarity: 5, merges, dragonflowers: 0, ivPlus, ivMinus, support: null, date, project: null,
-    }];
-    return;
-  }
-  const u = owned[id][0];
-  if (!u.rarity) u.rarity = 5;
-  if (!u.merges) u.merges = merges;
-  if (!u.ivPlus) u.ivPlus = ivPlus;
-  if (!u.ivMinus) u.ivMinus = ivMinus;
-  if (!u.date) u.date = date;
+  const unit = {
+    rarity: 5, merges, dragonflowers: 0, ivPlus, ivMinus, support: null, date, project: null,
+  };
+  if (!owned[id]) { owned[id] = [unit]; return; }
+  const dup = owned[id].some(
+    (u) => u.merges === merges && u.date === date && u.ivPlus === ivPlus && u.ivMinus === ivMinus,
+  );
+  if (!dup) owned[id].push(unit);
 }
 
 function csvCell(v) {
@@ -282,7 +285,14 @@ function matchHero(heroRaw, attrs, ctx) {
     keys = [...byFirstTok.keys()].filter((k) => lev(k, first) <= 1 && Math.abs(k.length - first.length) <= 1);
   }
   let cands = dedup(keys.flatMap((k) => byFirstTok.get(k) ?? []).filter(okDuo));
-  if (color && cands.some((h) => h.color === color)) cands = cands.filter((h) => h.color === color);
+  if (color && cands.some((h) => h.color === color)) {
+    // filtre couleur, sauf s'il jette le seul alt qui sort pile à la date de la
+    // feuille (couleur souvent mal renseignée pour les alts).
+    const near = (arr) => arr.some((h) => date && h.releaseDate
+      && Math.abs(new Date(h.releaseDate) - new Date(date)) <= 10 * 864e5);
+    const filtered = cands.filter((h) => h.color === color);
+    cands = near(cands) && !near(filtered) ? cands : filtered;
+  }
   const inWindow = cands.filter((h) => !date || !h.releaseDate
     || (new Date(h.releaseDate) - new Date(date)) <= GRACE);
   const pool = inWindow.length ? inWindow : cands;
