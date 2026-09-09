@@ -58,8 +58,8 @@ const TAG_TITLE = {
   bride: ['bride', 'bridal'],
   love: ['love', 'valentine', 'spirit', 'sweet', 'heart'],
   amour: ['love', 'valentine', 'spirit'],
-  newyear: ['new year', 'new-year', 'spirits', 'newyear'],
-  nouvelan: ['new year', 'spirits'],
+  newyear: ['new year', 'new-year', 'spirits', 'newyear', 'dawn', 'aube'],
+  nouvelan: ['new year', 'spirits', 'dawn', 'aube'],
   performing: ['dance', 'dancer', 'performing', 'stage', 'song'],
   festival: ['festival', 'dance', 'performing'],
   halloween: ['halloween', 'trick', 'treat', 'pumpkin', 'costume'],
@@ -69,7 +69,7 @@ const TAG_TITLE = {
   ninja: ['ninja', 'shuriken', 'shadow'],
   desert: ['desert', 'sand', 'oasis', 'nomad'],
   'désert': ['desert', 'sand', 'oasis'],
-  adrift: ['adrift', 'nohr', 'hoshido'],
+  adrift: ['adrift', 'dream', 'onirique', 'fantasy'],
   fates: ['fates'], // traité comme indice d'origine, pas de titre
   awakening: ['awakening'],
 };
@@ -88,6 +88,16 @@ const FR_PHRASE_FIX = {
   'chevalier noir': ['black', 'knight'],
   'chevalier macabre': ['death', 'knight'],
   'empereur des flammes': ['flame', 'emperor'],
+};
+
+// Corrections manuelles : nom de ligne (folded) -> WikiName exact. Priorité absolue.
+const SHEET_FIX = {
+  'corrinf adrift': 'Corrin Dream Princess',
+  'corrin adrift': 'Corrin Dream Princess',
+  'hector love': 'Hector Just Here to Fight',
+  'camilla adrift': 'Camilla Flower of Fantasy',
+  'reginn newyear': 'Reginn Bearing Dawn',
+  'reginn new year': 'Reginn Bearing Dawn',
 };
 
 function foldText(s) {
@@ -131,6 +141,27 @@ function toIso(dmy) {
   return `20${y}-${mo.padStart(2, '0')}-${d.padStart(2, '0')}`;
 }
 
+// Crée l'unité (rareté 5★ par défaut, la feuille étant du 5★) ou remplit les vides.
+function applyUnit(owned, id, { merges, ivPlus, ivMinus, date }) {
+  if (!owned[id]) {
+    owned[id] = [{
+      rarity: 5, merges, dragonflowers: 0, ivPlus, ivMinus, support: null, date, project: null,
+    }];
+    return;
+  }
+  const u = owned[id][0];
+  if (!u.rarity) u.rarity = 5;
+  if (!u.merges) u.merges = merges;
+  if (!u.ivPlus) u.ivPlus = ivPlus;
+  if (!u.ivMinus) u.ivMinus = ivMinus;
+  if (!u.date) u.date = date;
+}
+
+function csvCell(v) {
+  const s = String(v ?? '');
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
 async function run() {
   const [csvPath, basePath, outPath] = process.argv.slice(2);
   if (!csvPath) {
@@ -164,6 +195,8 @@ async function run() {
   };
   const owned = JSON.parse(JSON.stringify(base.owned ?? {}));
   const GRACE = 30 * 864e5; // tolérance date sheet vs sortie
+  const byId = new Map(heroes.map((h) => [h.id, h]));
+  const mapping = []; // { sheet, date, id, nameFr, titleFr } pour la relecture
 
   for (const r of rows) {
     const [rvbg, heroRaw, fusionRaw, ivP, ivM, deplaRaw, armeRaw, dateRaw] = r;
@@ -179,6 +212,16 @@ async function run() {
 
     // "OlwenVert" -> "olwen vert", "DaraenF" -> "daraen f"
     const foldName = foldText(String(heroRaw).replace(/([a-zà-ÿ0-9])([A-Z])/g, '$1 $2'));
+
+    // correction manuelle : court-circuite tout
+    if (SHEET_FIX[foldName] && byId.has(SHEET_FIX[foldName])) {
+      const h = byId.get(SHEET_FIX[foldName]);
+      applyUnit(owned, h.id, { merges, ivPlus, ivMinus, date });
+      mapping.push({ sheet: heroRaw, date: dateRaw, id: h.id, nameFr: h.nameFr, titleFr: h.titleFr });
+      report.matched += 1;
+      continue;
+    }
+
     const isDuo = /\+/.test(heroRaw);
     let toks = foldName.replace(/\+/g, ' ').split(' ').filter(Boolean);
     // fusion FR d'expression entière
@@ -218,14 +261,15 @@ async function run() {
       let s = 0;
       const props = new Set(h.properties ?? []);
       const title = foldText(h.title);
+      const titleFr = foldText(h.titleFr);
       const origins = foldText((h.origins ?? []).join(' '));
       if (weapon && h.weapon === weapon) s += 3;
       if (move && h.move === move) s += 3;
       for (const tg of tags) {
         if (TAG_PROP[tg] && props.has(TAG_PROP[tg])) s += 8;
-        if (TAG_TITLE[tg] && TAG_TITLE[tg].some((w) => title.includes(w) || origins.includes(w))) s += 5;
+        if (TAG_TITLE[tg] && TAG_TITLE[tg].some((w) => title.includes(w) || titleFr.includes(w) || origins.includes(w))) s += 5;
         if ((tg === 'f' && h.gender === 'female') || (tg === 'm' && h.gender === 'male')) s += 3;
-        if (title.includes(tg)) s += 4;
+        if (title.includes(tg) || titleFr.includes(tg)) s += 4;
       }
       // « Tiki Old / vieille » = Tiki adulte -> pénalise les titres « jeune »
       if (['old', 'vieille', 'vieux', 'adulte', 'grande'].some((t) => tags.includes(t))
@@ -252,25 +296,21 @@ async function run() {
     // date aberrante (> 90 j avant la sortie du héros = faute de saisie) -> on n'écrit pas la date
     const wayOff = date && best.releaseDate
       && (new Date(best.releaseDate) - new Date(date)) > 90 * 864e5;
-    const finalDate = wayOff ? null : date;
-
-    if (!owned[best.id]) {
-      owned[best.id] = [{
-        rarity: null, merges, dragonflowers: 0, ivPlus, ivMinus, support: null, date: finalDate, project: null,
-      }];
-    } else {
-      const u = owned[best.id][0];
-      if (!u.merges) u.merges = merges;
-      if (!u.ivPlus) u.ivPlus = ivPlus;
-      if (!u.ivMinus) u.ivMinus = ivMinus;
-      if (!u.date) u.date = finalDate;
-    }
+    applyUnit(owned, best.id, { merges, ivPlus, ivMinus, date: wayOff ? null : date });
+    mapping.push({
+      sheet: heroRaw, date: dateRaw, id: best.id, nameFr: best.nameFr, titleFr: best.titleFr,
+    });
     report.matched += 1;
     if (date && best.releaseDate && best.releaseDate > toIso(dateRaw)) {
       report.impossible.push(`${heroRaw} (${dateRaw}) -> ${best.id} sorti ${best.releaseDate}`);
     } else if (tie) {
       report.ambiguous.push(`${heroRaw} -> ${best.id} (ou ${cands[1].id})`);
     }
+  }
+
+  // « tout est en 5★ » : force la rareté sur chaque exemplaire possédé
+  for (const units of Object.values(owned)) {
+    for (const u of units) if (!u.rarity) u.rarity = 5;
   }
 
   const result = {
@@ -282,8 +322,16 @@ async function run() {
   };
   await writeFile(out, `${JSON.stringify(result, null, 2)}\n`, 'utf8');
 
+  // relecture : CSV « ligne feuille -> héros choisi »
+  const mapOut = out.replace(/\.json$/i, '') + '.mapping.csv';
+  const mapCsv = ['feuille,date,heros_choisi,nom_fr,titre_fr']
+    .concat(mapping.map((m) => [m.sheet, m.date, m.id, m.nameFr ?? '', m.titleFr ?? ''].map(csvCell).join(',')))
+    .join('\n');
+  await writeFile(mapOut, `${mapCsv}\n`, 'utf8');
+
   console.log(`[migrate-sheet] ${report.matched} lignes appariées, ${Object.keys(owned).length} héros au total`);
   console.log(`[migrate-sheet] écrit ${out}`);
+  console.log(`[migrate-sheet] relecture -> ${mapOut}`);
   const dump = (label, arr, mark) => {
     if (!arr.length) return;
     console.log(`\n${arr.length} ${label} :`);
