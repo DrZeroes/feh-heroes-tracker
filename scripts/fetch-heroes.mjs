@@ -199,7 +199,13 @@ export async function run({
     });
   const dex = {};
   dexOrder.forEach((h, i) => { dex[h.id] = i + 1; });
-  await writeFile(heroDexPath, `${JSON.stringify(dex)}\n`, 'utf8');
+  // Filet de sécurité (comme minHeroes) : ne jamais écraser hero-dex.json si le
+  // wiki n'a pas renvoyé de GameSort (réponse partielle, ou run de test mocké).
+  if (Object.keys(dex).length >= 800) {
+    await writeFile(heroDexPath, `${JSON.stringify(dex)}\n`, 'utf8');
+  } else {
+    console.warn(`[fetch-heroes] hero-dex.json non réécrit : seulement ${Object.keys(dex).length} héros avec GameSort`);
+  }
   return catalog;
 }
 
