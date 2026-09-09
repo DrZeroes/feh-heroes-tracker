@@ -352,6 +352,21 @@ function renderGridPage() {
   state.shown += slice.length;
 }
 
+// Charge des pages tant que la sentinelle reste proche du viewport : une seule
+// page de 60 ne suffit pas à la repousser sous la ligne de flottaison sur un
+// grand écran, et l'IntersectionObserver ne se redéclenche alors jamais.
+function fillViewport() {
+  if (state.group || state.view !== 'catalogue') return;
+  const sentinel = document.getElementById('load-more-sentinel');
+  let guard = 0;
+  while (state.shown < state.list.length && guard < 200) {
+    const near = sentinel.getBoundingClientRect().top < window.innerHeight + 800;
+    if (!near) break;
+    renderGridPage();
+    guard += 1;
+  }
+}
+
 function renderGroups() {
   const grid = $('#grid');
   grid.classList.add('grouped');
@@ -397,7 +412,7 @@ function recompute() {
     return;
   }
   if (state.group) renderGroups();
-  else renderGridPage();
+  else { renderGridPage(); fillViewport(); }
 }
 
 function currentHashView() {
@@ -1449,8 +1464,9 @@ async function main() {
 
   const sentinel = document.getElementById('load-more-sentinel');
   new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting && !state.group && state.shown < state.list.length) renderGridPage();
+    if (entries[0].isIntersecting) fillViewport();
   }, { rootMargin: '600px' }).observe(sentinel);
+  window.addEventListener('resize', fillViewport);
 }
 
 main();
