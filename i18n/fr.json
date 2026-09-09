@@ -161,6 +161,7 @@
   "caserne.colHero": "Héros",
   "caserne.remove": "Retirer cet exemplaire",
   "caserne.removeConfirm": "Retirer ton dernier exemplaire de {name} ? Ses fusions, IV et projet seront perdus.",
+  "caserne.removeCopyConfirm": "Retirer l'exemplaire n°{n} de {name} ?",
   "caserne.addCopy": "Ajouter une copie",
   "caserne.edit": "Éditer",
   "caserne.blank": "±0 neutre",

@@ -733,7 +733,10 @@ function caserneCard(hero, unit, idx, total) {
   rm.addEventListener('click', (e) => {
     e.stopPropagation();
     const last = total === 1;
-    if (last && !window.confirm(state.t('caserne.removeConfirm', { name: nameFor(hero) }))) return;
+    const msg = last
+      ? state.t('caserne.removeConfirm', { name: nameFor(hero) })
+      : state.t('caserne.removeCopyConfirm', { name: nameFor(hero), n: idx + 1 });
+    if (!window.confirm(msg)) return;
     state.collection = removeUnit(state.collection, hero.id, idx);
     if (last) refreshCard(hero.id);
     saveCollection();
@@ -1543,6 +1546,7 @@ function openDetail(hero, unitIndex = 0) {
       delCopy.textContent = '✕';
       delCopy.title = state.t('caserne.remove');
       delCopy.addEventListener('click', () => {
+        if (!window.confirm(state.t('caserne.removeCopyConfirm', { name: nameFor(hero), n: idx + 1 }))) return;
         state.collection = removeUnit(state.collection, hero.id, idx);
         saveCollection();
         updateCollectionCount();

@@ -161,6 +161,7 @@
   "caserne.colHero": "Hero",
   "caserne.remove": "Remove this copy",
   "caserne.removeConfirm": "Remove your last copy of {name}? Its merges, IVs and project will be lost.",
+  "caserne.removeCopyConfirm": "Remove copy #{n} of {name}?",
   "caserne.addCopy": "Add a copy",
   "caserne.edit": "Edit",
   "caserne.blank": "±0 neutral",
