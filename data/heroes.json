@@ -1,8 +1,162 @@
 {
-  "generatedAt": "2026-09-14T11:06:28.807Z",
+  "generatedAt": "2026-09-21T11:16:20.268Z",
   "source": "feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)",
-  "count": 1414,
+  "count": 1418,
   "heroes": [
+    {
+      "id": "Lyn Earth and Sky",
+      "name": "Lyn",
+      "title": "Earth and Sky",
+      "titleFr": null,
+      "person": "Lyn",
+      "color": "r",
+      "weapon": "bow",
+      "move": "cavalry",
+      "gender": "multi",
+      "origin": "Fire Emblem: The Blazing Blade,Fire Emblem: The Binding Blade",
+      "origins": [
+        "Fire Emblem: The Blazing Blade",
+        "Fire Emblem: The Binding Blade"
+      ],
+      "category": "harmonized",
+      "properties": [
+        "special",
+        "harmonized",
+        "tiara"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "エシュアル",
+      "actorEn": [
+        "Wendee Lee",
+        "Megan Taylor Harvey"
+      ],
+      "actorJp": [
+        "大本眞基子",
+        "ささきのぞみ"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/9/93/Lyn_Earth_and_Sky_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/c/c5/Lyn_Earth_and_Sky_Face.webp",
+      "releaseDate": "2026-09-18",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1415
+    },
+    {
+      "id": "Rebecca In the Suns Rays",
+      "name": "Rebecca",
+      "title": "In the Sun's Rays",
+      "titleFr": null,
+      "person": "Rebecca",
+      "color": "v",
+      "weapon": "bow",
+      "move": "cavalry",
+      "gender": "female",
+      "origin": "Fire Emblem: The Blazing Blade",
+      "origins": [
+        "Fire Emblem: The Blazing Blade"
+      ],
+      "category": "special",
+      "properties": [
+        "special"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "ＫｅＧ",
+      "actorEn": [
+        "Hunter Mackenzie Austin"
+      ],
+      "actorJp": [
+        "橋本ちなみ"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/b/b3/Rebecca_In_the_Suns_Rays_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/6/6e/Rebecca_In_the_Suns_Rays_Face.webp",
+      "releaseDate": "2026-09-18",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1417
+    },
+    {
+      "id": "Shamir Snipers Path",
+      "name": "Shamir",
+      "title": "Sniper's Path",
+      "titleFr": null,
+      "person": "Shamir",
+      "color": "b",
+      "weapon": "bow",
+      "move": "infantry",
+      "gender": "female",
+      "origin": "Fire Emblem: Three Houses",
+      "origins": [
+        "Fire Emblem: Three Houses"
+      ],
+      "category": "special",
+      "properties": [
+        "special"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "山田孝太郎",
+      "actorEn": [
+        "Allegra Clark"
+      ],
+      "actorJp": [
+        "渡辺優里奈"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/b/bb/Shamir_Snipers_Path_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/8/8b/Shamir_Snipers_Path_Face.webp",
+      "releaseDate": "2026-09-18",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1418
+    },
+    {
+      "id": "Takumi Divine Bow Prince",
+      "name": "Takumi",
+      "title": "Divine Bow Prince",
+      "titleFr": null,
+      "person": "Takumi",
+      "color": "g",
+      "weapon": "bow",
+      "move": "infantry",
+      "gender": "male",
+      "origin": "Fire Emblem Fates",
+      "origins": [
+        "Fire Emblem Fates"
+      ],
+      "category": "entwined",
+      "properties": [
+        "special",
+        "entwined"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "Tobi",
+      "actorEn": [
+        "Michael Sinterniklaas"
+      ],
+      "actorJp": [
+        "梶裕貴"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/6/6f/Takumi_Divine_Bow_Prince_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/c/c9/Takumi_Divine_Bow_Prince_Face.webp",
+      "releaseDate": "2026-09-18",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1416
+    },
     {
       "id": "Cai Child of Ribeira",
       "name": "Cai",
@@ -2181,7 +2335,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "北千里",
       "actorEn": [
@@ -3627,7 +3781,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "п猫Ｒ",
       "actorEn": [
@@ -6191,7 +6345,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "п猫Ｒ",
       "actorEn": [
@@ -7320,7 +7474,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "DAI-XT.",
       "actorEn": [
@@ -9004,7 +9158,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "shibayama wankuro",
       "actorEn": [
@@ -9074,7 +9228,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "北千里",
       "actorEn": [
@@ -9330,7 +9484,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "鳴瀬うろこ",
       "actorEn": [
@@ -13247,7 +13401,7 @@
         "tiara"
       ],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "п猫Ｒ",
       "actorEn": [
@@ -13866,7 +14020,7 @@
         "tiara"
       ],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "チーコ",
       "actorEn": [
@@ -14935,7 +15089,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "みく郎",
       "actorEn": [
@@ -15238,7 +15392,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "鳴瀬うろこ",
       "actorEn": [
@@ -16784,7 +16938,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "茶ちえ",
       "actorEn": [
@@ -18788,7 +18942,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "米子",
       "actorEn": [
@@ -20205,7 +20359,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "萩谷薫",
       "actorEn": [
@@ -20240,7 +20394,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "かわすみ",
       "actorEn": [
@@ -20466,7 +20620,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "ワダサチコ",
       "actorEn": [
@@ -20577,7 +20731,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "鈴木理華",
       "actorEn": [
@@ -21046,7 +21200,7 @@
         "tiara"
       ],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "えいひ",
       "actorEn": [
@@ -37046,9 +37200,7 @@
       ],
       "blessing": null,
       "poolRarity": 5,
-      "poolFlags": [
-        "specialRate"
-      ],
+      "poolFlags": [],
       "artist": "kiyu",
       "actorEn": [
         "Kayli Mills"
@@ -37344,7 +37496,9 @@
       ],
       "blessing": null,
       "poolRarity": 5,
-      "poolFlags": [],
+      "poolFlags": [
+        "specialRate"
+      ],
       "artist": "cuboon",
       "actorEn": [
         "Krizia Bajos"
@@ -37499,8 +37653,10 @@
         "notRandomized"
       ],
       "blessing": null,
-      "poolRarity": null,
-      "poolFlags": [],
+      "poolRarity": 5,
+      "poolFlags": [
+        "specialRate"
+      ],
       "artist": "山田孝太郎",
       "actorEn": [
         "Greg Chun",
@@ -39532,7 +39688,9 @@
       ],
       "category": "legendary",
       "properties": [
-        "legendary"
+        "legendary",
+        "resplendent",
+        "muspell"
       ],
       "blessing": "wind",
       "poolRarity": null,
