@@ -1,8 +1,82 @@
 {
-  "generatedAt": "2026-09-21T11:16:20.268Z",
+  "generatedAt": "2026-10-05T12:51:17.225Z",
   "source": "feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)",
-  "count": 1418,
+  "count": 1420,
   "heroes": [
+    {
+      "id": "Eshmel Pale Raven Herald",
+      "name": "Eshmel",
+      "title": "Pale Raven Herald",
+      "titleFr": null,
+      "person": "Eshmel F",
+      "color": "b",
+      "weapon": "lance",
+      "move": "infantry",
+      "gender": "female",
+      "origin": "Fire Emblem: Fortune's Weave",
+      "origins": [
+        "Fire Emblem: Fortune's Weave"
+      ],
+      "category": "legendary",
+      "properties": [
+        "legendary"
+      ],
+      "blessing": "water",
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "あっか",
+      "actorEn": [
+        "Virginia Lee"
+      ],
+      "actorJp": [
+        "井上麻里奈"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/9/96/Eshmel_Pale_Raven_Herald_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/8/8d/Eshmel_Pale_Raven_Herald_Face.webp",
+      "releaseDate": "2026-09-30",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1420
+    },
+    {
+      "id": "Seidr Hope Reborn",
+      "name": "Seiðr",
+      "title": "Hope Reborn",
+      "titleFr": null,
+      "person": "Seiðr",
+      "color": "r",
+      "weapon": "tome",
+      "move": "cavalry",
+      "gender": "female",
+      "origin": "Fire Emblem Heroes",
+      "origins": [
+        "Fire Emblem Heroes"
+      ],
+      "category": "mythic",
+      "properties": [
+        "mythic"
+      ],
+      "blessing": "anima",
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "佐々",
+      "actorEn": [
+        "Valeria Rodriguez"
+      ],
+      "actorJp": [
+        "羊宮妃那"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/e/e3/Seidr_Hope_Reborn_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/4/49/Seidr_Hope_Reborn_Face.webp",
+      "releaseDate": "2026-09-30",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1419
+    },
     {
       "id": "Lyn Earth and Sky",
       "name": "Lyn",
