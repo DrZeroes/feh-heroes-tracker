@@ -1,8 +1,161 @@
 {
-  "generatedAt": "2026-10-05T12:51:17.225Z",
+  "generatedAt": "2026-10-12T13:41:36.181Z",
   "source": "feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)",
-  "count": 1420,
+  "count": 1424,
   "heroes": [
+    {
+      "id": "Goldmary Darling Demon",
+      "name": "Goldmary",
+      "title": "Darling Demon",
+      "titleFr": null,
+      "person": "Goldmary",
+      "color": "v",
+      "weapon": "axe",
+      "move": "cavalry",
+      "gender": "female",
+      "origin": "Fire Emblem Engage",
+      "origins": [
+        "Fire Emblem Engage"
+      ],
+      "category": "special",
+      "properties": [
+        "special"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "えく",
+      "actorEn": [
+        "Maureen Price"
+      ],
+      "actorJp": [
+        "高森奈津美"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/1/1b/Goldmary_Darling_Demon_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/a/a5/Goldmary_Darling_Demon_Face.webp",
+      "releaseDate": "2026-10-07",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1423
+    },
+    {
+      "id": "Janaff Treat or Talon",
+      "name": "Janaff",
+      "title": "Treat or Talon",
+      "titleFr": null,
+      "person": "Janaff",
+      "color": "g",
+      "weapon": "beast",
+      "move": "flying",
+      "gender": "male",
+      "origin": "Fire Emblem: Radiant Dawn",
+      "origins": [
+        "Fire Emblem: Radiant Dawn"
+      ],
+      "category": "special",
+      "properties": [
+        "special"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "北千里",
+      "actorEn": [
+        "Kevin Andrew Rivera"
+      ],
+      "actorJp": [
+        "田丸篤志"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/f/f4/Janaff_Treat_or_Talon_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/e/ee/Janaff_Treat_or_Talon_Face.webp",
+      "releaseDate": "2026-10-07",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1424
+    },
+    {
+      "id": "Kurt Light Seekers",
+      "name": "Kurt",
+      "title": "Light Seekers",
+      "titleFr": null,
+      "person": "Kurt",
+      "color": "r",
+      "weapon": "tome",
+      "move": "infantry",
+      "gender": "multi",
+      "origin": "Fire Emblem Shadows",
+      "origins": [
+        "Fire Emblem Shadows"
+      ],
+      "category": "duo",
+      "properties": [
+        "special",
+        "duo",
+        "hat"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "HACCAN",
+      "actorEn": [
+        "Brittany Lauda",
+        "Elsie Lovelock"
+      ],
+      "actorJp": [
+        "羊宮妃那",
+        "麻倉もも"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/5/55/Kurt_Light_Seekers_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/c/ce/Kurt_Light_Seekers_Face.webp",
+      "releaseDate": "2026-10-07",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1421
+    },
+    {
+      "id": "Shea Guide to Bounty",
+      "name": "Shea",
+      "title": "Guide to Bounty",
+      "titleFr": null,
+      "person": "Shea",
+      "color": "b",
+      "weapon": "breath",
+      "move": "flying",
+      "gender": "female",
+      "origin": "Fire Emblem Shadows",
+      "origins": [
+        "Fire Emblem Shadows"
+      ],
+      "category": "rearmed",
+      "properties": [
+        "rearmed",
+        "special"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "うらたあさお",
+      "actorEn": [
+        "Kana Shimanuki"
+      ],
+      "actorJp": [
+        "富田美憂"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/9/92/Shea_Guide_to_Bounty_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/5/5a/Shea_Guide_to_Bounty_Face.webp",
+      "releaseDate": "2026-10-07",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1422
+    },
     {
       "id": "Eshmel Pale Raven Herald",
       "name": "Eshmel",
@@ -2034,7 +2187,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "Cha Minyi",
       "actorEn": [
@@ -3855,7 +4008,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "п猫Ｒ",
       "actorEn": [
@@ -6419,7 +6572,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "п猫Ｒ",
       "actorEn": [
@@ -8037,7 +8190,7 @@
         "hat"
       ],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "黒井ススム",
       "actorEn": [
@@ -8605,7 +8758,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "夕子",
       "actorEn": [
@@ -9232,7 +9385,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "shibayama wankuro",
       "actorEn": [
@@ -9558,7 +9711,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "鳴瀬うろこ",
       "actorEn": [
@@ -13127,7 +13280,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "恒星ホリグチ",
       "actorEn": [
@@ -14709,7 +14862,7 @@
         "tiara"
       ],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "村壱 雀",
       "actorEn": [
@@ -16009,7 +16162,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "夕子",
       "actorEn": [
@@ -17012,7 +17165,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "茶ちえ",
       "actorEn": [
@@ -17472,7 +17625,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "かわすみ",
       "actorEn": [
@@ -17662,7 +17815,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "とよた瑣織",
       "actorEn": [
@@ -18328,7 +18481,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "argon",
       "actorEn": [
@@ -19677,7 +19830,7 @@
         "tiara"
       ],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "Tobi",
       "actorEn": [
@@ -20433,7 +20586,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "萩谷薫",
       "actorEn": [
@@ -21236,7 +21389,7 @@
       "category": "standard",
       "properties": [],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "廣岡政樹",
       "actorEn": [
@@ -21274,7 +21427,7 @@
         "tiara"
       ],
       "blessing": null,
-      "poolRarity": 4,
+      "poolRarity": 3,
       "poolFlags": [],
       "artist": "えいひ",
       "actorEn": [
@@ -41508,7 +41661,9 @@
       ],
       "category": "legendary",
       "properties": [
-        "legendary"
+        "legendary",
+        "resplendent",
+        "nidavellir"
       ],
       "blessing": "fire",
       "poolRarity": null,
