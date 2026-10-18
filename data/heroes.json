@@ -1,8 +1,125 @@
 {
-  "generatedAt": "2026-10-12T13:41:36.181Z",
+  "generatedAt": "2026-10-18T10:05:13.784Z",
   "source": "feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)",
-  "count": 1424,
+  "count": 1427,
   "heroes": [
+    {
+      "id": "Dimitri Dual Idealists",
+      "name": "Dimitri",
+      "title": "Dual Idealists",
+      "titleFr": null,
+      "person": "Dimitri",
+      "color": "b",
+      "weapon": "lance",
+      "move": "infantry",
+      "gender": "multi",
+      "origin": "Fire Emblem: Three Houses",
+      "origins": [
+        "Fire Emblem: Three Houses"
+      ],
+      "category": "duo",
+      "properties": [
+        "brave",
+        "duo"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "Ｄd",
+      "actorEn": [
+        "Chris Hackney",
+        "Joe Zieja"
+      ],
+      "actorJp": [
+        "石川界人",
+        "豊永利行"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/4/48/Dimitri_Dual_Idealists_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/b/b6/Dimitri_Dual_Idealists_Face.webp",
+      "releaseDate": "2026-10-16",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1425
+    },
+    {
+      "id": "Edelgard Beyond Bounds",
+      "name": "Edelgard",
+      "title": "Beyond Bounds",
+      "titleFr": null,
+      "person": "Edelgard",
+      "color": "v",
+      "weapon": "axe",
+      "move": "armored",
+      "gender": "multi",
+      "origin": "Fire Emblem: Three Houses",
+      "origins": [
+        "Fire Emblem: Three Houses"
+      ],
+      "category": "duo",
+      "properties": [
+        "brave",
+        "duo"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "Hitoto*",
+      "actorEn": [
+        "Tara Platt",
+        "Janice Roman Roku"
+      ],
+      "actorJp": [
+        "加隈亜衣",
+        "悠木碧"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/c/cf/Edelgard_Beyond_Bounds_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/0/00/Edelgard_Beyond_Bounds_Face.webp",
+      "releaseDate": "2026-10-16",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1426
+    },
+    {
+      "id": "Gullveig Seer Reborn",
+      "name": "Gullveig",
+      "title": "Seer Reborn",
+      "titleFr": null,
+      "person": "Gullveig",
+      "color": "g",
+      "weapon": "tome",
+      "move": "cavalry",
+      "gender": "female",
+      "origin": "Fire Emblem Heroes",
+      "origins": [
+        "Fire Emblem Heroes"
+      ],
+      "category": "vista",
+      "properties": [
+        "vista"
+      ],
+      "blessing": null,
+      "poolRarity": null,
+      "poolFlags": [],
+      "artist": "四々九",
+      "actorEn": [
+        "Alice Himora"
+      ],
+      "actorJp": [
+        "三森すずこ"
+      ],
+      "image": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/7/7f/Gullveig_Seer_Reborn_Face_FC.webp",
+      "imageFull": "https://static.wikia.nocookie.net/feheroes_gamepedia_en/images/b/b9/Gullveig_Seer_Reborn_Face.webp",
+      "releaseDate": "2026-10-16",
+      "nameFr": null,
+      "book": "10",
+      "partner": null,
+      "aliases": [],
+      "intId": 1427
+    },
     {
       "id": "Goldmary Darling Demon",
       "name": "Goldmary",
@@ -688,7 +805,7 @@
       "id": "Sylvain Ladies Knight",
       "name": "Sylvain",
       "title": "Ladies' Knight",
-      "titleFr": null,
+      "titleFr": "Preux Chevalier",
       "person": "Sylvain",
       "color": "b",
       "weapon": "lance",
@@ -45824,7 +45941,9 @@
       "category": "ghb",
       "properties": [
         "ghb",
-        "limited"
+        "limited",
+        "resplendent",
+        "muspell"
       ],
       "blessing": null,
       "poolRarity": null,
