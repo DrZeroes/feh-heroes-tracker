@@ -43,6 +43,13 @@ const TABLES = {
   ],
   LegendaryHero: [{ Page: 'Rhea: The Final Child', LegendaryEffect: 'Fire' }],
   MythicHero: [{ Page: 'Nobody: Ghost', MythicEffect: 'Light' }],
+  UnitStats: [
+    {
+      WikiName: 'Rhea The Final Child', Lv1HP5: '20', Lv1Atk5: '11', Lv1Spd5: '7', Lv1Def5: '9', Lv1Res5: '8',
+      HPGR3: '55', AtkGR3: '60', SpdGR3: '45', DefGR3: '50', ResGR3: '40',
+    },
+    { WikiName: 'Greeny The Older', Lv1HP5: '18', Lv1Atk5: '' }, // incomplet -> stats null
+  ],
   SummoningAvailability: [
     { Page: 'Greeny: The Older', Rarity: '3', Property: '', StartTime: '2020-01-01 07:00:00' },
     { Page: 'Greeny: The Older', Rarity: '4', Property: 'specialRate', StartTime: '2021-06-01 07:00:00' },
@@ -77,7 +84,7 @@ test('run normalise, joint, trie et écrit le catalogue', async () => {
   );
   assert.ok(!catalog.heroes.some((h) => h.id === 'Axe Fighter ENEMY'));
   assert.equal(catalog.generatedAt, '2026-09-08T00:00:00.000Z');
-  assert.equal(catalog.source, 'feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)');
+  assert.equal(catalog.source, 'feheroes.fandom.com Cargo API (Units + UnitStats + LegendaryHero + MythicHero + SummoningAvailability)');
 
   const [first, second] = catalog.heroes;
   assert.equal(first.id, 'Rhea The Final Child');      // date la plus récente en tête
@@ -89,6 +96,8 @@ test('run normalise, joint, trie et écrit le catalogue', async () => {
   assert.deepEqual(first.aliases, ['Rhéa']);           // jointure data/name-aliases.json (par Person)
   assert.deepEqual(second.aliases, []);
   assert.equal(first.blessing, 'fire');                // jointure LegendaryHero
+  assert.deepEqual(first.stats, { base: [20, 11, 7, 9, 8], growth: [55, 60, 45, 50, 40] }); // jointure UnitStats
+  assert.equal(second.stats, null);                    // ligne UnitStats incomplète
   assert.equal(first.color, 'b');
   assert.equal(first.weapon, 'breath');
   assert.deepEqual(first.actorEn, ['Cherami Leigh']);

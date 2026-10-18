@@ -15,6 +15,17 @@ const UNIT_FIELDS = [
   'GameSort', 'CharSort',
 ].join(',');
 
+// Stats niv. 1 en 5★ + taux de croissance (PV, Atq, Vit, Déf, Rés) : calcul des
+// stats niv. 40 côté app (js/unit-stats.mjs).
+const STAT_NAMES = ['HP', 'Atk', 'Spd', 'Def', 'Res'];
+const STAT_FIELDS = ['WikiName', ...STAT_NAMES.map((k) => `Lv1${k}5`), ...STAT_NAMES.map((k) => `${k}GR3`)].join(',');
+
+function parseUnitStats(row) {
+  const base = STAT_NAMES.map((k) => Number.parseInt(row[`Lv1${k}5`], 10));
+  const growth = STAT_NAMES.map((k) => Number.parseInt(row[`${k}GR3`], 10));
+  return [...base, ...growth].every(Number.isFinite) ? { base, growth } : null;
+}
+
 export async function run({
   fetchImpl = globalThis.fetch,
   sleepImpl,
@@ -44,6 +55,9 @@ export async function run({
   });
   const mythic = await cargoQuery({
     ...common, table: 'MythicHero', fields: '_pageName=Page,MythicEffect',
+  });
+  const unitStats = await cargoQuery({
+    ...common, table: 'UnitStats', fields: STAT_FIELDS,
   });
   const availability = await cargoQuery({
     ...common, table: 'SummoningAvailability',
@@ -76,6 +90,9 @@ export async function run({
   let heroes = units.map(
     (u) => mergeJoins(normalizeUnit(u), { blessingByPage, poolByPage }),
   );
+
+  const statsById = new Map(unitStats.map((r) => [String(r.WikiName ?? '').trim(), parseUnitStats(r)]));
+  for (const h of heroes) h.stats = statsById.get(h.id) ?? null;
 
   // Le `where` Cargo ci-dessus est le filtre principal ; ceci est le filet de
   // sécurité si un `enemy` passe malgré tout (ex. réponse partielle / cache).

@@ -239,7 +239,7 @@ test('buildCatalog trie par date desc puis nom asc et compte', () => {
   ], { generatedAt: '2026-09-08T00:00:00.000Z' });
   assert.equal(cat.count, 3);
   assert.equal(cat.generatedAt, '2026-09-08T00:00:00.000Z');
-  assert.equal(cat.source, 'feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)');
+  assert.equal(cat.source, 'feheroes.fandom.com Cargo API (Units + UnitStats + LegendaryHero + MythicHero + SummoningAvailability)');
   assert.deepEqual(cat.heroes.map((h) => h.id), ['newA', 'newB', 'old']);
 });
 

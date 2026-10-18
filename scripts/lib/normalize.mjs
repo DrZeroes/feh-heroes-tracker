@@ -166,7 +166,7 @@ export function mergeJoins(hero, { blessingByPage, poolByPage }) {
   };
 }
 
-const SOURCE = 'feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)';
+const SOURCE = 'feheroes.fandom.com Cargo API (Units + UnitStats + LegendaryHero + MythicHero + SummoningAvailability)';
 
 export function applyOverrides(heroes, overrides) {
   const add = Array.isArray(overrides?.add) ? overrides.add : [];
@@ -190,6 +190,7 @@ export function buildCatalog(heroes, { generatedAt }) {
     book: 'book' in h ? h.book : deriveBook(h.releaseDate ?? null),
     partner: 'partner' in h ? h.partner : null,
     aliases: Array.isArray(h.aliases) ? h.aliases : [],
+    stats: h.stats ?? null,
   }));
   const sorted = [...filled].sort((a, b) => {
     const da = a.releaseDate ?? '';

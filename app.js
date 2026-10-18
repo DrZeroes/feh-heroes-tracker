@@ -19,6 +19,7 @@ import {
   distribution, topCopies, wishlistSummary,
   wishlistByPriority, projectProgress,
 } from './js/stats.mjs';
+import { lv40Stats, STAT_KEYS } from './js/unit-stats.mjs';
 
 const SUPPORTED = ['en', 'fr'];
 const FACETS = ['color', 'weapon', 'move', 'category', 'book', 'origin', 'gender', 'blessing', 'poolRarity'];
@@ -1561,6 +1562,7 @@ function openDetail(hero, unitIndex = 0) {
     rar.addEventListener('change', () => {
       state.collection = setUnit(state.collection, hero.id, idx, { rarity: rar.value || null });
       saveCollection();
+      paintStats();
     });
     addRow('field.rarity', rar);
 
@@ -1570,6 +1572,7 @@ function openDetail(hero, unitIndex = 0) {
       merges.value = String(clampMerges(merges.value));
       state.collection = setUnit(state.collection, hero.id, idx, { merges: merges.value });
       saveCollection();
+      paintStats();
     });
     addRow('field.merges', merges);
 
@@ -1579,6 +1582,7 @@ function openDetail(hero, unitIndex = 0) {
       state.collection = setUnit(state.collection, hero.id, idx, { dragonflowers: dflowers.value });
       dflowers.value = String(state.collection.owned[hero.id][idx].dragonflowers);
       saveCollection();
+      paintStats();
     });
     addRow('field.dragonflowers', dflowers);
 
@@ -1597,11 +1601,46 @@ function openDetail(hero, unitIndex = 0) {
     addRow('field.ivPlus', ivSelect(unit.ivPlus, (v) => {
       state.collection = setUnit(state.collection, hero.id, idx, { ivPlus: v });
       saveCollection();
+      paintStats();
     }));
     addRow('field.ivMinus', ivSelect(unit.ivMinus, (v) => {
       state.collection = setUnit(state.collection, hero.id, idx, { ivMinus: v });
       saveCollection();
+      paintStats();
     }));
+
+    // Stats niv. 40 (5★, sans arme ni compétences), recalculées à chaque modif.
+    const statsBox = document.createElement('div');
+    statsBox.className = 'lv40';
+    function paintStats() {
+      const cur = state.collection.owned[hero.id][idx];
+      const res = lv40Stats(hero, cur);
+      statsBox.replaceChildren();
+      if (!res) {
+        statsBox.classList.add('is-empty');
+        statsBox.textContent = state.t(hero.stats ? 'stats40.only5' : 'stats40.none');
+        return;
+      }
+      statsBox.classList.remove('is-empty');
+      const cell = (label, value, cls) => {
+        const c = document.createElement('span');
+        c.className = `lv40-cell${cls ? ` ${cls}` : ''}`;
+        const l = document.createElement('small');
+        l.textContent = label;
+        const v = document.createElement('b');
+        v.textContent = String(value);
+        c.append(l, v);
+        statsBox.appendChild(c);
+      };
+      STAT_KEYS.forEach((k, i) => {
+        const cls = k === cur.ivPlus ? 'is-plus' : (k === cur.ivMinus && !(cur.merges > 0) ? 'is-minus' : '');
+        cell(state.t(`iv.${k}`), res.stats[i], cls);
+      });
+      cell(state.t('stats40.total'), res.total, 'is-total');
+    }
+    paintStats();
+    statsBox.title = state.t('stats40.hint');
+    addRow('stats40.label', statsBox);
 
     const sup = document.createElement('select');
     for (const v of ['none', 'C', 'B', 'A', 'S']) {

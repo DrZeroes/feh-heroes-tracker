@@ -207,5 +207,10 @@
   "about.legalTitle": "Mentions légales",
   "about.legalBody": "Fire Emblem et Fire Emblem Heroes sont des marques de Nintendo / Intelligent Systems. Ceci est un projet de fan non officiel, sans affiliation ni approbation de Nintendo. Les noms, illustrations et ressources des héros appartiennent à leurs ayants droit respectifs.",
   "about.sourceTitle": "Code source",
-  "about.version": "Version {v}"
+  "about.version": "Version {v}",
+  "stats40.label": "Stats niv. 40",
+  "stats40.total": "Total",
+  "stats40.hint": "5★ niv. 40, fusions, fleurs et IV compris — sans arme ni compétences",
+  "stats40.only5": "Calcul disponible en 5★ uniquement",
+  "stats40.none": "Stats indisponibles pour ce héros"
 }

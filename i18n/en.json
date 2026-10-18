@@ -207,5 +207,10 @@
   "about.legalTitle": "Legal",
   "about.legalBody": "Fire Emblem and Fire Emblem Heroes are trademarks of Nintendo / Intelligent Systems. This is an unofficial fan project, not affiliated with or endorsed by Nintendo. All hero names, art and assets belong to their respective owners.",
   "about.sourceTitle": "Source code",
-  "about.version": "Version {v}"
+  "about.version": "Version {v}",
+  "stats40.label": "Lv. 40 stats",
+  "stats40.total": "Total",
+  "stats40.hint": "5★ Lv. 40 incl. merges, dragonflowers and IVs — without weapon or skills",
+  "stats40.only5": "Only computed for 5★",
+  "stats40.none": "No stats available for this hero"
 }

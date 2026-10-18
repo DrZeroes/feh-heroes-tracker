@@ -6,7 +6,7 @@ import { BOOK_STARTS } from './lib/normalize.mjs';
 
 const HERO_KEYS = ['id', 'name', 'nameFr', 'title', 'titleFr', 'person', 'color', 'weapon', 'move', 'gender',
   'origin', 'origins', 'category', 'properties', 'blessing', 'poolRarity', 'poolFlags', 'artist', 'actorEn',
-  'actorJp', 'image', 'imageFull', 'releaseDate', 'book', 'partner', 'aliases', 'intId'];
+  'actorJp', 'image', 'imageFull', 'releaseDate', 'book', 'partner', 'aliases', 'intId', 'stats'];
 const CATEGORIES = new Set(['mythic', 'legendary', 'emblem', 'rearmed', 'attuned', 'ascended',
   'duo', 'harmonized', 'aided', 'entwined', 'vista', 'chosen', 'refresher',
   'ghb', 'tempest', 'special', 'standard']);
@@ -31,9 +31,9 @@ test('catalog: count === heroes.length', () => {
 });
 test('catalog: source string exact', () => {
   assert.equal(catalog.source,
-    'feheroes.fandom.com Cargo API (Units + LegendaryHero + MythicHero + SummoningAvailability)');
+    'feheroes.fandom.com Cargo API (Units + UnitStats + LegendaryHero + MythicHero + SummoningAvailability)');
 });
-test('catalog: every hero has exactly the 27 keys', () => {
+test('catalog: every hero has exactly the 28 keys', () => {
   const want = [...HERO_KEYS].sort();
   for (const h of catalog.heroes) {
     assert.deepEqual(Object.keys(h).sort(), want, `bad shape: ${h.id}`);
@@ -43,6 +43,14 @@ test('catalog: titleFr est une chaîne non vide ou null', () => {
   for (const h of catalog.heroes) {
     assert.ok(h.titleFr === null || (typeof h.titleFr === 'string' && h.titleFr.length > 0), h.id);
   }
+});
+test('catalog: stats = null ou { base, growth } de 5 entiers, et quasi tous renseignés', () => {
+  const ok5 = (a) => Array.isArray(a) && a.length === 5 && a.every(Number.isInteger);
+  for (const h of catalog.heroes) {
+    assert.ok(h.stats === null || (ok5(h.stats.base) && ok5(h.stats.growth)), h.id);
+  }
+  const missing = catalog.heroes.filter((h) => !h.stats).length;
+  assert.ok(missing <= catalog.count * 0.02, `${missing} héros sans stats (UnitStats a dérivé ?)`);
 });
 test('catalog: no enemy rows', () => {
   assert.deepEqual(catalog.heroes.filter((h) => h.properties.includes('enemy')).map((h) => h.id), []);
