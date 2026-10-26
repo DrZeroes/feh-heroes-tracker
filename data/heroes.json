@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-18T10:25:16.291Z",
+  "generatedAt": "2026-10-26T11:52:51.710Z",
   "source": "feheroes.fandom.com Cargo API (Units + UnitStats + LegendaryHero + MythicHero + SummoningAvailability)",
   "count": 1427,
   "heroes": [
@@ -390,7 +390,7 @@
       "name": "Eshmel",
       "title": "Pale Raven Herald",
       "titleFr": null,
-      "person": "Eshmel F",
+      "person": "Eshmel Type B",
       "color": "b",
       "weapon": "lance",
       "move": "infantry",
@@ -1753,7 +1753,7 @@
         "tiara"
       ],
       "blessing": null,
-      "poolRarity": 3,
+      "poolRarity": 4,
       "poolFlags": [],
       "artist": "野間崇史",
       "actorEn": [
@@ -2782,7 +2782,8 @@
       ],
       "category": "standard",
       "properties": [
-        "fallen"
+        "fallen",
+        "notRandomized"
       ],
       "blessing": null,
       "poolRarity": 5,
@@ -2890,7 +2891,8 @@
       ],
       "category": "standard",
       "properties": [
-        "fallen"
+        "fallen",
+        "notRandomized"
       ],
       "blessing": null,
       "poolRarity": 5,
@@ -22850,10 +22852,11 @@
       "origins": [
         "Fire Emblem Engage"
       ],
-      "category": "special",
+      "category": "tempest",
       "properties": [
         "special",
-        "hat"
+        "hat",
+        "tempest"
       ],
       "blessing": null,
       "poolRarity": null,
@@ -23337,10 +23340,11 @@
       "origins": [
         "Fire Emblem: Three Houses"
       ],
-      "category": "special",
+      "category": "tempest",
       "properties": [
         "special",
-        "hat"
+        "hat",
+        "tempest"
       ],
       "blessing": null,
       "poolRarity": null,
@@ -24002,9 +24006,10 @@
       "origins": [
         "Fire Emblem: Three Houses"
       ],
-      "category": "special",
+      "category": "tempest",
       "properties": [
-        "special"
+        "special",
+        "tempest"
       ],
       "blessing": null,
       "poolRarity": null,
